@@ -34,7 +34,7 @@ PUNCT = set("，。！？；、：·．…—～「」『』（）【】《》�
 CN_NUM = "〇一二三四五六七八九十百"
 
 # 已收的篇。以后每做一篇，在这里加卷号。
-DONE = [7]
+DONE = [7, 8]
 
 GROUPS = [
     ("benji", "本纪", 1, 12),
@@ -90,6 +90,8 @@ def emend(text: str) -> str:
     # 维基文库漏掉的标点。
     text = text.replace("公為我獻之」張良曰", "公為我獻之。」張良曰")
     text = text.replace("沛公曰「", "沛公曰：「")
+    # 高祖本纪：上文刚写「至固陵，不會。楚擊漢軍，大破之」，维基文库作「漢王敗碧陵」，据中华书局点校本改作「固陵」。
+    text = text.replace("漢王敗碧陵", "漢王敗固陵")
     if "□" in text:
         raise SystemExit(f"正文有 □，要先查证再补字：{text[:40]}")
     return text
