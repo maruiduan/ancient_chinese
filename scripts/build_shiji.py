@@ -29,7 +29,7 @@ CATALOG = ROOT / "data" / "shiji.json"
 DUMP = SRC / "texts.json"
 URL = "https://zh.wikisource.org/wiki/史記/卷{juan:03d}"
 # 用了固定修订版的卷，出处链接指向那一版。
-OLDID = {48: 2531218, 55: 2666612, 84: 1568305, 86: 2388562, 81: 8735558, 92: 1483915, 109: 1765440, 62: 7903600, 77: 367917, 130: 2609362, 61: 2621133, 124: 367994}
+OLDID = {48: 2531218, 55: 2666612, 84: 1568305, 86: 2388562, 81: 8735558, 92: 1483915, 109: 1765440, 62: 7903600, 77: 367917, 130: 2609362, 61: 2621133, 124: 367994, 129: 7904128}
 
 
 def source_url(juan: int) -> str:
@@ -42,7 +42,7 @@ PUNCT = set("，。！？；、：·．…—～「」『』（）【】《》�
 CN_NUM = "〇一二三四五六七八九十百"
 
 # 已收的篇。以后每做一篇，在这里加卷号。
-DONE = [7, 8, 48, 55, 61, 62, 77, 81, 84, 86, 92, 109, 124, 130]
+DONE = [7, 8, 48, 55, 61, 62, 77, 81, 84, 86, 92, 109, 124, 129, 130]
 
 GROUPS = [
     ("benji", "本纪", 1, 12),
@@ -181,6 +181,21 @@ def emend_109(text: str) -> str:
         text = text.replace(old, new)
     return text
 
+FIX_129 = [
+    ("巴[蜀]寡婦", "巴蜀寡婦"),
+    ("犀、瑁", "犀、瑇瑁"),
+    ("烏氏倮牧", "烏氏倮畜牧"),
+    ("悲歌慨", "悲歌忼慨"),
+    ("竹竿萬，", "竹竿萬個，"),
+    ("炧", "卮"),
+]
+
+
+def emend_129(text: str) -> str:
+    for old, new in FIX_129:
+        text = text.replace(old, new)
+    return text
+
 FIX_081 = [
     ("原以十五城請易璧", "願以十五城請易璧"),
     ("原王勿遣", "願王勿遣"),
@@ -266,6 +281,8 @@ def parse_juan(juan: int) -> list[list[str]]:
             text = emend_086(text)
         if juan == 109:
             text = emend_109(text)
+        if juan == 129:
+            text = emend_129(text)
         text = emend(text)
         sents = split_sentences(text)
         if sents:
