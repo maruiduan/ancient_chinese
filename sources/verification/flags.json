@@ -51,10 +51,10 @@
       }
     ],
     "unexpected": [],
-    "reviewChars": 19,
-    "cacheSingle": 117,
+    "reviewChars": 9,
+    "cacheSingle": 43,
     "glosses": 9066,
-    "lessonFlags": 161,
+    "lessonFlags": 135,
     "missingChars": 375,
     "missingHits": 600,
     "simp": [
@@ -278,11 +278,11 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
-      "word": "且",
-      "reading": "jū",
-      "han": "qiě",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
+      "word": "不",
+      "reading": "bù",
+      "han": "fǒu、bú",
+      "ui": "review",
+      "detail": "汉典有多个读音，说文音一个都不在里面。页面仍用说文音，弹层标为待复核。"
     },
     {
       "kind": "reading",
@@ -299,7 +299,7 @@
       "where": "字书默认音",
       "id": "",
       "word": "乾",
-      "reading": "qián",
+      "reading": "gān",
       "han": "gàn",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
@@ -308,49 +308,9 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
-      "word": "他",
-      "reading": "tuó",
-      "han": "tā",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "住",
-      "reading": "shù",
-      "han": "zhù",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "俘",
-      "reading": "fū",
-      "han": "fú",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "俱",
-      "reading": "jū",
-      "han": "jù",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "傭",
-      "reading": "chōng",
-      "han": "yōng",
+      "word": "伺",
+      "reading": "cì",
+      "han": "sì",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
     },
@@ -368,9 +328,9 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
-      "word": "僥",
-      "reading": "yáo",
-      "han": "jiǎo",
+      "word": "剌",
+      "reading": "lá",
+      "han": "là",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
     },
@@ -378,59 +338,9 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
-      "word": "儔",
-      "reading": "dào",
-      "han": "chóu",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "儷",
-      "reading": "lí",
-      "han": "lì",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "冰",
-      "reading": "níng",
-      "han": "bīng",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "副",
-      "reading": "pì",
-      "han": "fù",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "劇",
-      "reading": "jí",
-      "han": "jù",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "北",
-      "reading": "bèi",
-      "han": "běi",
+      "word": "勁",
+      "reading": "jìn",
+      "han": "jìng",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
     },
@@ -448,39 +358,9 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
-      "word": "匱",
-      "reading": "guì",
-      "han": "kuì",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
       "word": "匹",
       "reading": "pǐ",
       "han": "pí",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "卓",
-      "reading": "zhuō",
-      "han": "zhuó",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "厭",
-      "reading": "yā",
-      "han": "yàn",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
     },
@@ -493,56 +373,6 @@
       "han": "zhī",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "听",
-      "reading": "yǐn",
-      "han": "tīng",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "嗔",
-      "reading": "tián",
-      "han": "chēn",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "嗟",
-      "reading": "chā",
-      "han": "jiē",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "噁",
-      "reading": "ě",
-      "han": "è、wū、wù",
-      "ui": "review",
-      "detail": "汉典有多个读音，说文音一个都不在里面。页面仍用说文音，弹层标为待复核。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "噫",
-      "reading": "ǎi",
-      "han": "yī、ài",
-      "ui": "review",
-      "detail": "汉典有多个读音，说文音一个都不在里面。页面仍用说文音，弹层标为待复核。"
     },
     {
       "kind": "reading",
@@ -568,16 +398,6 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
-      "word": "夢",
-      "reading": "méng",
-      "han": "mèng",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
       "word": "奧",
       "reading": "ào",
       "han": "yù、ǎo",
@@ -588,39 +408,9 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
-      "word": "妙",
-      "reading": "yāo",
-      "han": "miào",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
       "word": "寸",
       "reading": "cùn",
       "han": "cǔn",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "已",
-      "reading": "sì",
-      "han": "yǐ",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "帙",
-      "reading": "zhí",
-      "han": "zhì",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
     },
@@ -638,9 +428,9 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
-      "word": "廁",
-      "reading": "cì",
-      "han": "cè",
+      "word": "幹",
+      "reading": "gān",
+      "han": "gàn",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
     },
@@ -658,69 +448,9 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
-      "word": "弄",
-      "reading": "lòng",
-      "han": "nòng",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "影",
-      "reading": "jǐng",
-      "han": "yǐng",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "徘",
-      "reading": "péi",
-      "han": "pái",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "愾",
-      "reading": "xì",
-      "han": "kài",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "慷",
-      "reading": "kàng",
-      "han": "kāng",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "憔",
-      "reading": "jiāo",
-      "han": "qiáo",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "或",
-      "reading": "yù",
-      "han": "huò",
+      "word": "悄",
+      "reading": "qiāo",
+      "han": "qiǎo",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
     },
@@ -738,81 +468,11 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
-      "word": "抱",
-      "reading": "póu",
-      "han": "bào",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "拓",
-      "reading": "zhí",
-      "han": "tuò、tà",
-      "ui": "review",
-      "detail": "汉典有多个读音，说文音一个都不在里面。页面仍用说文音，弹层标为待复核。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "捲",
-      "reading": "quán",
-      "han": "juàn、juǎn",
-      "ui": "review",
-      "detail": "汉典有多个读音，说文音一个都不在里面。页面仍用说文音，弹层标为待复核。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "掇",
-      "reading": "duó",
-      "han": "duō",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "探",
-      "reading": "tān",
-      "han": "tàn",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
       "word": "揣",
       "reading": "chuǎi",
       "han": "zhuī、tuán、chuāi",
       "ui": "review",
       "detail": "汉典有多个读音，说文音一个都不在里面。页面仍用说文音，弹层标为待复核。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "揭",
-      "reading": "qì",
-      "han": "jiē",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "攘",
-      "reading": "ràng",
-      "han": "rǎng",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
     },
     {
       "kind": "reading",
@@ -828,19 +488,9 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
-      "word": "曰",
-      "reading": "yuè",
-      "han": "yuē",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "朋",
-      "reading": "fèng",
-      "han": "péng",
+      "word": "暈",
+      "reading": "yūn",
+      "han": "yùn",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
     },
@@ -858,16 +508,6 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
-      "word": "朴",
-      "reading": "pò",
-      "han": "bú、pǔ",
-      "ui": "review",
-      "detail": "汉典有多个读音，说文音一个都不在里面。页面仍用说文音，弹层标为待复核。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
       "word": "杠",
       "reading": "gāng",
       "han": "gàng",
@@ -878,31 +518,11 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
-      "word": "某",
-      "reading": "méi",
-      "han": "mǒu",
+      "word": "枹",
+      "reading": "bāo",
+      "han": "fú",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "核",
-      "reading": "gāi",
-      "han": "hé",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "榜",
-      "reading": "bēng",
-      "han": "bǎng、bàng",
-      "ui": "review",
-      "detail": "汉典有多个读音，说文音一个都不在里面。页面仍用说文音，弹层标为待复核。"
     },
     {
       "kind": "reading",
@@ -918,109 +538,9 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
-      "word": "模",
-      "reading": "mú",
-      "han": "mó",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "橈",
-      "reading": "nào",
-      "han": "ráo、náo",
-      "ui": "review",
-      "detail": "汉典有多个读音，说文音一个都不在里面。页面仍用说文音，弹层标为待复核。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "欄",
-      "reading": "liàn",
-      "han": "lán",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "氣",
-      "reading": "xì",
-      "han": "qì",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "沬",
-      "reading": "huì",
-      "han": "mèi",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "沮",
-      "reading": "jū",
-      "han": "jǔ",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "治",
-      "reading": "chí",
-      "han": "zhì",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "泄",
-      "reading": "yì",
-      "han": "xiè",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "洋",
-      "reading": "xiáng",
-      "han": "yáng",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "活",
-      "reading": "guō",
-      "han": "huó",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "淨",
-      "reading": "chéng",
-      "han": "jìng",
+      "word": "氓",
+      "reading": "máng",
+      "han": "méng",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
     },
@@ -1038,109 +558,9 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
-      "word": "湮",
-      "reading": "yīn",
-      "han": "yān",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "溺",
-      "reading": "ruò",
-      "han": "nì",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "滫",
-      "reading": "xiū",
-      "han": "xiǔ",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "番",
-      "reading": "fán",
-      "han": "fān",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
       "word": "碩",
       "reading": "shuò",
       "han": "shuō",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "禪",
-      "reading": "shàn",
-      "han": "chàn、chán",
-      "ui": "review",
-      "detail": "汉典有多个读音，说文音一个都不在里面。页面仍用说文音，弹层标为待复核。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "種",
-      "reading": "chóng",
-      "han": "zhǒng、zhòng",
-      "ui": "review",
-      "detail": "汉典有多个读音，说文音一个都不在里面。页面仍用说文音，弹层标为待复核。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "究",
-      "reading": "jiù",
-      "han": "jiū",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "簪",
-      "reading": "zēn",
-      "han": "zān",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "籲",
-      "reading": "yù",
-      "han": "xū",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "粢",
-      "reading": "cí",
-      "han": "zī",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
     },
@@ -1158,96 +578,6 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
-      "word": "綏",
-      "reading": "suī",
-      "han": "suí",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "緣",
-      "reading": "yuàn",
-      "han": "yuán",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "緹",
-      "reading": "tǐ",
-      "han": "tí",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "績",
-      "reading": "jī",
-      "han": "jì",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "繚",
-      "reading": "liǎo",
-      "han": "liáo",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "繞",
-      "reading": "rǎo",
-      "han": "rào",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "繫",
-      "reading": "jì",
-      "han": "xì",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "纔",
-      "reading": "shān",
-      "han": "cái",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "義",
-      "reading": "yí",
-      "han": "yì",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
       "word": "翟",
       "reading": "dí",
       "han": "dì、zhái",
@@ -1258,29 +588,9 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
-      "word": "翫",
-      "reading": "wàn",
-      "han": "wán",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
       "word": "耶",
       "reading": "yé",
       "han": "yē",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "膚",
-      "reading": "lú",
-      "han": "fū",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
     },
@@ -1308,11 +618,11 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
-      "word": "草",
-      "reading": "zào",
-      "han": "cǎo",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
+      "word": "菲",
+      "reading": "fēi",
+      "han": "fěi、féi",
+      "ui": "review",
+      "detail": "汉典有多个读音，说文音一个都不在里面。页面仍用说文音，弹层标为待复核。"
     },
     {
       "kind": "reading",
@@ -1328,9 +638,9 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
-      "word": "蛇",
-      "reading": "tā",
-      "han": "shé",
+      "word": "蒔",
+      "reading": "shí",
+      "han": "shì",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
     },
@@ -1338,9 +648,9 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
-      "word": "蜉",
-      "reading": "liè",
-      "han": "fú",
+      "word": "蘋",
+      "reading": "píng",
+      "han": "pín",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
     },
@@ -1348,49 +658,9 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
-      "word": "蟠",
-      "reading": "fán",
-      "han": "pán",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "蠡",
-      "reading": "lǐ",
-      "han": "lí",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "衰",
-      "reading": "suō",
-      "han": "cuī、shuāi",
-      "ui": "review",
-      "detail": "汉典有多个读音，说文音一个都不在里面。页面仍用说文音，弹层标为待复核。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "袒",
-      "reading": "zhàn",
-      "han": "tǎn",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "論",
-      "reading": "lún",
-      "han": "lùn",
+      "word": "詰",
+      "reading": "jí",
+      "han": "jié",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
     },
@@ -1408,26 +678,6 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
-      "word": "譙",
-      "reading": "qiào",
-      "han": "qiáo",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "貉",
-      "reading": "mò",
-      "han": "hé",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
       "word": "跂",
       "reading": "qí",
       "han": "qì",
@@ -1438,29 +688,9 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
-      "word": "跡",
-      "reading": "jī",
-      "han": "jì",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "踔",
-      "reading": "zhào",
-      "han": "chuō",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "蹟",
-      "reading": "jī",
-      "han": "jì",
+      "word": "轘",
+      "reading": "huán",
+      "han": "huàn",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
     },
@@ -1478,9 +708,9 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
-      "word": "迹",
-      "reading": "jī",
-      "han": "jì",
+      "word": "迤",
+      "reading": "yí",
+      "han": "yǐ",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
     },
@@ -1498,16 +728,6 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
-      "word": "還",
-      "reading": "huán",
-      "han": "xuán、hái",
-      "ui": "review",
-      "detail": "汉典有多个读音，说文音一个都不在里面。页面仍用说文音，弹层标为待复核。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
       "word": "酪",
       "reading": "lào",
       "han": "lǎo",
@@ -1518,19 +738,9 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
-      "word": "鉞",
-      "reading": "huì",
-      "han": "yuè",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "錢",
-      "reading": "jiǎn",
-      "han": "qián",
+      "word": "鏑",
+      "reading": "dī",
+      "han": "dí",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
     },
@@ -1548,9 +758,9 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
-      "word": "閒",
-      "reading": "jiàn",
-      "han": "xián",
+      "word": "闒",
+      "reading": "dá",
+      "han": "tà",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
     },
@@ -1558,9 +768,9 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
-      "word": "閤",
-      "reading": "gé",
-      "han": "hé",
+      "word": "隻",
+      "reading": "zhǐ",
+      "han": "zhī",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
     },
@@ -1568,9 +778,9 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
-      "word": "附",
+      "word": "餔",
       "reading": "bù",
-      "han": "fù",
+      "han": "bū",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
     },
@@ -1578,97 +788,11 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
-      "word": "陣",
-      "reading": "chén",
-      "han": "zhèn",
+      "word": "馮",
+      "reading": "féng",
+      "han": "píng",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "雌",
-      "reading": "cī",
-      "han": "cí",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "霸",
-      "reading": "pò",
-      "han": "bà",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "鞅",
-      "reading": "yǎng",
-      "han": "yāng、yàng",
-      "ui": "review",
-      "detail": "汉典有多个读音，说文音一个都不在里面。页面仍用说文音，弹层标为待复核。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "頃",
-      "reading": "qīng",
-      "han": "qǐng",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "字书默认音",
-      "id": "",
-      "word": "馴",
-      "reading": "xún",
-      "han": "xùn",
-      "ui": "silent",
-      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
-    },
-    {
-      "kind": "reading",
-      "where": "虚词",
-      "id": "h01-09",
-      "word": "不若",
-      "reading": "bù ruò",
-      "han": "不→bù（汉典 fǒu、bú）",
-      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
-    },
-    {
-      "kind": "reading",
-      "where": "虚词",
-      "id": "h01-17",
-      "word": "不可不",
-      "reading": "bù kě bù",
-      "han": "不→bù（汉典 fǒu、bú）；不→bù（汉典 fǒu、bú）",
-      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
-    },
-    {
-      "kind": "reading",
-      "where": "实词",
-      "id": "h01-22",
-      "word": "芳菲",
-      "reading": "fāng fēi",
-      "han": "菲→fēi（汉典 fěi、féi）",
-      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
-    },
-    {
-      "kind": "reading",
-      "where": "实词",
-      "id": "h01-30",
-      "word": "不已",
-      "reading": "bù yǐ",
-      "han": "不→bù（汉典 fǒu、bú）",
-      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     },
     {
       "kind": "reading",
@@ -1687,15 +811,6 @@
       "reading": "韵",
       "han": "http://wyw.hwxnet.com/view/hwxe5hwx9dhwx87.html",
       "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
-    },
-    {
-      "kind": "reading",
-      "where": "实词",
-      "id": "h01-40",
-      "word": "不隔",
-      "reading": "bù gé",
-      "han": "不→bù（汉典 fǒu、bú）",
-      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     },
     {
       "kind": "loan",
@@ -1743,15 +858,6 @@
       "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
     },
     {
-      "kind": "reading",
-      "where": "实词",
-      "id": "v01-05",
-      "word": "不逞",
-      "reading": "bù chěng",
-      "han": "不→bù（汉典 fǒu、bú）",
-      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
-    },
-    {
       "kind": "loan",
       "where": "通假",
       "id": "v01-05",
@@ -1775,7 +881,7 @@
       "id": "v01-06",
       "word": "不凿",
       "reading": "bù zuò",
-      "han": "不→bù（汉典 fǒu、bú）；凿→zuò（汉典 zāo）",
+      "han": "凿→zuò（汉典 zāo）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     },
     {
@@ -1797,15 +903,6 @@
       "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
     },
     {
-      "kind": "reading",
-      "where": "实词",
-      "id": "v01-09",
-      "word": "不穀",
-      "reading": "bù gǔ",
-      "han": "不→bù（汉典 fǒu、bú）",
-      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
-    },
-    {
       "kind": "loan",
       "where": "通假",
       "id": "v01-11",
@@ -1822,33 +919,6 @@
       "reading": "磬",
       "han": "http://wyw.hwxnet.com/view/hwxe7hwxbdhwx84.html",
       "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
-    },
-    {
-      "kind": "reading",
-      "where": "实词",
-      "id": "v02-02",
-      "word": "不若",
-      "reading": "bù ruò",
-      "han": "不→bù（汉典 fǒu、bú）",
-      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
-    },
-    {
-      "kind": "reading",
-      "where": "实词",
-      "id": "v02-04",
-      "word": "不谷",
-      "reading": "bù gǔ",
-      "han": "不→bù（汉典 fǒu、bú）",
-      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
-    },
-    {
-      "kind": "reading",
-      "where": "实词",
-      "id": "v02-06",
-      "word": "不腆",
-      "reading": "bù tiǎn",
-      "han": "不→bù（汉典 fǒu、bú）",
-      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     },
     {
       "kind": "reading",
@@ -1894,15 +964,6 @@
       "reading": "聚",
       "han": "http://wyw.hwxnet.com/view/hwxe5hwx8fhwx96.html",
       "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
-    },
-    {
-      "kind": "reading",
-      "where": "实词",
-      "id": "v03-03",
-      "word": "不佞",
-      "reading": "bù nìng",
-      "han": "不→bù（汉典 fǒu、bú）",
-      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     },
     {
       "kind": "loan",
@@ -2076,15 +1137,6 @@
       "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
     },
     {
-      "kind": "reading",
-      "where": "实词",
-      "id": "v06-15",
-      "word": "不毛",
-      "reading": "bù máo",
-      "han": "不→bù（汉典 fǒu、bú）",
-      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
-    },
-    {
       "kind": "loan",
       "where": "通假",
       "id": "v07-01",
@@ -2092,15 +1144,6 @@
       "reading": "伶仃",
       "han": "http://wyw.hwxnet.com/view/hwxe9hwx9bhwxb6.html",
       "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
-    },
-    {
-      "kind": "reading",
-      "where": "实词",
-      "id": "v07-05",
-      "word": "不求甚解",
-      "reading": "bù qiú shèn jiě",
-      "han": "不→bù（汉典 fǒu、bú）",
-      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     },
     {
       "kind": "reading",
@@ -2119,6 +1162,15 @@
       "reading": "曼",
       "han": "http://wyw.hwxnet.com/view/hwxe7hwxbchwxa6.html",
       "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "v07-15",
+      "word": "湮郁",
+      "reading": "yīn yù",
+      "han": "湮→yīn（汉典 yān）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     },
     {
       "kind": "loan",
@@ -2211,15 +1263,6 @@
       "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
     },
     {
-      "kind": "reading",
-      "where": "实词",
-      "id": "v08-18",
-      "word": "冥顽不灵",
-      "reading": "míng wán bù líng",
-      "han": "不→bù（汉典 fǒu、bú）",
-      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
-    },
-    {
       "kind": "loan",
       "where": "通假",
       "id": "v08-18",
@@ -2236,15 +1279,6 @@
       "reading": "间",
       "han": "http://wyw.hwxnet.com/view/hwxe9hwx97hwxb2.html",
       "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
-    },
-    {
-      "kind": "reading",
-      "where": "实词",
-      "id": "v09-02",
-      "word": "不中",
-      "reading": "bù zhòng",
-      "han": "不→bù（汉典 fǒu、bú）",
-      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     },
     {
       "kind": "loan",
@@ -2427,15 +1461,6 @@
       "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
     },
     {
-      "kind": "reading",
-      "where": "实词",
-      "id": "v10-12",
-      "word": "不忮不求",
-      "reading": "bù zhì bù qiú",
-      "han": "不→bù（汉典 fǒu、bú）；不→bù（汉典 fǒu、bú）",
-      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
-    },
-    {
       "kind": "loan",
       "where": "通假",
       "id": "v10-14",
@@ -2445,15 +1470,6 @@
       "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
     },
     {
-      "kind": "reading",
-      "where": "实词",
-      "id": "v10-15",
-      "word": "不经",
-      "reading": "bù jīng",
-      "han": "不→bù（汉典 fǒu、bú）",
-      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
-    },
-    {
       "kind": "loan",
       "where": "通假",
       "id": "v10-15",
@@ -2461,15 +1477,6 @@
       "reading": "放",
       "han": "http://wyw.hwxnet.com/view/hwxe6hwx96hwxb9.html",
       "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
-    },
-    {
-      "kind": "reading",
-      "where": "实词",
-      "id": "v11-01",
-      "word": "不遇",
-      "reading": "bù yù",
-      "han": "不→bù（汉典 fǒu、bú）",
-      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     },
     {
       "kind": "reading",
@@ -2488,6 +1495,15 @@
       "reading": "蔬",
       "han": "http://wyw.hwxnet.com/view/hwxe7hwx96hwx8f.html",
       "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "v11-06",
+      "word": "彭蠡",
+      "reading": "Péng Lǐ",
+      "han": "蠡→lǐ（汉典 lí）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     },
     {
       "kind": "loan",
@@ -2535,15 +1551,6 @@
       "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
     },
     {
-      "kind": "reading",
-      "where": "实词",
-      "id": "v11-10",
-      "word": "不时",
-      "reading": "bù shí",
-      "han": "不→bù（汉典 fǒu、bú）",
-      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
-    },
-    {
       "kind": "loan",
       "where": "通假",
       "id": "v11-12",
@@ -2580,15 +1587,6 @@
       "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
     },
     {
-      "kind": "reading",
-      "where": "实词",
-      "id": "v11-16",
-      "word": "不宣",
-      "reading": "bù xuān",
-      "han": "不→bù（汉典 fǒu、bú）",
-      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
-    },
-    {
       "kind": "loan",
       "where": "通假",
       "id": "v11-17",
@@ -2610,9 +1608,9 @@
       "kind": "reading",
       "where": "实词",
       "id": "v11-21",
-      "word": "不羁",
-      "reading": "bù jī",
-      "han": "不→bù（汉典 fǒu、bú）",
+      "word": "卓荦",
+      "reading": "zhuō luò",
+      "han": "卓→zhuō（汉典 zhuó）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     },
     {
@@ -2700,27 +1698,9 @@
       "kind": "reading",
       "where": "实词",
       "id": "z02-06",
-      "word": "不可讳",
-      "reading": "bù kě huì",
-      "han": "不→bù（汉典 fǒu、bú）",
-      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
-    },
-    {
-      "kind": "reading",
-      "where": "实词",
-      "id": "z02-06",
       "word": "栎阳",
       "reading": "yuè yáng",
       "han": "栎→yuè（汉典 lì）",
-      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
-    },
-    {
-      "kind": "reading",
-      "where": "实词",
-      "id": "z02-11",
-      "word": "道不拾遗",
-      "reading": "dào bù shí yí",
-      "han": "不→bù（汉典 fǒu、bú）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     },
     {
@@ -2730,15 +1710,6 @@
       "word": "远",
       "reading": "yuàn",
       "han": "远→yuàn（汉典 yuǎn）",
-      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
-    },
-    {
-      "kind": "reading",
-      "where": "实词",
-      "id": "z02-18",
-      "word": "不胜",
-      "reading": "bù shèng",
-      "han": "不→bù（汉典 fǒu、bú）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     },
     {
@@ -2766,15 +1737,6 @@
       "word": "五羖大夫",
       "reading": "wǔ gǔ dài fū",
       "han": "大→dài（汉典 tài、dà）",
-      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
-    },
-    {
-      "kind": "reading",
-      "where": "实词",
-      "id": "z02-25",
-      "word": "申不害",
-      "reading": "shēn bù hài",
-      "han": "不→bù（汉典 fǒu、bú）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     },
     {
@@ -2812,15 +1774,6 @@
       "reading": "壬",
       "han": "http://wyw.hwxnet.com/view/hwxe4hwxbbhwxbb.html",
       "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
-    },
-    {
-      "kind": "reading",
-      "where": "实词",
-      "id": "z04-06",
-      "word": "不竞",
-      "reading": "bù jìng",
-      "han": "不→bù（汉典 fǒu、bú）",
-      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     },
     {
       "kind": "reading",
@@ -2914,15 +1867,6 @@
     },
     {
       "kind": "reading",
-      "where": "虚词",
-      "id": "z05-04",
-      "word": "不",
-      "reading": "bù",
-      "han": "不→bù（汉典 fǒu、bú）",
-      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
-    },
-    {
-      "kind": "reading",
       "where": "实词",
       "id": "z05-05",
       "word": "五大夫",
@@ -3000,24 +1944,6 @@
       "word": "败还",
       "reading": "bài huán",
       "han": "还→huán（汉典 xuán、hái）",
-      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
-    },
-    {
-      "kind": "reading",
-      "where": "实词",
-      "id": "z06-24",
-      "word": "不礼",
-      "reading": "bù lǐ",
-      "han": "不→bù（汉典 fǒu、bú）",
-      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
-    },
-    {
-      "kind": "reading",
-      "where": "实词",
-      "id": "z06-27",
-      "word": "不受命",
-      "reading": "bù shòu mìng",
-      "han": "不→bù（汉典 fǒu、bú）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     },
     {

@@ -3522,7 +3522,9 @@
     const sub = document.createElement("p");
     sub.className = "sub";
     const bits = [];
-    if (dictPy && !samePy(dictPy, syllable)) bits.push("字书 " + dictPy);
+    if (dictPy && !samePy(dictPy, syllable)) bits.push("常用 " + dictPy);
+    const swPy = entry.pending ? "" : normalizePy(entry.pySw);
+    if (swPy && !samePy(swPy, syllable) && !samePy(swPy, dictPy)) bits.push("说文 " + swPy);
     if (entry.fanqie) bits.push("反切 " + entry.fanqie);
     sub.textContent = bits.join(" · ");
     const ben = document.createElement("p");

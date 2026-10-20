@@ -65,6 +65,9 @@ def simplify(text: str) -> str:
     return "".join(out)
 
 
+from common_reading import common_py, norm as norm_py  # noqa: E402
+
+
 def pinyin_of(text: str) -> str:
     parts = []
     for ch in text:
@@ -296,13 +299,17 @@ def build_dict(chars: set[str]) -> dict:
             if trad != ch:
                 entry = shuowen.get(trad)
         ben = entry["ben"] if entry else ""
+        sw = norm_py((entry or {}).get("py") or "") or pinyin_of(ch)
+        py = common_py(ch, sw)
         out[ch] = {
-            "py": (entry or {}).get("py") or pinyin_of(ch),
+            "py": py,
             "fanqie": (entry or {}).get("fanqie") or "",
             "ben": ben,
             "benS": simplify(ben) if ben else "",
             "inShuowen": bool(entry),
         }
+        if py != sw:
+            out[ch]["pySw"] = sw
     return out
 
 
