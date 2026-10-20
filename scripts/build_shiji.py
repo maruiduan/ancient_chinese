@@ -34,7 +34,7 @@ PUNCT = set("，。！？；、：·．…—～「」『』（）【】《》�
 CN_NUM = "〇一二三四五六七八九十百"
 
 # 已收的篇。以后每做一篇，在这里加卷号。
-DONE = [7, 8, 92]
+DONE = [7, 8, 81, 92]
 
 GROUPS = [
     ("benji", "本纪", 1, 12),
@@ -58,6 +58,9 @@ def to_simplified(text: str) -> str:
     for ch in text:
         # 史记里的「閒」都是间隔、间道、离间的间，人名涉閒、田閒也读间。OpenCC 收成「闲」，这里改作「间」。
         simp = "间" if ch == "閒" else CC.convert(ch)
+        # 「齮」的类推简化字 𬺈 很多字体没有，仍用齮。
+        if simp == "𬺈":
+            simp = "齮"
         if len(simp) != 1:
             raise SystemExit(f"简繁不对齐：{ch} -> {simp}")
         out.append(simp)
@@ -96,6 +99,34 @@ def emend(text: str) -> str:
     text = text.replace("泗州守壯敗於薛", "泗川守壯敗於薛")
     if "□" in text:
         raise SystemExit(f"正文有 □，要先查证再补字：{text[:40]}")
+    return text
+
+
+# 卷八十一维基文库本混入日本新字形，另有几处录错，逐条改。每一条都记在 EDITION.md。
+SHINJITAI_081 = str.maketrans({"歳": "歲", "倶": "俱", "撃": "擊", "歩": "步", "毎": "每",
+                               "髙": "高", "暦": "歷", "晩": "晚", "娯": "娛", "巻": "卷"})
+FIX_081 = [
+    ("原以十五城請易璧", "願以十五城請易璧"),
+    ("原王勿遣", "願王勿遣"),
+    ("皆原一戰", "皆願一戰"),
+    ("請奏盆鮓秦王", "請奉盆缻秦王"),
+    ("鮓", "缻"),
+    ("禦史", "御史"),
+    ("道裏", "道里"),
+    ("五十裏", "五十里"),
+    ("「籲！", "「吁！"),
+    ("舍相如廣成傳。", "舍相如廣成傳舍。"),
+    ("遣秦間，卷甲而趨之", "遣秦間，乃卷甲而趨之"),
+    ("今善射者去閼與", "令善射者去閼與"),
+    ("扈輒於武遂，", "扈輒於武遂城，"),
+    ("龐暖", "龐煖"),
+]
+
+
+def emend_081(text: str) -> str:
+    text = text.translate(SHINJITAI_081)
+    for old, new in FIX_081:
+        text = text.replace(old, new)
     return text
 
 
@@ -138,12 +169,18 @@ def parse_juan(juan: int) -> list[list[str]]:
     paragraphs = []
     for line in body.splitlines():
         line = line.strip()
-        if not line or line.startswith(("__", "{{", "==", "|", "[[")):
+        # 卷八十一的【索隱述贊】写成小节标题，下面一段也是司马贞的，不收。
+        if line.startswith("==索隱述贊"):
+            break
+        if not line or line.startswith(("__", "{{", "==", "|", "[[", "</")):
             continue
         # 篇末的【索隱述贊】是司马贞写的，不是史记本文。
         if line.startswith("【"):
             continue
-        text = emend(clean_inline(line))
+        text = clean_inline(line)
+        if juan == 81:
+            text = emend_081(text)
+        text = emend(text)
         sents = split_sentences(text)
         if sents:
             paragraphs.append(sents)
