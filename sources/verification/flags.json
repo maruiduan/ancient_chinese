@@ -15,8 +15,8 @@
       },
       {
         "collection": "史记",
-        "pieces": 51,
-        "chars": 233767,
+        "pieces": 52,
+        "chars": 237420,
         "unexpected": "0"
       },
       {
@@ -53,21 +53,21 @@
     "unexpected": [],
     "reviewChars": 13,
     "cacheSingle": 51,
-    "glosses": 10175,
-    "lessonFlags": 140,
+    "glosses": 10198,
+    "lessonFlags": 141,
     "missingChars": 395,
-    "missingHits": 647,
+    "missingHits": 649,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 4289,
+        "count": 4336,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 1080,
+        "count": 1087,
         "note": "归并"
       },
       {
@@ -79,13 +79,13 @@
       {
         "trad": "雲",
         "simp": "云",
-        "count": 137,
+        "count": 141,
         "note": "归并"
       },
       {
         "trad": "徵",
         "simp": "征",
-        "count": 42,
+        "count": 43,
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
@@ -958,6 +958,15 @@
       "reading": "韵",
       "han": "http://wyw.hwxnet.com/view/hwxe5hwx9dhwx87.html",
       "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "s001",
+      "word": "禅让",
+      "reading": "shàn ràng",
+      "han": "禅→shàn（汉典 chàn、chán）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     },
     {
       "kind": "reading",
