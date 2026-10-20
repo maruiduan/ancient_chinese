@@ -29,7 +29,7 @@ CATALOG = ROOT / "data" / "shiji.json"
 DUMP = SRC / "texts.json"
 URL = "https://zh.wikisource.org/wiki/史記/卷{juan:03d}"
 # 用了固定修订版的卷，出处链接指向那一版。
-OLDID = {48: 2531218, 81: 8735558, 92: 1483915}
+OLDID = {48: 2531218, 55: 2666612, 81: 8735558, 92: 1483915}
 
 
 def source_url(juan: int) -> str:
@@ -42,7 +42,7 @@ PUNCT = set("，。！？；、：·．…—～「」『』（）【】《》�
 CN_NUM = "〇一二三四五六七八九十百"
 
 # 已收的篇。以后每做一篇，在这里加卷号。
-DONE = [7, 8, 48, 81, 92]
+DONE = [7, 8, 48, 55, 81, 92]
 
 GROUPS = [
     ("benji", "本纪", 1, 12),
@@ -115,6 +115,10 @@ def emend(text: str) -> str:
     text = text.replace("又彊令吳廣之次所旁", "又閒令吳廣之次所旁")
     text = text.replace("足以守陽，", "足以守滎陽，")
     text = text.replace("董緶", "董緤")
+    # 留侯世家：「鴻鵠高飛」维基文库作鴻鴈；「常為畫策臣」漏臣；「嘗閒從容」的閒是闲暇，写作閑以免简化成间。
+    text = text.replace("鴻鴈高飛", "鴻鵠高飛")
+    text = text.replace("常為畫策，時時從漢王", "常為畫策臣，時時從漢王")
+    text = text.replace("良嘗間從容", "良嘗閑從容")
     if "□" in text:
         raise SystemExit(f"正文有 □，要先查证再补字：{text[:40]}")
     return text
