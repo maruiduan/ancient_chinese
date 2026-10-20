@@ -1861,3 +1861,7 @@ a.shiji-item { box-shadow: inset 2px 0 0 var(--accent); }
 /* 诗词拼音模式：字间多留一点空，相邻拼音不相碰 */
 .reader .body.verse .orig.with-py .zi { padding-left: .2em; padding-right: .2em; }
 @media (min-width: 861px) { .reader .body.verse .orig.with-py .zi { padding-left: .22em; padding-right: .22em; } }
+/* 诗词拼音是绝对定位，不会撑开字格；按最长拼音（如 shuāng、zhuàng）给足字格宽度 */
+.reader .body.verse .orig.with-py .zi { min-width: 2.15em; padding-left: 0; padding-right: 0; }
+.reader .body.verse.ci .orig.with-py .zi { min-width: 2.25em; }
+@media (min-width: 861px) { .reader .body.verse .orig.with-py .zi { min-width: 2.1em; padding-left: 0; padding-right: 0; } }
