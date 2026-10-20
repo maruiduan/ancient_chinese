@@ -29,7 +29,7 @@ CATALOG = ROOT / "data" / "shiji.json"
 DUMP = SRC / "texts.json"
 URL = "https://zh.wikisource.org/wiki/史記/卷{juan:03d}"
 # 用了固定修订版的卷，出处链接指向那一版。
-OLDID = {48: 2531218, 55: 2666612, 81: 8735558, 92: 1483915}
+OLDID = {48: 2531218, 55: 2666612, 84: 1568305, 81: 8735558, 92: 1483915}
 
 
 def source_url(juan: int) -> str:
@@ -42,7 +42,7 @@ PUNCT = set("，。！？；、：·．…—～「」『』（）【】《》�
 CN_NUM = "〇一二三四五六七八九十百"
 
 # 已收的篇。以后每做一篇，在这里加卷号。
-DONE = [7, 8, 48, 55, 81, 92]
+DONE = [7, 8, 48, 55, 81, 84, 92]
 
 GROUPS = [
     ("benji", "本纪", 1, 12),
@@ -68,7 +68,7 @@ def to_simplified(text: str) -> str:
         simp = "间" if ch == "閒" else CC.convert(ch)
         # 「齮」的类推简化字 𬺈 很多字体没有，仍用齮。
         # 类推简化出的扩展区字（𬺈、𫄬……）很多字体没有，保留原字。
-        if ord(simp) > 0xFFFF and ord(ch) <= 0xFFFF:
+        if (ord(simp) > 0xFFFF or 0x3400 <= ord(simp) <= 0x4DBF) and 0x4E00 <= ord(ch) <= 0x9FFF:
             simp = ch
         # 「夥」表多义时《通用规范汉字表》仍作夥，不简化为伙。
         if ch == "夥":
@@ -119,6 +119,14 @@ def emend(text: str) -> str:
     text = text.replace("鴻鴈高飛", "鴻鵠高飛")
     text = text.replace("常為畫策，時時從漢王", "常為畫策臣，時時從漢王")
     text = text.replace("良嘗間從容", "良嘗閑從容")
+    # 屈原贾生列传：据点校本、wenku 本改。
+    text = text.replace("一而相量", "一槩而相量")
+    text = text.replace("迸固有不并兮", "古固有不並兮")
+    text = text.replace("覽德惪而下之", "覽德煇而下之")
+    text = text.replace("述迫之徒", "怵迫之徒")
+    text = text.replace("細故遰葪", "細故慸葪")
+    text = text.replace("貌甚閒暇", "貌甚閑暇")
+    text = text.replace("被髪", "被髮").replace("造讬", "造託").replace("翺", "翱")
     if "□" in text:
         raise SystemExit(f"正文有 □，要先查证再补字：{text[:40]}")
     return text
