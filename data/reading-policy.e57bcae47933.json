@@ -1,0 +1,107 @@
+{
+  "source": "legacy/dict/out_file/ancient_chinese.json",
+  "sourceName": "汉典文言",
+  "rule": "不根据这份缓存改读音。汉典有多个读音、而说文音都不在其中的，弹层标为待复核。",
+  "chars": {
+    "不": {
+      "status": "review",
+      "py": "",
+      "shuowen": "bù",
+      "han": [
+        "fǒu",
+        "bú"
+      ]
+    },
+    "培": {
+      "status": "review",
+      "py": "",
+      "shuowen": "péi",
+      "han": [
+        "pǒu",
+        "pēi"
+      ]
+    },
+    "塞": {
+      "status": "review",
+      "py": "",
+      "shuowen": "sài",
+      "han": [
+        "sāi",
+        "sè"
+      ]
+    },
+    "奧": {
+      "status": "review",
+      "py": "",
+      "shuowen": "ào",
+      "han": [
+        "yù",
+        "ǎo"
+      ]
+    },
+    "怵": {
+      "status": "review",
+      "py": "",
+      "shuowen": "chù",
+      "han": [
+        "xù",
+        "chǔ"
+      ]
+    },
+    "揣": {
+      "status": "review",
+      "py": "",
+      "shuowen": "chuǎi",
+      "han": [
+        "zhuī",
+        "tuán",
+        "chuāi"
+      ]
+    },
+    "擿": {
+      "status": "review",
+      "py": "",
+      "shuowen": "tī",
+      "han": [
+        "tì",
+        "zhì"
+      ]
+    },
+    "昳": {
+      "status": "review",
+      "py": "",
+      "shuowen": "dié",
+      "han": [
+        "diè",
+        "yì"
+      ]
+    },
+    "翟": {
+      "status": "review",
+      "py": "",
+      "shuowen": "dí",
+      "han": [
+        "dì",
+        "zhái"
+      ]
+    },
+    "菲": {
+      "status": "review",
+      "py": "",
+      "shuowen": "fēi",
+      "han": [
+        "fěi",
+        "féi"
+      ]
+    },
+    "逮": {
+      "status": "review",
+      "py": "",
+      "shuowen": "dài",
+      "han": [
+        "dì",
+        "dǎi"
+      ]
+    }
+  }
+}
