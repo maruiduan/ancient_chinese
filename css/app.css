@@ -1655,3 +1655,31 @@ a.shiji-item { border-color: var(--accent); box-shadow: inset 3px 0 0 var(--acce
 @media (min-width: 1100px) {
   .shiji-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
+/* ===== 西窗烛式排版 =====
+   宋体正文、暖纸底色、淡墨字色、标题居中、拼音轻细。
+   只用系统字体栈，不加载网络字体：iOS/macOS 走宋体-简，Android/Linux 走思源（Noto）宋体，Windows 走中易宋体。
+   拼音模式下每个字的格子宽度不动，只调颜色和字重，免得拼音又挤在一起。 */
+:root {
+  --bg: #f5f1e8;
+  --surface: #fbf9f4;
+  --ink: #2e2924;
+  --ink-soft: #5b5349;
+  --muted: #8f8577;
+  --line: #e5ddd0;
+  --py: #a3937f;
+  --header-bg: rgba(245, 241, 232, 0.94);
+  --serif: "Songti SC", "Noto Serif SC", "Source Han Serif SC", "Noto Serif CJK SC", "Source Han Serif CN", "STSong", "SimSun", "Noto Serif CJK TC", serif;
+}
+h1 { font-weight: 600; letter-spacing: 0.06em; }
+.reader > h1, .reader .kicker, .reader > .meta { text-align: center; }
+.reader > h1 { letter-spacing: 0.1em; margin-bottom: 14px; }
+.home > h1, .home > .lead { text-align: center; }
+.home > .lead { margin-left: auto; margin-right: auto; color: var(--muted); }
+.book-row b, .book-row strong { font-weight: 600; letter-spacing: 0.04em; }
+.orig { color: var(--ink); font-weight: 400; }
+.orig:not(.with-py) { letter-spacing: 0.06em; line-height: 2; }
+.body.prose .orig:not(.with-py) { line-height: 2; }
+.py-ruby, .body.prose .orig.with-py .py-ruby { font-weight: 400; color: var(--py); }
+.vern { color: var(--ink-soft); line-height: 1.8; letter-spacing: 0.02em; }
+.home > h1 { margin-top: 6px; margin-bottom: 6px; }
+.home > .lead { margin-bottom: 20px; }
