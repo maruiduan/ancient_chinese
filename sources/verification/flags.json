@@ -15,8 +15,8 @@
       },
       {
         "collection": "史记",
-        "pieces": 60,
-        "chars": 279285,
+        "pieces": 61,
+        "chars": 284772,
         "unexpected": "0"
       },
       {
@@ -53,27 +53,27 @@
     "unexpected": [],
     "reviewChars": 14,
     "cacheSingle": 53,
-    "glosses": 10380,
-    "lessonFlags": 143,
+    "glosses": 10402,
+    "lessonFlags": 144,
     "missingChars": 400,
-    "missingHits": 659,
+    "missingHits": 660,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 4683,
+        "count": 4709,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 1269,
+        "count": 1284,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 755,
+        "count": 790,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
@@ -1059,6 +1059,15 @@
       "word": "封禅",
       "reading": "fēng shàn",
       "han": "禅→shàn（汉典 chàn、chán）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "s123",
+      "word": "凿空",
+      "reading": "záo kōng",
+      "han": "凿→záo（汉典 zāo）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     },
     {
