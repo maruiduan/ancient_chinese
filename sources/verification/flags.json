@@ -15,8 +15,8 @@
       },
       {
         "collection": "史记",
-        "pieces": 63,
-        "chars": 295718,
+        "pieces": 64,
+        "chars": 297662,
         "unexpected": "0"
       },
       {
@@ -53,7 +53,7 @@
     "unexpected": [],
     "reviewChars": 14,
     "cacheSingle": 53,
-    "glosses": 10446,
+    "glosses": 10468,
     "lessonFlags": 144,
     "missingChars": 400,
     "missingHits": 661,
@@ -61,19 +61,19 @@
       {
         "trad": "於",
         "simp": "于",
-        "count": 4792,
+        "count": 4810,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 1309,
+        "count": 1315,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 806,
+        "count": 808,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
