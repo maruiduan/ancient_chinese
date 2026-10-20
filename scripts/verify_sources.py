@@ -409,7 +409,7 @@ def check_shiji() -> tuple[list[dict], list[dict], list[dict]]:
             "id": entry["id"],
             "collection": "史记",
             "edition": "维基文库《史記》卷%d %s" % (entry["juan"], entry["full_t"]),
-            "url": build_shiji.URL.format(juan=entry["juan"]),
+            "url": build_shiji.source_url(entry["juan"]),
             "note": "正文按 sources/shiji/EDITION.md：只收本文和太史公曰，不收三家注、索隐述赞。白话和注释是本书编写的。",
             "chars": len(got),
         })
