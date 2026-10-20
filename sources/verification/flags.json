@@ -15,8 +15,8 @@
       },
       {
         "collection": "史记",
-        "pieces": 59,
-        "chars": 270207,
+        "pieces": 60,
+        "chars": 279285,
         "unexpected": "0"
       },
       {
@@ -53,33 +53,33 @@
     "unexpected": [],
     "reviewChars": 14,
     "cacheSingle": 53,
-    "glosses": 10358,
-    "lessonFlags": 142,
+    "glosses": 10380,
+    "lessonFlags": 143,
     "missingChars": 400,
     "missingHits": 659,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 4620,
+        "count": 4683,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 1222,
+        "count": 1269,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 700,
+        "count": 755,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 156,
+        "count": 168,
         "note": "归并"
       },
       {
@@ -1041,6 +1041,15 @@
       "word": "落魄",
       "reading": "luò tuò",
       "han": "魄→tuò（汉典 pò）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "s110",
+      "word": "阏氏",
+      "reading": "yān zhī",
+      "han": "阏→yān（汉典 è）；氏→zhī（汉典 shì）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     },
     {
