@@ -15,8 +15,8 @@
       },
       {
         "collection": "史记",
-        "pieces": 14,
-        "chars": 60731,
+        "pieces": 15,
+        "chars": 65510,
         "unexpected": "0"
       },
       {
@@ -53,7 +53,7 @@
     "unexpected": [],
     "reviewChars": 11,
     "cacheSingle": 44,
-    "glosses": 9357,
+    "glosses": 9380,
     "lessonFlags": 136,
     "missingChars": 382,
     "missingHits": 615,
@@ -61,31 +61,31 @@
       {
         "trad": "於",
         "simp": "于",
-        "count": 2682,
+        "count": 2714,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 599,
+        "count": 605,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 360,
+        "count": 366,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 92,
+        "count": 93,
         "note": "归并"
       },
       {
         "trad": "徵",
         "simp": "征",
-        "count": 25,
+        "count": 28,
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
@@ -93,6 +93,12 @@
         "simp": "乾",
         "count": 5,
         "note": "乾坤、乾谿等读 qián，保留乾"
+      },
+      {
+        "trad": "裏",
+        "simp": "里",
+        "count": 5,
+        "note": "归并"
       },
       {
         "trad": "裡",
@@ -105,12 +111,6 @@
         "simp": "於",
         "count": 4,
         "note": "樊於期保留於"
-      },
-      {
-        "trad": "裏",
-        "simp": "里",
-        "count": 4,
-        "note": "归并"
       },
       {
         "trad": "乾",
