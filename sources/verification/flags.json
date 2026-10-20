@@ -15,8 +15,8 @@
       },
       {
         "collection": "史记",
-        "pieces": 55,
-        "chars": 251865,
+        "pieces": 56,
+        "chars": 258300,
         "unexpected": "0"
       },
       {
@@ -53,51 +53,51 @@
     "unexpected": [],
     "reviewChars": 13,
     "cacheSingle": 52,
-    "glosses": 10269,
-    "lessonFlags": 141,
-    "missingChars": 396,
-    "missingHits": 653,
+    "glosses": 10292,
+    "lessonFlags": 142,
+    "missingChars": 397,
+    "missingHits": 655,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 4502,
+        "count": 4554,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 1123,
+        "count": 1156,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 655,
+        "count": 670,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 142,
+        "count": 151,
         "note": "归并"
       },
       {
         "trad": "徵",
         "simp": "征",
-        "count": 50,
+        "count": 51,
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
         "trad": "裏",
         "simp": "里",
-        "count": 17,
+        "count": 18,
         "note": "归并"
       },
       {
         "trad": "乾",
         "simp": "干",
-        "count": 9,
+        "count": 13,
         "note": "干燥作干"
       },
       {
@@ -127,8 +127,14 @@
       {
         "trad": "祇",
         "simp": "祇",
-        "count": 3,
+        "count": 4,
         "note": "神祇保留祇"
+      },
+      {
+        "trad": "幹",
+        "simp": "干",
+        "count": 3,
+        "note": "归并"
       },
       {
         "trad": "禕",
@@ -140,12 +146,6 @@
         "trad": "隻",
         "simp": "只",
         "count": 3,
-        "note": "归并"
-      },
-      {
-        "trad": "幹",
-        "simp": "干",
-        "count": 2,
         "note": "归并"
       },
       {
@@ -982,6 +982,15 @@
       "kind": "reading",
       "where": "实词",
       "id": "s006",
+      "word": "封禅",
+      "reading": "fēng shàn",
+      "han": "禅→shàn（汉典 chàn、chán）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "s012",
       "word": "封禅",
       "reading": "fēng shàn",
       "han": "禅→shàn（汉典 chàn、chán）",
