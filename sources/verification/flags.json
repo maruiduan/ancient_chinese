@@ -15,8 +15,8 @@
       },
       {
         "collection": "史记",
-        "pieces": 38,
-        "chars": 165443,
+        "pieces": 39,
+        "chars": 172781,
         "unexpected": "0"
       },
       {
@@ -53,27 +53,27 @@
     "unexpected": [],
     "reviewChars": 11,
     "cacheSingle": 45,
-    "glosses": 9903,
+    "glosses": 9924,
     "lessonFlags": 138,
-    "missingChars": 389,
-    "missingHits": 634,
+    "missingChars": 391,
+    "missingHits": 637,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 3833,
+        "count": 3868,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 883,
+        "count": 913,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 500,
+        "count": 510,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
@@ -91,13 +91,13 @@
       {
         "trad": "裏",
         "simp": "里",
-        "count": 11,
+        "count": 16,
         "note": "归并"
       },
       {
         "trad": "乾",
         "simp": "干",
-        "count": 6,
+        "count": 8,
         "note": "干燥作干"
       },
       {
