@@ -467,6 +467,9 @@ def parse_juan(juan: int) -> list[list[str]]:
     paragraphs = []
     zan = False
     quote = False
+    addendum = ""
+    tags: list[str] = []
+    PARA_TAGS[juan] = tags
     for line in body.splitlines():
         # 卷一百三十《论六家要指》的分段用维基缩进「:」开头。
         line = line.strip().lstrip(":")
@@ -483,12 +486,17 @@ def parse_juan(juan: int) -> list[list[str]]:
         # 维基文库的跨语言链接（如「fr:Shiji/LXV」），不是正文。
         if re.match(r"^\[\[[a-z]{2,3}:[^\]]*\]\]$", line):
             continue
-        # 卷六篇末附班固《秦纪论》（{{*|班固記秦始皇本紀後…}}），不是史记本文，不收。
+        # 卷六篇末附班固《秦纪论》（{{*|班固記秦始皇本紀後…}}），不是司马迁写的。
+        # 照中华点校本收入，段落标「班固《秦纪论》」。这一行本身是维基文库的标题，不收。
         if line.startswith("{{*|"):
-            break
-        # 卷四十八篇末「褚先生曰」以下是褚少孙补的（引贾谊《过秦论》），不是史记本文。
+            addendum = "bangu"
+            continue
+        # 「褚先生曰」以下是褚少孙补的，照点校本收入，段落标「褚少孙补」。
         if line.startswith("褚先生曰"):
-            break
+            addendum = "chu"
+        # 《秦纪论》末段以维基文库模板的「}}」收尾。
+        if addendum == "bangu" and line.endswith("}}"):
+            line = line[:-2]
         # 卷四十七的「==太史公曰==」是小标题，正文不再写「太史公曰」，补回来。
         if line.replace(" ", "") == "==太史公曰==":
             zan = True
@@ -546,7 +554,18 @@ def parse_juan(juan: int) -> list[list[str]]:
         sents = split_sentences(text)
         if sents:
             paragraphs.append(sents)
+            tags.append(addendum)
     return paragraphs
+
+
+# 每卷每段的出处：""＝司马迁本文；"chu"＝褚少孙补；"bangu"＝班固《秦纪论》。
+PARA_TAGS: dict[int, list[str]] = {}
+ADDENDA = {
+    "chu": {"by": "褚少孙", "label": "褚少孙补",
+            "note": "以下是西汉褚少孙后来补写的，不是司马迁原文。中华书局点校本照录，这里也收入。"},
+    "bangu": {"by": "班固", "label": "班固《秦纪论》",
+              "note": "以下是东汉班固评秦始皇、秦二世的《秦纪论》，后人附在本卷末，不是司马迁原文。中华书局点校本照录，这里也收入。"},
+}
 
 
 def article_id(juan: int) -> str:
@@ -630,23 +649,46 @@ def apply_readings(entry: dict, sentences: list[list[dict]], spec: dict) -> None
         for tok in flat:
             if tok["s"] == rule["char"]:
                 tok["py"] = rule["py"]
+    text_t = "".join(tok["t"] for tok in flat)
     for rule in spec["readings"]:
         ctx, at, py = rule["ctx"], rule["at"], rule["py"]
-        if not (0 <= at < len(ctx)) or ctx[at] in PUNCT or len(py.split()) != 1:
+        if not ctx or len(py.split()) != 1:
             raise SystemExit(f"{entry['id']} 读音规则不对：{rule}")
-        # 通假字按本字读，读音从本字查。
-        allowed = set(pinyin(rule.get("loan") or ctx[at], style=Style.TONE, heteronym=True)[0])
-        if py not in allowed:
-            raise SystemExit(f"{entry['id']} {ctx[at]} 没有 {py} 这个读音：{sorted(allowed)}")
-        hits = [m.start() for m in re.finditer(re.escape(ctx), text)]
+        # 片段先对简体正文，再对繁体正文，最后把片段本身转成简体再对。
+        hits = []
+        for probe, hay in ((ctx, text), (ctx, text_t), (to_simplified(ctx), text)):
+            hits = [m.start() for m in re.finditer(re.escape(probe), hay)]
+            if hits:
+                break
         if not hits:
             raise SystemExit(f"{entry['id']} 读音规则没对上原文：{ctx}")
+
+        def ok(j: int) -> bool:
+            tok = flat[hits[0] + j]
+            if tok.get("punct"):
+                return False
+            chars = {rule["loan"]} if rule.get("loan") else {tok["s"], tok["t"]}
+            return any(py in pinyin(c, style=Style.TONE, heteronym=True)[0] for c in chars)
+
+        # 位置写错（越界、落在标点上、该字没有这个读音）时，就近改到片段里有这个读音的字；
+        # 改不了才报错。改过的记在 AUTOPOS 里，构建结束时列出。
+        if not (0 <= at < len(ctx) and ok(at)):
+            cands = sorted((j for j in range(len(ctx)) if ok(j)), key=lambda j: (abs(j - at), j))
+            if not cands:
+                raise SystemExit(f"{entry['id']} {ctx} 里没有读 {py} 的字（at={at}）")
+            if len(cands) > 1 and abs(cands[0] - at) == abs(cands[1] - at):
+                raise SystemExit(f"{entry['id']} {ctx} 读 {py} 的位置不确定（at={at}，候选 {cands[:2]}）")
+            AUTOPOS.append(f"{entry['id']} {ctx} at {at}→{cands[0]} {py}")
+            at = cands[0]
         rule["_hits"] = len(hits)
         for start in hits:
             tok = flat[start + at]
             tok["py"] = py
             tok["level"] = "sentence"
             tok["ctx"] = rule.get("note", "")
+
+
+AUTOPOS: list[str] = []
 
 
 def tokens_for(trad: str, simp: str) -> list[dict]:
@@ -664,7 +706,8 @@ def article_for(entry: dict, lesson: dict) -> dict:
     cursor = 0
     paragraphs = []
     token_rows = []
-    for trad_p, simp_p in zip(entry["paragraphs_t"], entry["paragraphs_s"]):
+    tags = PARA_TAGS.get(entry["juan"], [])
+    for pi, (trad_p, simp_p) in enumerate(zip(entry["paragraphs_t"], entry["paragraphs_s"])):
         sentences = []
         for trad, simp in zip(trad_p, simp_p):
             if len(trad) != len(simp):
@@ -673,7 +716,11 @@ def article_for(entry: dict, lesson: dict) -> dict:
             token_rows.append(toks)
             sentences.append({"tr": trs[cursor], "tokens": toks})
             cursor += 1
-        paragraphs.append({"sentences": sentences})
+        para = {"sentences": sentences}
+        tag = tags[pi] if pi < len(tags) else ""
+        if tag:
+            para["addendum"] = ADDENDA[tag]
+        paragraphs.append(para)
     apply_readings(entry, token_rows, load_readings(entry))
     gid, label = group_for(entry["juan"])
     head = f"{label} · 卷{cn_juan(entry['juan'])}"
@@ -781,6 +828,10 @@ def main() -> None:
     entries = load_entries()
     if "--write" in sys.argv:
         write(entries)
+        (ROOT / "sources" / "verification" / "reading_autopos.txt").write_text(
+            "".join(line + "\n" for line in AUTOPOS), encoding="utf-8")
+        if AUTOPOS:
+            print(f"读音位置自动改正 {len(AUTOPOS)} 条，见 sources/verification/reading_autopos.txt")
         print(f"wrote {len(entries)} articles")
         return
     dump_json(DUMP, [{"id": e["id"], "title": e["title_s"], "sentences": sentence_count(e),

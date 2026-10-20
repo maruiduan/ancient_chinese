@@ -2213,9 +2213,11 @@
     const lesson = art.lesson;
     if (tab === "vernacular") {
       let any = false;
-      art.paragraphs.forEach(function (para) {
+      art.paragraphs.forEach(function (para, pi) {
         const text = para.sentences.map(function (sent) { return sent.tr || ""; }).join("");
         if (!text) return;
+        const add = addendumStart(art.paragraphs, pi);
+        if (add) panel.appendChild(addendumBanner(add));
         any = true;
         panel.appendChild(sheetP(text));
       });
@@ -2531,6 +2533,25 @@
     return a;
   }
 
+  // 后人补写的段落（褚少孙补、班固《秦纪论》）：在每段补写开头标明出处。
+  function addendumStart(paras, index) {
+    const add = paras[index] && paras[index].addendum;
+    if (!add) return null;
+    const prev = index > 0 ? paras[index - 1].addendum : null;
+    if (prev && prev.label === add.label) return null;
+    return add;
+  }
+
+  function addendumBanner(add) {
+    const p = document.createElement("p");
+    p.className = "pair-missing addendum-note";
+    const b = document.createElement("strong");
+    b.textContent = "【" + add.label + "】";
+    p.appendChild(b);
+    p.appendChild(document.createTextNode(add.note));
+    return p;
+  }
+
   function renderProseBody(art) {
     const body = document.createElement("div");
     const hasTr = art.paragraphs.some(function (para) {
@@ -2538,7 +2559,9 @@
     });
     if (!sentenceMode()) {
       body.className = "body prose";
-      art.paragraphs.forEach(function (para) {
+      art.paragraphs.forEach(function (para, pi) {
+        const add = addendumStart(art.paragraphs, pi);
+        if (add) body.appendChild(addendumBanner(add));
         const p = document.createElement("p");
         p.className = "orig para" + (state.progress.pinyin ? " with-py" : "");
         para.sentences.forEach(function (sent) {
@@ -2555,7 +2578,9 @@
       banner.textContent = "这一篇还没有逐句译文。下面按句断开，点开字看《说文》。注释在底部。";
       body.appendChild(banner);
     }
-    art.paragraphs.forEach(function (para) {
+    art.paragraphs.forEach(function (para, pi) {
+      const add = addendumStart(art.paragraphs, pi);
+      if (add) body.appendChild(addendumBanner(add));
       para.sentences.forEach(function (sent, index) {
         const pair = document.createElement("div");
         pair.className = "pair" + (index === para.sentences.length - 1 ? " para-end" : "");
@@ -2579,7 +2604,9 @@
   function renderBody(art, mode) {
     const body = document.createElement("div");
     body.className = "body";
-    art.paragraphs.forEach(function (para) {
+    art.paragraphs.forEach(function (para, pi) {
+      const add = addendumStart(art.paragraphs, pi);
+      if (add) body.appendChild(addendumBanner(add));
       if (mode === "parallel") {
         para.sentences.forEach(function (sent) {
           const pair = document.createElement("div");
@@ -2851,7 +2878,13 @@
     card.appendChild(h2);
     const ol = document.createElement("ol");
     ol.className = "sentence-list";
-    art.paragraphs.forEach(function (para) {
+    art.paragraphs.forEach(function (para, pi) {
+      const add = addendumStart(art.paragraphs, pi);
+      if (add) {
+        const li = document.createElement("li");
+        li.appendChild(addendumBanner(add));
+        ol.appendChild(li);
+      }
       para.sentences.forEach(function (sent) {
         if (!sent.tr) return;
         const li = document.createElement("li");
