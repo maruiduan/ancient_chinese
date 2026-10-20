@@ -29,7 +29,7 @@ CATALOG = ROOT / "data" / "shiji.json"
 DUMP = SRC / "texts.json"
 URL = "https://zh.wikisource.org/wiki/史記/卷{juan:03d}"
 # 用了固定修订版的卷，出处链接指向那一版。
-OLDID = {48: 2531218, 55: 2666612, 84: 1568305, 86: 2388562, 81: 8735558, 92: 1483915, 109: 1765440, 62: 7903600, 77: 367917, 130: 2609362, 61: 2621133, 124: 367994, 129: 7904128, 47: 7903609}
+OLDID = {48: 2531218, 55: 2666612, 84: 1568305, 86: 2388562, 81: 8735558, 92: 1483915, 109: 1765440, 62: 7903600, 77: 367917, 130: 2609362, 61: 2621133, 124: 367994, 129: 7904128, 47: 7903609, 6: 7907969}
 
 
 def source_url(juan: int) -> str:
@@ -42,7 +42,7 @@ PUNCT = set("，。！？；、：·．…—～「」『』（）【】《》�
 CN_NUM = "〇一二三四五六七八九十百"
 
 # 已收的篇。以后每做一篇，在这里加卷号。
-DONE = [7, 8, 47, 48, 55, 61, 62, 77, 81, 84, 86, 92, 109, 124, 129, 130]
+DONE = [6, 7, 8, 47, 48, 55, 61, 62, 77, 81, 84, 86, 92, 109, 124, 129, 130]
 
 GROUPS = [
     ("benji", "本纪", 1, 12),
@@ -198,6 +198,20 @@ def emend_129(text: str) -> str:
         text = text.replace(old, new)
     return text
 
+FIX_006 = [
+    # {{YL|秦始皇元年}} 是维基文库把「元年」展开的年号链接，本文只作「元年」。
+    ("秦始皇元年，將軍蒙驁", "元年，將軍蒙驁"),
+    ("死而以行為謐", "死而以行為謚"),
+    ("皆以戌漕轉作", "皆以戍漕轉作"),
+]
+
+
+def emend_006(text: str) -> str:
+    for old, new in FIX_006:
+        text = text.replace(old, new)
+    return text
+
+
 FIX_081 = [
     ("原以十五城請易璧", "願以十五城請易璧"),
     ("原王勿遣", "願王勿遣"),
@@ -267,6 +281,9 @@ def parse_juan(juan: int) -> list[list[str]]:
         # 卷八十一的【索隱述贊】写成小节标题，下面一段也是司马贞的，不收。
         if line.startswith("==索隱述贊"):
             break
+        # 卷六篇末附班固《秦纪论》（{{*|班固記秦始皇本紀後…}}），不是史记本文，不收。
+        if line.startswith("{{*|"):
+            break
         # 卷四十八篇末「褚先生曰」以下是褚少孙补的（引贾谊《过秦论》），不是史记本文。
         if line.startswith("褚先生曰"):
             break
@@ -293,6 +310,8 @@ def parse_juan(juan: int) -> list[list[str]]:
             text = emend_109(text)
         if juan == 129:
             text = emend_129(text)
+        if juan == 6:
+            text = emend_006(text)
         text = emend(text)
         sents = split_sentences(text)
         if sents:

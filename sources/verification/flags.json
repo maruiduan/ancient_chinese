@@ -15,8 +15,8 @@
       },
       {
         "collection": "史记",
-        "pieces": 16,
-        "chars": 72884,
+        "pieces": 17,
+        "chars": 85515,
         "unexpected": "0"
       },
       {
@@ -53,40 +53,46 @@
     "unexpected": [],
     "reviewChars": 11,
     "cacheSingle": 45,
-    "glosses": 9403,
-    "lessonFlags": 136,
+    "glosses": 9426,
+    "lessonFlags": 137,
     "missingChars": 382,
     "missingHits": 616,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 2807,
+        "count": 2886,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 633,
+        "count": 661,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 373,
+        "count": 390,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 93,
+        "count": 99,
         "note": "归并"
       },
       {
         "trad": "徵",
         "simp": "征",
-        "count": 32,
+        "count": 33,
         "note": "征召、征兆、征逐。不是乐律"
+      },
+      {
+        "trad": "裏",
+        "simp": "里",
+        "count": 9,
+        "note": "归并"
       },
       {
         "trad": "乾",
@@ -99,12 +105,6 @@
         "simp": "干",
         "count": 5,
         "note": "干燥作干"
-      },
-      {
-        "trad": "裏",
-        "simp": "里",
-        "count": 5,
-        "note": "归并"
       },
       {
         "trad": "裡",
@@ -878,6 +878,15 @@
       "reading": "韵",
       "han": "http://wyw.hwxnet.com/view/hwxe5hwx9dhwx87.html",
       "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "s006",
+      "word": "封禅",
+      "reading": "fēng shàn",
+      "han": "禅→shàn（汉典 chàn、chán）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     },
     {
       "kind": "reading",
