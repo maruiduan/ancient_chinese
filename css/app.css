@@ -1751,6 +1751,7 @@ h1 { font-weight: 600; letter-spacing: 0.06em; }
 @font-face{font-family:"GW Serif";font-weight:400;font-display:swap;src:url(fonts/xcz/serif-400-60.woff2) format("woff2");unicode-range:U+4EB3,U+502E,U+509C,U+50C4,U+5470,U+57D2,U+59C9,U+61C1,U+61FB,U+63C4,U+63F3,U+6B79,U+6C67,U+6D9D,U+6EC7,U+6F99,U+74E8,U+7514,U+76EC,U+7A51,U+7A61,U+7A96,U+7AB3,U+7C9C,U+7CC8,U+7CF6,U+7E66,U+7EBB,U+7FA0,U+831C,U+8429,U+873E,U+8753,U+8803,U+89B2,U+89D0,U+8DD5,U+8E7E,U+90A0,U+90E7,U+9116,U+91B5,U+99D4,U+9A2C,U+9A75,U+9AE4,U+9B86,U+9B90,U+9C90,U+9EB9,U+9F26,U+29C59}
 @font-face{font-family:"GW Serif";font-weight:400;font-display:swap;src:url(fonts/xcz/serif-400-61.woff2) format("woff2");unicode-range:U+3430,U+43CC,U+5110,U+51F9,U+54C4,U+5729,U+5851,U+6138,U+65CD,U+695B,U+6B5B,U+728A,U+72A2,U+7486,U+782E,U+7D07,U+7D7B,U+81B0,U+889A,U+90C8,U+90F0,U+9958,U+20209,U+2B5F4}
 @font-face{font-family:"GW Serif";font-weight:400;font-display:swap;src:url(fonts/xcz/serif-400-62.woff2) format("woff2");unicode-range:U+4FD1,U+5013,U+55F7,U+586F,U+5A2D,U+5A5F,U+5E11,U+62D1,U+6A1B,U+6A51,U+6ACC,U+6CC6,U+6DC6,U+71C0,U+753F,U+7623,U+78C5,U+7934,U+7AD8,U+7F4B,U+803C,U+8144,U+831D,U+8648,U+87BD,U+87DC,U+88CB,U+89F3,U+8A1E,U+8F3C,U+8F8C,U+931F,U+952C,U+95E1,U+9EA0,U+9F72,U+9F8B,U+2C2A4}
+@font-face{font-family:"GW Serif";font-weight:400;font-display:swap;src:url(fonts/xcz/serif-400-63.woff2) format("woff2");unicode-range:U+34F7,U+6876,U+8B37}
 :root, :root[data-theme="light"] {
   color-scheme: light;
   --bg: #ffffff; --surface: #ffffff; --ink: #1a1a1a; --ink-soft: #4d4d4d; --muted: #999999;
