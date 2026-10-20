@@ -15,8 +15,8 @@
       },
       {
         "collection": "史记",
-        "pieces": 73,
-        "chars": 316668,
+        "pieces": 74,
+        "chars": 321019,
         "unexpected": "0"
       },
       {
@@ -52,40 +52,40 @@
     ],
     "unexpected": [],
     "reviewChars": 14,
-    "cacheSingle": 53,
-    "glosses": 10670,
+    "cacheSingle": 54,
+    "glosses": 10693,
     "lessonFlags": 145,
     "missingChars": 402,
-    "missingHits": 668,
+    "missingHits": 669,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 4914,
+        "count": 4931,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 1364,
+        "count": 1374,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 850,
+        "count": 866,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 172,
+        "count": 173,
         "note": "归并"
       },
       {
         "trad": "徵",
         "simp": "征",
-        "count": 62,
+        "count": 63,
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
@@ -743,6 +743,16 @@
       "han": "fěi、féi",
       "ui": "review",
       "detail": "汉典有多个读音，说文音一个都不在里面。页面仍用说文音，弹层标为待复核。"
+    },
+    {
+      "kind": "reading",
+      "where": "字书默认音",
+      "id": "",
+      "word": "菹",
+      "reading": "jū",
+      "han": "zū",
+      "ui": "silent",
+      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
     },
     {
       "kind": "reading",
