@@ -15,8 +15,8 @@
       },
       {
         "collection": "史记",
-        "pieces": 53,
-        "chars": 245805,
+        "pieces": 54,
+        "chars": 248999,
         "unexpected": "0"
       },
       {
@@ -52,34 +52,34 @@
     ],
     "unexpected": [],
     "reviewChars": 13,
-    "cacheSingle": 51,
-    "glosses": 10222,
+    "cacheSingle": 52,
+    "glosses": 10245,
     "lessonFlags": 141,
     "missingChars": 395,
-    "missingHits": 650,
+    "missingHits": 651,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 4436,
+        "count": 4472,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 1112,
+        "count": 1116,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 652,
+        "count": 655,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 141,
+        "count": 142,
         "note": "归并"
       },
       {
@@ -571,6 +571,16 @@
       "word": "枹",
       "reading": "bāo",
       "han": "fú",
+      "ui": "silent",
+      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
+    },
+    {
+      "kind": "reading",
+      "where": "字书默认音",
+      "id": "",
+      "word": "榦",
+      "reading": "gān",
+      "han": "gàn",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
     },
