@@ -15,8 +15,8 @@
       },
       {
         "collection": "史记",
-        "pieces": 64,
-        "chars": 297662,
+        "pieces": 65,
+        "chars": 299646,
         "unexpected": "0"
       },
       {
@@ -53,33 +53,33 @@
     "unexpected": [],
     "reviewChars": 14,
     "cacheSingle": 53,
-    "glosses": 10468,
-    "lessonFlags": 144,
+    "glosses": 10490,
+    "lessonFlags": 145,
     "missingChars": 400,
     "missingHits": 661,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 4810,
+        "count": 4820,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 1315,
+        "count": 1320,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 808,
+        "count": 811,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 168,
+        "count": 172,
         "note": "归并"
       },
       {
@@ -1041,6 +1041,15 @@
       "word": "落魄",
       "reading": "luò tuò",
       "han": "魄→tuò（汉典 pò）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "s102",
+      "word": "冯唐易老",
+      "reading": "féng táng yì lǎo",
+      "han": "冯→féng（汉典 píng）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     },
     {
