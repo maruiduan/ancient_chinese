@@ -15,8 +15,8 @@
       },
       {
         "collection": "史记",
-        "pieces": 52,
-        "chars": 237420,
+        "pieces": 53,
+        "chars": 245805,
         "unexpected": "0"
       },
       {
@@ -53,27 +53,27 @@
     "unexpected": [],
     "reviewChars": 13,
     "cacheSingle": 51,
-    "glosses": 10198,
+    "glosses": 10222,
     "lessonFlags": 141,
     "missingChars": 395,
-    "missingHits": 649,
+    "missingHits": 650,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 4336,
+        "count": 4436,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 1087,
+        "count": 1112,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 647,
+        "count": 652,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
@@ -85,7 +85,7 @@
       {
         "trad": "徵",
         "simp": "征",
-        "count": 43,
+        "count": 50,
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
@@ -125,6 +125,12 @@
         "note": "樊於期保留於"
       },
       {
+        "trad": "祇",
+        "simp": "祇",
+        "count": 3,
+        "note": "神祇保留祇"
+      },
+      {
         "trad": "禕",
         "simp": "祎",
         "count": 3,
@@ -141,12 +147,6 @@
         "simp": "干",
         "count": 2,
         "note": "归并"
-      },
-      {
-        "trad": "祇",
-        "simp": "祇",
-        "count": 2,
-        "note": "神祇保留祇"
       },
       {
         "trad": "徵",
