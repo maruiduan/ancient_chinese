@@ -1128,6 +1128,20 @@ def han_only(text: str) -> str:
     return "".join(ch for ch in text if "\u3400" <= ch <= "\u9fff" or ord(ch) > 0xFFFF)
 
 
+# 维基文库底本保留了不少旧字形（淸、呑、値、疎、髙……），OpenCC 不转。
+# 名句按通行字形写，比对时两边都折成同一字形；写进 famous.json 的仍是原句。
+VARIANT_FOLD = str.maketrans({
+    "淸": "清", "呑": "吞", "値": "值", "疎": "疏", "髙": "高", "倶": "俱", "歳": "岁",
+    "撃": "击", "靑": "青", "毎": "每", "晩": "晚", "歩": "步", "戸": "户", "塡": "填",
+    "徴": "征", "兪": "俞", "楡": "榆", "鄕": "乡", "屛": "屏", "兊": "兑", "呉": "吴",
+    "絶": "绝", "卽": "即", "旣": "既", "眞": "真", "緑": "绿", "說": "说",
+})
+
+
+def fold(text: str) -> str:
+    return to_simplified(han_only(text)).translate(VARIANT_FOLD)
+
+
 def merge_famous(entries: list[dict]) -> None:
     """课注里的名句写进 data/famous.json。先去掉本书旧条目，再按篇加回。"""
     path = ROOT / "data" / "famous.json"
@@ -1140,8 +1154,8 @@ def merge_famous(entries: list[dict]) -> None:
         famous = json.loads((LESSONS / f"{entry['id']}.lesson.json").read_text(encoding="utf-8")).get("famous", [])
         sentences = [s for p in entry["paragraphs_s"] for s in p]
         for item in famous:
-            quote = han_only(item["quote"])
-            hits = [s for s in sentences if quote in han_only(s)]
+            quote = fold(item["quote"])
+            hits = [s for s in sentences if quote in fold(s)]
             if len(quote) < 3 or not hits:
                 raise SystemExit(f"{entry['id']} 名句对不上原文：{item['quote']}")
             data["lines"].append({"pieces": [entry["id"]], "quote": item["quote"], "text": hits[0],
