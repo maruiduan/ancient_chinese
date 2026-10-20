@@ -15,8 +15,8 @@
       },
       {
         "collection": "史记",
-        "pieces": 79,
-        "chars": 341630,
+        "pieces": 80,
+        "chars": 342374,
         "unexpected": "0"
       },
       {
@@ -51,23 +51,23 @@
       }
     ],
     "unexpected": [],
-    "reviewChars": 14,
+    "reviewChars": 15,
     "cacheSingle": 54,
-    "glosses": 10803,
+    "glosses": 10821,
     "lessonFlags": 145,
-    "missingChars": 403,
-    "missingHits": 670,
+    "missingChars": 404,
+    "missingHits": 671,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 5106,
+        "count": 5111,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 1418,
+        "count": 1422,
         "note": "归并"
       },
       {
@@ -933,6 +933,16 @@
       "han": "jú",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
+    },
+    {
+      "kind": "reading",
+      "where": "字书默认音",
+      "id": "",
+      "word": "頡",
+      "reading": "jié",
+      "han": "xié、jiá",
+      "ui": "review",
+      "detail": "汉典有多个读音，说文音一个都不在里面。页面仍用说文音，弹层标为待复核。"
     },
     {
       "kind": "reading",
