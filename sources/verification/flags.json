@@ -15,8 +15,8 @@
       },
       {
         "collection": "史记",
-        "pieces": 80,
-        "chars": 342374,
+        "pieces": 81,
+        "chars": 343440,
         "unexpected": "0"
       },
       {
@@ -53,15 +53,15 @@
     "unexpected": [],
     "reviewChars": 15,
     "cacheSingle": 54,
-    "glosses": 10821,
-    "lessonFlags": 145,
+    "glosses": 10835,
+    "lessonFlags": 146,
     "missingChars": 404,
     "missingHits": 671,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 5111,
+        "count": 5112,
         "note": "介词作于"
       },
       {
@@ -73,7 +73,7 @@
       {
         "trad": "餘",
         "simp": "余",
-        "count": 893,
+        "count": 895,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
@@ -1034,6 +1034,15 @@
       "word": "封禅",
       "reading": "fēng shàn",
       "han": "禅→shàn（汉典 chàn、chán）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "s051",
+      "word": "风",
+      "reading": "fěng",
+      "han": "风→fěng（汉典 fēng）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     },
     {
