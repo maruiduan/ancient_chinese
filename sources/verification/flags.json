@@ -15,8 +15,8 @@
       },
       {
         "collection": "史记",
-        "pieces": 41,
-        "chars": 179698,
+        "pieces": 42,
+        "chars": 183692,
         "unexpected": "0"
       },
       {
@@ -53,27 +53,27 @@
     "unexpected": [],
     "reviewChars": 11,
     "cacheSingle": 46,
-    "glosses": 9966,
-    "lessonFlags": 138,
-    "missingChars": 391,
-    "missingHits": 637,
+    "glosses": 9987,
+    "lessonFlags": 139,
+    "missingChars": 392,
+    "missingHits": 638,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 3896,
+        "count": 3914,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 925,
+        "count": 931,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 584,
+        "count": 586,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
@@ -85,13 +85,13 @@
       {
         "trad": "徵",
         "simp": "征",
-        "count": 36,
+        "count": 37,
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
         "trad": "裏",
         "simp": "里",
-        "count": 16,
+        "count": 17,
         "note": "归并"
       },
       {
@@ -914,6 +914,15 @@
       "word": "背水陈",
       "reading": "bèi shuǐ zhèn",
       "han": "陈→zhèn（汉典 chén）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "s097",
+      "word": "落魄",
+      "reading": "luò tuò",
+      "han": "魄→tuò（汉典 pò）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     },
     {
