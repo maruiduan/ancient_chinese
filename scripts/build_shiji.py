@@ -29,7 +29,7 @@ CATALOG = ROOT / "data" / "shiji.json"
 DUMP = SRC / "texts.json"
 URL = "https://zh.wikisource.org/wiki/史記/卷{juan:03d}"
 # 用了固定修订版的卷，出处链接指向那一版。
-OLDID = {48: 2531218, 55: 2666612, 84: 1568305, 81: 8735558, 92: 1483915}
+OLDID = {48: 2531218, 55: 2666612, 84: 1568305, 86: 2388562, 81: 8735558, 92: 1483915}
 
 
 def source_url(juan: int) -> str:
@@ -42,7 +42,7 @@ PUNCT = set("，。！？；、：·．…—～「」『』（）【】《》�
 CN_NUM = "〇一二三四五六七八九十百"
 
 # 已收的篇。以后每做一篇，在这里加卷号。
-DONE = [7, 8, 48, 55, 81, 84, 92]
+DONE = [7, 8, 48, 55, 81, 84, 86, 92]
 
 GROUPS = [
     ("benji", "本纪", 1, 12),
@@ -88,8 +88,16 @@ def clean_inline(text: str) -> str:
     text = re.sub(r"<ref>.*?</ref>", "", text, flags=re.S)
     # -{zh-hans:佣; zh-hant:庸;}- 这类繁简分写，取繁体。
     text = re.sub(r"-\{[^}]*zh-hant:([^;}]+);?[^}]*\}-", r"\1", text)
-    text = re.sub(r"-\{([^}]+)\}-", r"\1", text)
+    # 嵌套的 -{-{徴}-}- 要剥到没有为止。
+    while True:
+        new = re.sub(r"-\{([^{}]+)\}-", r"\1", text)
+        if new == text:
+            break
+        text = new
     text = re.sub(r"\[\[(?:[^|\]]+\|)?([^\]]+)\]\]", r"\1", text)
+    # {{參|縣|校记}} 显示第一个字；{{另|熒|滎}} 是異文，取后一个（校改后的字）。
+    text = re.sub(r"\{\{參\|([^|}]+)\|[^}]*\}\}", r"\1", text)
+    text = re.sub(r"\{\{另\|[^|}]+\|([^|}]+)\}\}", r"\1", text)
     text = re.sub(r"\{\{[^}]+\}\}", "", text)
     text = re.sub(r"[ \t\u3000]+", "", text)
     return text.strip()
@@ -135,6 +143,23 @@ def emend(text: str) -> str:
 # 卷八十一维基文库本混入日本新字形，另有几处录错，逐条改。每一条都记在 EDITION.md。
 SHINJITAI_081 = str.maketrans({"歳": "歲", "倶": "俱", "撃": "擊", "歩": "步", "毎": "每",
                                "髙": "高", "暦": "歷", "晩": "晚", "娯": "娛", "巻": "卷"})
+# 卷八十六同样混入日本字形。
+SHINJITAI_086 = str.maketrans({"呉": "吳", "撃": "擊", "髙": "高", "倶": "俱", "楡": "榆", "毎": "每",
+                               "戸": "戶", "呑": "吞", "涙": "淚", "徴": "徵", "鄕": "鄉"})
+FIX_086 = [
+    ("而大國侵魯亦甚矣", "而大國侵魯亦以甚矣"),
+    ("睚眞諼", "睚眥之意"),
+    ("於是韓縣之", "於是韓購縣之"),
+    ("爲羽聲慨", "爲羽聲忼慨"),
+]
+
+
+def emend_086(text: str) -> str:
+    text = text.translate(SHINJITAI_086)
+    for old, new in FIX_086:
+        text = text.replace(old, new)
+    return text
+
 FIX_081 = [
     ("原以十五城請易璧", "願以十五城請易璧"),
     ("原王勿遣", "願王勿遣"),
@@ -213,6 +238,8 @@ def parse_juan(juan: int) -> list[list[str]]:
         text = clean_inline(line)
         if juan == 81:
             text = emend_081(text)
+        if juan == 86:
+            text = emend_086(text)
         text = emend(text)
         sents = split_sentences(text)
         if sents:
