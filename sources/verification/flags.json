@@ -15,8 +15,8 @@
       },
       {
         "collection": "史记",
-        "pieces": 7,
-        "chars": 37727,
+        "pieces": 8,
+        "chars": 43377,
         "unexpected": "0"
       },
       {
@@ -51,9 +51,9 @@
       }
     ],
     "unexpected": [],
-    "reviewChars": 10,
-    "cacheSingle": 43,
-    "glosses": 9191,
+    "reviewChars": 11,
+    "cacheSingle": 44,
+    "glosses": 9216,
     "lessonFlags": 135,
     "missingChars": 382,
     "missingHits": 611,
@@ -61,31 +61,31 @@
       {
         "trad": "於",
         "simp": "于",
-        "count": 2462,
+        "count": 2533,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 537,
+        "count": 555,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 323,
+        "count": 332,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 87,
+        "count": 88,
         "note": "归并"
       },
       {
         "trad": "徵",
         "simp": "征",
-        "count": 24,
+        "count": 25,
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
@@ -481,6 +481,26 @@
       "word": "揣",
       "reading": "chuǎi",
       "han": "zhuī、tuán、chuāi",
+      "ui": "review",
+      "detail": "汉典有多个读音，说文音一个都不在里面。页面仍用说文音，弹层标为待复核。"
+    },
+    {
+      "kind": "reading",
+      "where": "字书默认音",
+      "id": "",
+      "word": "擘",
+      "reading": "bāi",
+      "han": "bò",
+      "ui": "silent",
+      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
+    },
+    {
+      "kind": "reading",
+      "where": "字书默认音",
+      "id": "",
+      "word": "擿",
+      "reading": "tī",
+      "han": "tì、zhì",
       "ui": "review",
       "detail": "汉典有多个读音，说文音一个都不在里面。页面仍用说文音，弹层标为待复核。"
     },
