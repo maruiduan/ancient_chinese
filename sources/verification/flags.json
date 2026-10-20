@@ -15,8 +15,8 @@
       },
       {
         "collection": "史记",
-        "pieces": 42,
-        "chars": 183692,
+        "pieces": 43,
+        "chars": 192801,
         "unexpected": "0"
       },
       {
@@ -52,40 +52,40 @@
     ],
     "unexpected": [],
     "reviewChars": 11,
-    "cacheSingle": 46,
-    "glosses": 9987,
-    "lessonFlags": 139,
-    "missingChars": 392,
-    "missingHits": 638,
+    "cacheSingle": 48,
+    "glosses": 10008,
+    "lessonFlags": 140,
+    "missingChars": 394,
+    "missingHits": 641,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 3914,
+        "count": 4020,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 931,
+        "count": 962,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 586,
+        "count": 596,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 112,
+        "count": 131,
         "note": "归并"
       },
       {
         "trad": "徵",
         "simp": "征",
-        "count": 37,
+        "count": 39,
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
@@ -107,6 +107,12 @@
         "note": "乾坤、乾谿等读 qián，保留乾"
       },
       {
+        "trad": "祇",
+        "simp": "只",
+        "count": 5,
+        "note": "只辱。神祇不在此列"
+      },
+      {
         "trad": "裡",
         "simp": "里",
         "count": 5,
@@ -117,12 +123,6 @@
         "simp": "於",
         "count": 4,
         "note": "樊於期保留於"
-      },
-      {
-        "trad": "祇",
-        "simp": "只",
-        "count": 4,
-        "note": "只辱。神祇不在此列"
       },
       {
         "trad": "禕",
@@ -608,9 +608,29 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
+      "word": "磅",
+      "reading": "bàng",
+      "han": "páng",
+      "ui": "silent",
+      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
+    },
+    {
+      "kind": "reading",
+      "where": "字书默认音",
+      "id": "",
       "word": "絜",
       "reading": "jié",
       "han": "xié",
+      "ui": "silent",
+      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
+    },
+    {
+      "kind": "reading",
+      "where": "字书默认音",
+      "id": "",
+      "word": "縹",
+      "reading": "piāo",
+      "han": "piǎo",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
     },
@@ -923,6 +943,15 @@
       "word": "落魄",
       "reading": "luò tuò",
       "han": "魄→tuò（汉典 pò）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "s117",
+      "word": "封禅",
+      "reading": "fēng shàn",
+      "han": "禅→shàn（汉典 chàn、chán）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     },
     {
