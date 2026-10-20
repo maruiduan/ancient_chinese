@@ -29,7 +29,7 @@ CATALOG = ROOT / "data" / "shiji.json"
 DUMP = SRC / "texts.json"
 URL = "https://zh.wikisource.org/wiki/史記/卷{juan:03d}"
 # 用了固定修订版的卷，出处链接指向那一版。
-OLDID = {48: 2531218, 55: 2666612, 84: 1568305, 86: 2388562, 81: 8735558, 92: 1483915, 109: 1765440, 62: 7903600, 77: 367917, 130: 2609362, 61: 2621133, 124: 367994, 129: 7904128}
+OLDID = {48: 2531218, 55: 2666612, 84: 1568305, 86: 2388562, 81: 8735558, 92: 1483915, 109: 1765440, 62: 7903600, 77: 367917, 130: 2609362, 61: 2621133, 124: 367994, 129: 7904128, 47: 7903609}
 
 
 def source_url(juan: int) -> str:
@@ -42,7 +42,7 @@ PUNCT = set("，。！？；、：·．…—～「」『』（）【】《》�
 CN_NUM = "〇一二三四五六七八九十百"
 
 # 已收的篇。以后每做一篇，在这里加卷号。
-DONE = [7, 8, 48, 55, 61, 62, 77, 81, 84, 86, 92, 109, 124, 129, 130]
+DONE = [7, 8, 47, 48, 55, 61, 62, 77, 81, 84, 86, 92, 109, 124, 129, 130]
 
 GROUPS = [
     ("benji", "本纪", 1, 12),
@@ -99,7 +99,7 @@ def clean_inline(text: str) -> str:
     text = re.sub(r"\{\{參\|([^|}]+)\|[^}]*\}\}", r"\1", text)
     text = re.sub(r"\{\{另\|[^|}]+\|([^|}]+)\}\}", r"\1", text)
     # {{ProperNoun|李}} 是专名线，留字。
-    text = re.sub(r"\{\{ProperNoun\|([^|}]+)\}\}", r"\1", text)
+    text = re.sub(r"\{\{(?:ProperNoun|YL)\|([^|}]+)\}\}", r"\1", text)
     text = re.sub(r"\{\{[^}]+\}\}", "", text)
     text = re.sub(r"[ \t\u3000]+", "", text)
     return text.strip()
@@ -116,6 +116,8 @@ def emend(text: str) -> str:
     text = text.replace("免子於緦何子", "免子於厄，何子")
     # 卷一百三十：游侠列传小序「救人於戹，振人不贍」误作緦；范雎蔡泽小序「能忍訽於魏齊」漏訽。从点校本、wenku 本。
     text = text.replace("救人於緦振人", "救人於戹，振人")
+    # 卷四十七：「以遠方職」漏方，从点校本、wenku 本。
+    text = text.replace("異姓以遠職", "異姓以遠方職")
     text = text.replace("能忍於魏齊", "能忍訽於魏齊")
     # 「烹周苛，并殺樅公」。维基文库作「井殺」，形近而误，据中华书局点校本改。
     text = text.replace("烹周苛，井殺樅公", "烹周苛，并殺樅公")
@@ -258,6 +260,7 @@ def parse_juan(juan: int) -> list[list[str]]:
     raw = (SRC / f"juan{juan:03d}.wikitext").read_text(encoding="utf-8")
     body = raw.split("}}", 1)[1]
     paragraphs = []
+    zan = False
     for line in body.splitlines():
         # 卷一百三十《论六家要指》的分段用维基缩进「:」开头。
         line = line.strip().lstrip(":")
@@ -267,7 +270,11 @@ def parse_juan(juan: int) -> list[list[str]]:
         # 卷四十八篇末「褚先生曰」以下是褚少孙补的（引贾谊《过秦论》），不是史记本文。
         if line.startswith("褚先生曰"):
             break
-        if line.startswith("{{") and not line.startswith("{{ProperNoun|"):
+        # 卷四十七的「==太史公曰==」是小标题，正文不再写「太史公曰」，补回来。
+        if line.replace(" ", "") == "==太史公曰==":
+            zan = True
+            continue
+        if line.startswith("{{") and not line.startswith(("{{ProperNoun|", "{{YL|")):
             continue
         if not line or line.startswith(("__", "}}", "==", "|", "[[Category", "[[category", "[[File", "[[分類", "</")):
             continue
@@ -275,6 +282,9 @@ def parse_juan(juan: int) -> list[list[str]]:
         if line.startswith("【"):
             continue
         text = clean_inline(line)
+        if zan and not text.startswith("太史公曰"):
+            text = "太史公曰：" + text
+        zan = False
         if juan == 81:
             text = emend_081(text)
         if juan == 86:

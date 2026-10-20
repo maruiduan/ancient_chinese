@@ -15,8 +15,8 @@
       },
       {
         "collection": "史记",
-        "pieces": 15,
-        "chars": 65510,
+        "pieces": 16,
+        "chars": 72884,
         "unexpected": "0"
       },
       {
@@ -52,28 +52,28 @@
     ],
     "unexpected": [],
     "reviewChars": 11,
-    "cacheSingle": 44,
-    "glosses": 9380,
+    "cacheSingle": 45,
+    "glosses": 9403,
     "lessonFlags": 136,
     "missingChars": 382,
-    "missingHits": 615,
+    "missingHits": 616,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 2714,
+        "count": 2807,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 605,
+        "count": 633,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 366,
+        "count": 373,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
@@ -85,7 +85,7 @@
       {
         "trad": "徵",
         "simp": "征",
-        "count": 28,
+        "count": 32,
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
@@ -93,6 +93,12 @@
         "simp": "乾",
         "count": 5,
         "note": "乾坤、乾谿等读 qián，保留乾"
+      },
+      {
+        "trad": "乾",
+        "simp": "干",
+        "count": 5,
+        "note": "干燥作干"
       },
       {
         "trad": "裏",
@@ -111,12 +117,6 @@
         "simp": "於",
         "count": 4,
         "note": "樊於期保留於"
-      },
-      {
-        "trad": "乾",
-        "simp": "干",
-        "count": 3,
-        "note": "干燥作干"
       },
       {
         "trad": "祇",
@@ -653,6 +653,16 @@
       "han": "fěi、féi",
       "ui": "review",
       "detail": "汉典有多个读音，说文音一个都不在里面。页面仍用说文音，弹层标为待复核。"
+    },
+    {
+      "kind": "reading",
+      "where": "字书默认音",
+      "id": "",
+      "word": "萎",
+      "reading": "wēi",
+      "han": "wěi",
+      "ui": "silent",
+      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
     },
     {
       "kind": "reading",
