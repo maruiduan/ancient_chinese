@@ -4061,10 +4061,20 @@
         "status": "中华书局点校本是正文校点，不是译文。本站译文未按某一译注本核定"
       }
     },
+    "s048": {
+      "collection": "史记",
+      "edition": "维基文库《史記》卷48 陳涉世家第十八",
+      "url": "https://zh.wikisource.org/w/index.php?oldid=2531218",
+      "note": "正文按 sources/shiji/EDITION.md：只收本文和太史公曰，不收三家注、索隐述赞。白话和注释是本书编写的。",
+      "translation": {
+        "edition": "未取得中华书局《史记》全本全注全译本",
+        "status": "中华书局点校本是正文校点，不是译文。本站译文未按某一译注本核定"
+      }
+    },
     "s081": {
       "collection": "史记",
       "edition": "维基文库《史記》卷81 廉頗藺相如列傳第二十一",
-      "url": "https://zh.wikisource.org/wiki/史記/卷081",
+      "url": "https://zh.wikisource.org/w/index.php?oldid=8735558",
       "note": "正文按 sources/shiji/EDITION.md：只收本文和太史公曰，不收三家注、索隐述赞。白话和注释是本书编写的。",
       "translation": {
         "edition": "未取得中华书局《史记》全本全注全译本",
@@ -4074,7 +4084,7 @@
     "s092": {
       "collection": "史记",
       "edition": "维基文库《史記》卷92 淮陰侯列傳第三十二",
-      "url": "https://zh.wikisource.org/wiki/史記/卷092",
+      "url": "https://zh.wikisource.org/w/index.php?oldid=1483915",
       "note": "正文按 sources/shiji/EDITION.md：只收本文和太史公曰，不收三家注、索隐述赞。白话和注释是本书编写的。",
       "translation": {
         "edition": "未取得中华书局《史记》全本全注全译本",

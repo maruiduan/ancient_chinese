@@ -28,13 +28,21 @@ ARTICLES = ROOT / "data" / "articles"
 CATALOG = ROOT / "data" / "shiji.json"
 DUMP = SRC / "texts.json"
 URL = "https://zh.wikisource.org/wiki/史記/卷{juan:03d}"
+# 用了固定修订版的卷，出处链接指向那一版。
+OLDID = {48: 2531218, 81: 8735558, 92: 1483915}
+
+
+def source_url(juan: int) -> str:
+    if juan in OLDID:
+        return f"https://zh.wikisource.org/w/index.php?oldid={OLDID[juan]}"
+    return URL.format(juan=juan)
 
 CC = OpenCC("t2s")
 PUNCT = set("，。！？；、：·．…—～「」『』（）【】《》〈〉〔〕〖〗､“”‘’")
 CN_NUM = "〇一二三四五六七八九十百"
 
 # 已收的篇。以后每做一篇，在这里加卷号。
-DONE = [7, 8, 81, 92]
+DONE = [7, 8, 48, 81, 92]
 
 GROUPS = [
     ("benji", "本纪", 1, 12),
@@ -59,8 +67,12 @@ def to_simplified(text: str) -> str:
         # 史记里的「閒」都是间隔、间道、离间的间，人名涉閒、田閒也读间。OpenCC 收成「闲」，这里改作「间」。
         simp = "间" if ch == "閒" else CC.convert(ch)
         # 「齮」的类推简化字 𬺈 很多字体没有，仍用齮。
-        if simp == "𬺈":
-            simp = "齮"
+        # 类推简化出的扩展区字（𬺈、𫄬……）很多字体没有，保留原字。
+        if ord(simp) > 0xFFFF and ord(ch) <= 0xFFFF:
+            simp = ch
+        # 「夥」表多义时《通用规范汉字表》仍作夥，不简化为伙。
+        if ch == "夥":
+            simp = "夥"
         if len(simp) != 1:
             raise SystemExit(f"简繁不对齐：{ch} -> {simp}")
         out.append(simp)
@@ -74,6 +86,8 @@ def clean_inline(text: str) -> str:
     text = text.replace("'''", "")
     text = re.sub(r"<!--.*?-->", "", text, flags=re.S)
     text = re.sub(r"<ref>.*?</ref>", "", text, flags=re.S)
+    # -{zh-hans:佣; zh-hant:庸;}- 这类繁简分写，取繁体。
+    text = re.sub(r"-\{[^}]*zh-hant:([^;}]+);?[^}]*\}-", r"\1", text)
     text = re.sub(r"-\{([^}]+)\}-", r"\1", text)
     text = re.sub(r"\[\[(?:[^|\]]+\|)?([^\]]+)\]\]", r"\1", text)
     text = re.sub(r"\{\{[^}]+\}\}", "", text)
@@ -97,6 +111,10 @@ def emend(text: str) -> str:
     text = text.replace("漢王敗碧陵", "漢王敗固陵")
     # 高祖本纪：同段前后都作「泗川守壯」「泗川監平」，维基文库这一处作「泗州」，据 wenku 本和点校本改。
     text = text.replace("泗州守壯敗於薛", "泗川守壯敗於薛")
+    # 陈涉世家：「又閒令吳廣」，閒是暗中，维基文库误作「彊」；「守滎陽」漏滎；「董緤」误作緶。据点校本、wenku 本改。
+    text = text.replace("又彊令吳廣之次所旁", "又閒令吳廣之次所旁")
+    text = text.replace("足以守陽，", "足以守滎陽，")
+    text = text.replace("董緶", "董緤")
     if "□" in text:
         raise SystemExit(f"正文有 □，要先查证再补字：{text[:40]}")
     return text
@@ -172,7 +190,10 @@ def parse_juan(juan: int) -> list[list[str]]:
         # 卷八十一的【索隱述贊】写成小节标题，下面一段也是司马贞的，不收。
         if line.startswith("==索隱述贊"):
             break
-        if not line or line.startswith(("__", "{{", "==", "|", "[[", "</")):
+        # 卷四十八篇末「褚先生曰」以下是褚少孙补的（引贾谊《过秦论》），不是史记本文。
+        if line.startswith("褚先生曰"):
+            break
+        if not line or line.startswith(("__", "{{", "}}", "==", "|", "[[Category", "[[category", "[[File", "[[分類", "</")):
             continue
         # 篇末的【索隱述贊】是司马贞写的，不是史记本文。
         if line.startswith("【"):
