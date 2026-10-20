@@ -15,8 +15,8 @@
       },
       {
         "collection": "史记",
-        "pieces": 2,
-        "chars": 18451,
+        "pieces": 3,
+        "chars": 24604,
         "unexpected": "0"
       },
       {
@@ -51,41 +51,41 @@
       }
     ],
     "unexpected": [],
-    "reviewChars": 18,
+    "reviewChars": 19,
     "cacheSingle": 117,
-    "glosses": 9041,
-    "lessonFlags": 160,
+    "glosses": 9066,
+    "lessonFlags": 161,
     "missingChars": 375,
     "missingHits": 600,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 2335,
+        "count": 2386,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 480,
+        "count": 495,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 293,
+        "count": 299,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 83,
+        "count": 86,
         "note": "归并"
       },
       {
         "trad": "徵",
         "simp": "征",
-        "count": 19,
+        "count": 20,
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
@@ -523,6 +523,16 @@
       "han": "jiē",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
+    },
+    {
+      "kind": "reading",
+      "where": "字书默认音",
+      "id": "",
+      "word": "噁",
+      "reading": "ě",
+      "han": "è、wū、wù",
+      "ui": "review",
+      "detail": "汉典有多个读音，说文音一个都不在里面。页面仍用说文音，弹层标为待复核。"
     },
     {
       "kind": "reading",
@@ -1713,6 +1723,15 @@
       "reading": "韵",
       "han": "http://wyw.hwxnet.com/view/hwxe5hwx9dhwx87.html",
       "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "s092",
+      "word": "背水陈",
+      "reading": "bèi shuǐ zhèn",
+      "han": "陈→zhèn（汉典 chén）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     },
     {
       "kind": "loan",
