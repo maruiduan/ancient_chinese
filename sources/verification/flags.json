@@ -15,8 +15,8 @@
       },
       {
         "collection": "史记",
-        "pieces": 69,
-        "chars": 308816,
+        "pieces": 70,
+        "chars": 309743,
         "unexpected": "0"
       },
       {
@@ -53,21 +53,21 @@
     "unexpected": [],
     "reviewChars": 14,
     "cacheSingle": 53,
-    "glosses": 10580,
+    "glosses": 10601,
     "lessonFlags": 145,
     "missingChars": 401,
-    "missingHits": 664,
+    "missingHits": 665,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 4874,
+        "count": 4875,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 1333,
+        "count": 1334,
         "note": "归并"
       },
       {
