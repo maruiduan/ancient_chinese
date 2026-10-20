@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 182,
-        "chars": 59683,
+        "pieces": 184,
+        "chars": 66796,
         "unexpected": "0"
       },
       {
@@ -45,29 +45,29 @@
       }
     ],
     "unexpected": [],
-    "reviewChars": 18,
-    "cacheSingle": 114,
-    "glosses": 8991,
+    "reviewChars": 19,
+    "cacheSingle": 119,
+    "glosses": 9024,
     "lessonFlags": 160,
-    "missingChars": 375,
-    "missingHits": 600,
+    "missingChars": 376,
+    "missingHits": 601,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 2254,
+        "count": 2296,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 449,
+        "count": 456,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 246,
+        "count": 274,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
@@ -79,7 +79,7 @@
       {
         "trad": "徵",
         "simp": "征",
-        "count": 16,
+        "count": 17,
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
@@ -492,6 +492,16 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
+      "word": "噁",
+      "reading": "ě",
+      "han": "è、wū、wù",
+      "ui": "review",
+      "detail": "汉典有多个读音，说文音一个都不在里面。页面仍用说文音，弹层标为待复核。"
+    },
+    {
+      "kind": "reading",
+      "where": "字书默认音",
+      "id": "",
       "word": "噫",
       "reading": "ǎi",
       "han": "yī、ài",
@@ -545,6 +555,16 @@
       "word": "妙",
       "reading": "yāo",
       "han": "miào",
+      "ui": "silent",
+      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
+    },
+    {
+      "kind": "reading",
+      "where": "字书默认音",
+      "id": "",
+      "word": "娃",
+      "reading": "wā",
+      "han": "wá",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
     },
@@ -675,6 +695,16 @@
       "word": "或",
       "reading": "yù",
       "han": "huò",
+      "ui": "silent",
+      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
+    },
+    {
+      "kind": "reading",
+      "where": "字书默认音",
+      "id": "",
+      "word": "扛",
+      "reading": "gāng",
+      "han": "káng",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
     },
@@ -852,6 +882,16 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
+      "word": "樗",
+      "reading": "huà",
+      "han": "chū",
+      "ui": "silent",
+      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
+    },
+    {
+      "kind": "reading",
+      "where": "字书默认音",
+      "id": "",
       "word": "模",
       "reading": "mú",
       "han": "mó",
@@ -995,6 +1035,16 @@
       "word": "滫",
       "reading": "xiū",
       "han": "xiǔ",
+      "ui": "silent",
+      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
+    },
+    {
+      "kind": "reading",
+      "where": "字书默认音",
+      "id": "",
+      "word": "澮",
+      "reading": "guì",
+      "han": "kuài",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
     },
@@ -1325,6 +1375,16 @@
       "word": "論",
       "reading": "lún",
       "han": "lùn",
+      "ui": "silent",
+      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
+    },
+    {
+      "kind": "reading",
+      "where": "字书默认音",
+      "id": "",
+      "word": "謚",
+      "reading": "yì",
+      "han": "shì",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
     },

@@ -4,7 +4,7 @@
 正文对照仓库里的底本缓存，不是现场去抓网页：
 
 - 古文观止：sources/wikisource/vol01–12.wikitext（维基文库）
-- 资治通鉴卷一至卷八：sources/zztj/juan01–08.wikitext（维基文库）
+- 资治通鉴卷一至卷九：sources/zztj/juan01–09.wikitext（维基文库）
 - 人间词话六十四则：sources/renjian/guocui-juan-shang.wikitext（维基文库）
 - 唐诗、宋词：sources/poetry/canonical.json
   （chinese-poetry 指定 commit 的选篇缓存）
@@ -37,7 +37,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from build_renjian import CORRECTIONS, WIKI as RENJIAN_WIKI, parse_entries, split_sentences  # noqa: E402
-from build_zztj import load_years  # noqa: E402
+from build_zztj import LAST_JUAN, load_years  # noqa: E402
 from hanzi import only_han  # noqa: E402
 from parse_wikisource import parse_volume  # noqa: E402
 
@@ -356,7 +356,7 @@ def check_zztj() -> tuple[list[dict], list[dict], list[dict]]:
         pieces.append({
             "id": entry["id"],
             "collection": "资治通鉴",
-            "edition": "维基文库《资治通鉴》卷%d（周纪、秦纪）" % entry["juan"],
+            "edition": "维基文库《资治通鉴》卷%d" % entry["juan"],
             "url": ZZTJ_URL.format(juan=entry["juan"]),
             "note": "正文按 sources/zztj/EDITION.md：不收增补和移入，人名樊於期的於不改成于。白话和注释是本书编写的。",
             "chars": len(got),
@@ -365,7 +365,7 @@ def check_zztj() -> tuple[list[dict], list[dict], list[dict]]:
             unexpected.append({"id": entry["id"], "title": entry["title_s"], "detail": first_diff(expect, got)})
     raw = "".join(
         (ROOT / "sources" / "zztj" / f"juan{juan:02d}.wikitext").read_text(encoding="utf-8")
-        for juan in range(1, 9)
+        for juan in range(1, LAST_JUAN + 1)
     )
     resolved = []
     if "樊於期" in raw:

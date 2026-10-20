@@ -37,7 +37,7 @@ def main() -> int:
     gaps = []
     gaps.extend(audit_group(authors, re.compile(r"v\d{2}-\d{2}\.json"), 222, "古文观止"))
     gaps.extend(audit_group(authors, re.compile(r"h01-\d{2}\.json"), 64, "人间词话"))
-    gaps.extend(audit_group(authors, re.compile(r"z\d{2}-\d{2}\.json"), 182, "资治通鉴"))
+    gaps.extend(audit_group(authors, re.compile(r"z\d{2}-\d{2}\.json"), 184, "资治通鉴"))
     for art_id, title, found in gaps:
         print(f"{art_id}\t{title}\t" + "；".join(found))
     if gaps:
