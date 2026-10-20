@@ -15,8 +15,8 @@
       },
       {
         "collection": "史记",
-        "pieces": 1,
-        "chars": 8995,
+        "pieces": 2,
+        "chars": 18451,
         "unexpected": "0"
       },
       {
@@ -52,8 +52,8 @@
     ],
     "unexpected": [],
     "reviewChars": 18,
-    "cacheSingle": 115,
-    "glosses": 9016,
+    "cacheSingle": 117,
+    "glosses": 9041,
     "lessonFlags": 160,
     "missingChars": 375,
     "missingHits": 600,
@@ -61,31 +61,31 @@
       {
         "trad": "於",
         "simp": "于",
-        "count": 2304,
+        "count": 2335,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 456,
+        "count": 480,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 271,
+        "count": 293,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 80,
+        "count": 83,
         "note": "归并"
       },
       {
         "trad": "徵",
         "simp": "征",
-        "count": 18,
+        "count": 19,
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
@@ -147,6 +147,12 @@
         "simp": "徵",
         "count": 1,
         "note": "流徵保留徵"
+      },
+      {
+        "trad": "裏",
+        "simp": "里",
+        "count": 1,
+        "note": "归并"
       }
     ],
     "simpProblems": []
@@ -852,6 +858,16 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
+      "word": "杠",
+      "reading": "gāng",
+      "han": "gàng",
+      "ui": "silent",
+      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
+    },
+    {
+      "kind": "reading",
+      "where": "字书默认音",
+      "id": "",
       "word": "某",
       "reading": "méi",
       "han": "mǒu",
@@ -1395,6 +1411,16 @@
       "word": "貉",
       "reading": "mò",
       "han": "hé",
+      "ui": "silent",
+      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
+    },
+    {
+      "kind": "reading",
+      "where": "字书默认音",
+      "id": "",
+      "word": "跂",
+      "reading": "qí",
+      "han": "qì",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
     },
