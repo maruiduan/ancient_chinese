@@ -29,7 +29,7 @@ CATALOG = ROOT / "data" / "shiji.json"
 DUMP = SRC / "texts.json"
 URL = "https://zh.wikisource.org/wiki/史記/卷{juan:03d}"
 # 用了固定修订版的卷，出处链接指向那一版。
-OLDID = {48: 2531218, 55: 2666612, 84: 1568305, 86: 2388562, 81: 8735558, 92: 1483915}
+OLDID = {48: 2531218, 55: 2666612, 84: 1568305, 86: 2388562, 81: 8735558, 92: 1483915, 109: 1765440}
 
 
 def source_url(juan: int) -> str:
@@ -42,7 +42,7 @@ PUNCT = set("，。！？；、：·．…—～「」『』（）【】《》�
 CN_NUM = "〇一二三四五六七八九十百"
 
 # 已收的篇。以后每做一篇，在这里加卷号。
-DONE = [7, 8, 48, 55, 81, 84, 86, 92]
+DONE = [7, 8, 48, 55, 81, 84, 86, 92, 109]
 
 GROUPS = [
     ("benji", "本纪", 1, 12),
@@ -98,6 +98,8 @@ def clean_inline(text: str) -> str:
     # {{參|縣|校记}} 显示第一个字；{{另|熒|滎}} 是異文，取后一个（校改后的字）。
     text = re.sub(r"\{\{參\|([^|}]+)\|[^}]*\}\}", r"\1", text)
     text = re.sub(r"\{\{另\|[^|}]+\|([^|}]+)\}\}", r"\1", text)
+    # {{ProperNoun|李}} 是专名线，留字。
+    text = re.sub(r"\{\{ProperNoun\|([^|}]+)\}\}", r"\1", text)
     text = re.sub(r"\{\{[^}]+\}\}", "", text)
     text = re.sub(r"[ \t\u3000]+", "", text)
     return text.strip()
@@ -157,6 +159,20 @@ FIX_086 = [
 def emend_086(text: str) -> str:
     text = text.translate(SHINJITAI_086)
     for old, new in FIX_086:
+        text = text.replace(old, new)
+    return text
+
+SHINJITAI_109 = str.maketrans({"呉": "吳", "戸": "戶", "歳": "歲", "歩": "步", "髪": "髮"})
+FIX_109 = [
+    ("爲輕車將車", "爲輕車將軍"),
+    ("謂其麾下曰；", "謂其麾下曰："),
+    ("擊刀鬬", "擊刁斗"),
+]
+
+
+def emend_109(text: str) -> str:
+    text = text.translate(SHINJITAI_109)
+    for old, new in FIX_109:
         text = text.replace(old, new)
     return text
 
@@ -230,7 +246,9 @@ def parse_juan(juan: int) -> list[list[str]]:
         # 卷四十八篇末「褚先生曰」以下是褚少孙补的（引贾谊《过秦论》），不是史记本文。
         if line.startswith("褚先生曰"):
             break
-        if not line or line.startswith(("__", "{{", "}}", "==", "|", "[[Category", "[[category", "[[File", "[[分類", "</")):
+        if line.startswith("{{") and not line.startswith("{{ProperNoun|"):
+            continue
+        if not line or line.startswith(("__", "}}", "==", "|", "[[Category", "[[category", "[[File", "[[分類", "</")):
             continue
         # 篇末的【索隱述贊】是司马贞写的，不是史记本文。
         if line.startswith("【"):
@@ -240,6 +258,8 @@ def parse_juan(juan: int) -> list[list[str]]:
             text = emend_081(text)
         if juan == 86:
             text = emend_086(text)
+        if juan == 109:
+            text = emend_109(text)
         text = emend(text)
         sents = split_sentences(text)
         if sents:
