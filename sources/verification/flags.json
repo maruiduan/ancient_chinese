@@ -15,8 +15,8 @@
       },
       {
         "collection": "史记",
-        "pieces": 102,
-        "chars": 403378,
+        "pieces": 103,
+        "chars": 405771,
         "unexpected": "0"
       },
       {
@@ -53,27 +53,27 @@
     "unexpected": [],
     "reviewChars": 15,
     "cacheSingle": 54,
-    "glosses": 11266,
-    "lessonFlags": 150,
+    "glosses": 11287,
+    "lessonFlags": 151,
     "missingChars": 408,
     "missingHits": 685,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 5614,
+        "count": 5627,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 1588,
+        "count": 1594,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 1010,
+        "count": 1011,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
@@ -91,7 +91,7 @@
       {
         "trad": "裏",
         "simp": "里",
-        "count": 19,
+        "count": 20,
         "note": "归并"
       },
       {
@@ -1034,6 +1034,15 @@
       "word": "封禅",
       "reading": "fēng shàn",
       "han": "禅→shàn（汉典 chàn、chán）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "s023",
+      "word": "隆杀",
+      "reading": "lóng shài",
+      "han": "杀→shài（汉典 shā）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     },
     {
