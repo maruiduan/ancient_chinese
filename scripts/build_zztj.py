@@ -22,7 +22,8 @@ CATALOG = ROOT / "data" / "zztj.json"
 DUMP = SRC / "years.json"
 
 CC = OpenCC("t2s")
-VARIANTS = str.maketrans({"髙": "高", "籐": "藤", "鄕": "乡"})
+# 维基文库底本混入的日文新字体，一并回正。
+VARIANTS = str.maketrans({"髙": "高", "籐": "藤", "鄕": "乡", **dict(zip("毎歳説撃呉倶絶戸徴呑楡歴髪虚歩", "每歲說擊吳俱絕戶徵吞榆歷髮虛步"))})
 PUNCT = set("，。！？；、：·．…—～「」『』（）【】《》〈〉〔〕〖〗､“”‘’")
 CN_DIGIT = "〇一二三四五六七八九零○"
 YEAR_RE = re.compile(r"^(.+?)([元一二三四五六七八九十百]+)年(.*)$")

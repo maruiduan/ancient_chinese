@@ -125,12 +125,16 @@ def first_star_note(text: str) -> str:
     return ""
 
 
+SHINJITAI = str.maketrans(dict(zip("毎歳説撃呉倶絶戸徴呑楡歴髪虚歩", "每歲說擊吳俱絕戶徵吞榆歷髮虛步")))
+
+
 def clean_inline(text: str) -> str:
     text = re.sub(r"<!--.*?-->", "", text, flags=re.S)
     text = text.replace("\u200b", "")
     text = re.sub(r"<[^>]+>", "", text)
     text = text.replace("'''", "").replace("''", "")
-    return text
+    # 底本混入的日文新字体，回正为传统字形。
+    return text.translate(SHINJITAI)
 
 
 def split_source(note: str) -> Tuple[str, str]:
