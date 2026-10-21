@@ -15,8 +15,8 @@
       },
       {
         "collection": "史记",
-        "pieces": 108,
-        "chars": 425638,
+        "pieces": 109,
+        "chars": 436560,
         "unexpected": "0"
       },
       {
@@ -51,53 +51,53 @@
       }
     ],
     "unexpected": [],
-    "reviewChars": 15,
+    "reviewChars": 16,
     "cacheSingle": 54,
-    "glosses": 11388,
-    "lessonFlags": 151,
+    "glosses": 11410,
+    "lessonFlags": 152,
     "missingChars": 411,
-    "missingHits": 688,
+    "missingHits": 690,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 5822,
+        "count": 5918,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 1656,
+        "count": 1722,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 1371,
+        "count": 1390,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 188,
+        "count": 195,
         "note": "归并"
       },
       {
         "trad": "徵",
         "simp": "征",
-        "count": 98,
+        "count": 101,
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
         "trad": "裏",
         "simp": "里",
-        "count": 21,
+        "count": 22,
         "note": "归并"
       },
       {
         "trad": "乾",
         "simp": "干",
-        "count": 15,
+        "count": 19,
         "note": "干燥作干"
       },
       {
@@ -108,26 +108,26 @@
       },
       {
         "trad": "祇",
+        "simp": "祇",
+        "count": 6,
+        "note": "神祇保留祇"
+      },
+      {
+        "trad": "幹",
+        "simp": "干",
+        "count": 5,
+        "note": "归并"
+      },
+      {
+        "trad": "祇",
         "simp": "只",
         "count": 5,
         "note": "只辱。神祇不在此列"
       },
       {
-        "trad": "祇",
-        "simp": "祇",
-        "count": 5,
-        "note": "神祇保留祇"
-      },
-      {
         "trad": "裡",
         "simp": "里",
         "count": 5,
-        "note": "归并"
-      },
-      {
-        "trad": "幹",
-        "simp": "干",
-        "count": 4,
         "note": "归并"
       },
       {
@@ -618,6 +618,16 @@
       "kind": "reading",
       "where": "字书默认音",
       "id": "",
+      "word": "澇",
+      "reading": "lào",
+      "han": "lǎo、láo",
+      "ui": "review",
+      "detail": "汉典有多个读音，说文音一个都不在里面。页面仍用说文音，弹层标为待复核。"
+    },
+    {
+      "kind": "reading",
+      "where": "字书默认音",
+      "id": "",
       "word": "澮",
       "reading": "huì",
       "han": "kuài",
@@ -1043,6 +1053,15 @@
       "word": "隆杀",
       "reading": "lóng shài",
       "han": "杀→shài（汉典 shā）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "s028",
+      "word": "封禅",
+      "reading": "fēng shàn",
+      "han": "禅→shàn（汉典 chàn、chán）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     },
     {
