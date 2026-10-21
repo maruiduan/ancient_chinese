@@ -1032,7 +1032,7 @@
     const lead = document.createElement("p");
     lead.className = "lead";
     lead.textContent = data
-      ? "司马迁。一百三十篇，已收 " + articles.length + " 篇，已读 " + learnedIn(articles) + "。其余待添加。"
+      ? "司马迁。一百三十篇，已收 " + articles.length + " 篇，已读 " + learnedIn(articles) + "。" + (articles.length < 130 ? "其余待添加。" : "")
       : "目录还没有载入。";
     wrap.appendChild(h1);
     wrap.appendChild(lead);
