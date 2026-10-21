@@ -2907,6 +2907,8 @@
           ruby.className = "py-ruby";
           ruby.textContent = syllable;
           btn.appendChild(ruby);
+          // 字格按拼音宽度撑开，长音节不再和邻字的拼音挤在一起。
+          btn.dataset.py = syllable;
         }
         btn.appendChild(document.createTextNode(glyph));
         btn.addEventListener("click", function () {
