@@ -15,8 +15,8 @@
       },
       {
         "collection": "史记",
-        "pieces": 127,
-        "chars": 476371,
+        "pieces": 128,
+        "chars": 480587,
         "unexpected": "0"
       },
       {
@@ -53,7 +53,7 @@
     "unexpected": [],
     "reviewChars": 16,
     "cacheSingle": 54,
-    "glosses": 11742,
+    "glosses": 11766,
     "lessonFlags": 153,
     "missingChars": 410,
     "missingHits": 693,
@@ -61,19 +61,19 @@
       {
         "trad": "於",
         "simp": "于",
-        "count": 6269,
+        "count": 6306,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 1861,
+        "count": 1864,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 1437,
+        "count": 1438,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
@@ -85,7 +85,7 @@
       {
         "trad": "徵",
         "simp": "征",
-        "count": 124,
+        "count": 128,
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
@@ -109,7 +109,7 @@
       {
         "trad": "祇",
         "simp": "祇",
-        "count": 6,
+        "count": 7,
         "note": "神祇保留祇"
       },
       {
