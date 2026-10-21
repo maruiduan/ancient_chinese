@@ -1977,3 +1977,7 @@ table.biao { border-collapse: separate; border-spacing: 0; font-family: var(--se
 .biao td.biao-ev { background: color-mix(in srgb, var(--accent) 6%, transparent); }
 .biao tr.biao-yr > * { border-top: 2px solid var(--accent); }
 @media (min-width: 900px) { .biao { font-size: 15px; } .biao th, .biao td { min-width: 7.5em; } }
+
+/* 长拼音撑开字格：用不可见的同字号拼音占位，拼音仍居中在字上，邻字不再重叠 */
+.reader .body .orig.with-py .zi[data-py]::before { content: attr(data-py); display: block; height: 0; overflow: hidden; visibility: hidden; font-family: var(--py-font); font-weight: 400; font-size: 12px; letter-spacing: 0; white-space: nowrap; padding: 0 2px; }
+@media (min-width: 861px) { .reader .body .orig.with-py .zi[data-py]::before { font-size: 13px; } }
