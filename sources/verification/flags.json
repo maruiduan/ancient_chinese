@@ -15,8 +15,8 @@
       },
       {
         "collection": "史记",
-        "pieces": 101,
-        "chars": 394969,
+        "pieces": 102,
+        "chars": 403378,
         "unexpected": "0"
       },
       {
@@ -53,39 +53,39 @@
     "unexpected": [],
     "reviewChars": 15,
     "cacheSingle": 54,
-    "glosses": 11246,
+    "glosses": 11266,
     "lessonFlags": 150,
-    "missingChars": 407,
-    "missingHits": 683,
+    "missingChars": 408,
+    "missingHits": 685,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 5552,
+        "count": 5614,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 1579,
+        "count": 1588,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 1008,
+        "count": 1010,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 182,
+        "count": 186,
         "note": "归并"
       },
       {
         "trad": "徵",
         "simp": "征",
-        "count": 84,
+        "count": 86,
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
@@ -103,7 +103,7 @@
       {
         "trad": "乾",
         "simp": "乾",
-        "count": 6,
+        "count": 7,
         "note": "乾坤、乾谿等读 qián，保留乾"
       },
       {
@@ -137,16 +137,16 @@
         "note": "神祇保留祇"
       },
       {
+        "trad": "隻",
+        "simp": "只",
+        "count": 4,
+        "note": "归并"
+      },
+      {
         "trad": "禕",
         "simp": "祎",
         "count": 3,
         "note": "费祎。不从 OpenCC 把褘收成袆"
-      },
-      {
-        "trad": "隻",
-        "simp": "只",
-        "count": 3,
-        "note": "归并"
       },
       {
         "trad": "徵",
