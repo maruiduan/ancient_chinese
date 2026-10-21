@@ -2576,10 +2576,13 @@
       const rows = tb.rows[font] || tb.rows.s;
       let thead = null;
       const tbody = document.createElement("tbody");
+      const yrRe = /^前?\d/;
+      const nYr = rows.filter(function (r) { return r[0] && yrRe.test(r[0].x || ""); }).length;
+      const markYr = nYr * 2 < rows.length;
       rows.forEach(function (row, ri) {
         const tr = document.createElement("tr");
         const isHead = ri === 0 && row.every(function (c) { return c.h; });
-        if (!isHead && row[0] && /^前?\d/.test(row[0].x || "")) tr.className = "biao-yr";
+        if (markYr && !isHead && row[0] && yrRe.test(row[0].x || "")) tr.className = "biao-yr";
         row.forEach(function (c, ci) {
           const cell = document.createElement(c.h || ci === 0 ? "th" : "td");
           if (ci === 0) cell.className = "biao-k";
