@@ -2552,6 +2552,81 @@
     return p;
   }
 
+  // 十表：表格按 at（排在第几段之前）插进正文；同一处相邻的几张表做成切换页。
+  function appendBiaoAt(body, art, at) {
+    if (!art.biao) return;
+    const group = art.biao.filter(function (tb) { return tb.at === at; });
+    if (!group.length) return;
+    const font = state.progress.font === "t" ? "t" : "s";
+    const box = document.createElement("section");
+    box.className = "biao-block";
+    if (group[0].addendum) box.appendChild(addendumBanner(group[0].addendum));
+    const tabs = document.createElement("div");
+    tabs.className = "biao-tabs";
+    const hint = document.createElement("p");
+    hint.className = "biao-hint";
+    hint.textContent = "← 左右滑动看各栏 · 首栏和表头固定 →";
+    const scroller = document.createElement("div");
+    scroller.className = "biao-scroll";
+    scroller.tabIndex = 0;
+    function show(k) {
+      const tb = group[k];
+      const table = document.createElement("table");
+      table.className = "biao";
+      const rows = tb.rows[font] || tb.rows.s;
+      let thead = null;
+      const tbody = document.createElement("tbody");
+      rows.forEach(function (row, ri) {
+        const tr = document.createElement("tr");
+        const isHead = ri === 0 && row.every(function (c) { return c.h; });
+        if (!isHead && row[0] && /^前?\d/.test(row[0].x || "")) tr.className = "biao-yr";
+        row.forEach(function (c, ci) {
+          const cell = document.createElement(c.h || ci === 0 ? "th" : "td");
+          if (ci === 0) cell.className = "biao-k";
+          else if (!isHead) {
+            const plain = (c.x || "").replace(/。$/, "");
+            cell.className = /^[一二三四五六七八九十〇]*$/.test(plain) ? "biao-n" : "biao-ev";
+          }
+          if (c.c) cell.colSpan = c.c;
+          if (c.r) cell.rowSpan = c.r;
+          (c.x || "").split("\n").forEach(function (line, li) {
+            if (li) cell.appendChild(document.createElement("br"));
+            cell.appendChild(document.createTextNode(line));
+          });
+          tr.appendChild(cell);
+        });
+        if (isHead) {
+          thead = document.createElement("thead");
+          thead.appendChild(tr);
+        } else tbody.appendChild(tr);
+      });
+      if (thead) table.appendChild(thead);
+      table.appendChild(tbody);
+      scroller.replaceChildren(table);
+      scroller.scrollLeft = 0;
+      Array.prototype.forEach.call(tabs.children, function (b, i) { b.classList.toggle("on", i === k); });
+    }
+    if (group.length > 1) {
+      group.forEach(function (tb, k) {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.textContent = tb.name[font] || ("表" + (k + 1));
+        b.addEventListener("click", function () { show(k); });
+        tabs.appendChild(b);
+      });
+      box.appendChild(tabs);
+    } else if (group[0].name[font]) {
+      const h = document.createElement("h3");
+      h.className = "biao-title";
+      h.textContent = group[0].name[font];
+      box.appendChild(h);
+    }
+    box.appendChild(hint);
+    box.appendChild(scroller);
+    show(0);
+    body.appendChild(box);
+  }
+
   function renderProseBody(art) {
     const body = document.createElement("div");
     const hasTr = art.paragraphs.some(function (para) {
@@ -2560,6 +2635,7 @@
     if (!sentenceMode()) {
       body.className = "body prose";
       art.paragraphs.forEach(function (para, pi) {
+        appendBiaoAt(body, art, pi);
         const add = addendumStart(art.paragraphs, pi);
         if (add) body.appendChild(addendumBanner(add));
         const p = document.createElement("p");
@@ -2569,6 +2645,7 @@
         });
         body.appendChild(p);
       });
+      appendBiaoAt(body, art, art.paragraphs.length);
       return body;
     }
     body.className = "body prose sentence";
@@ -2579,6 +2656,7 @@
       body.appendChild(banner);
     }
     art.paragraphs.forEach(function (para, pi) {
+      appendBiaoAt(body, art, pi);
       const add = addendumStart(art.paragraphs, pi);
       if (add) body.appendChild(addendumBanner(add));
       para.sentences.forEach(function (sent, index) {
@@ -2598,6 +2676,7 @@
         body.appendChild(pair);
       });
     });
+    appendBiaoAt(body, art, art.paragraphs.length);
     return body;
   }
 
@@ -2605,6 +2684,7 @@
     const body = document.createElement("div");
     body.className = "body";
     art.paragraphs.forEach(function (para, pi) {
+      appendBiaoAt(body, art, pi);
       const add = addendumStart(art.paragraphs, pi);
       if (add) body.appendChild(addendumBanner(add));
       if (mode === "parallel") {
@@ -2632,6 +2712,7 @@
         body.appendChild(p);
       }
     });
+    appendBiaoAt(body, art, art.paragraphs.length);
     return body;
   }
 

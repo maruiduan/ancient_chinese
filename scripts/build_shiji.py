@@ -29,7 +29,7 @@ CATALOG = ROOT / "data" / "shiji.json"
 DUMP = SRC / "texts.json"
 URL = "https://zh.wikisource.org/wiki/史記/卷{juan:03d}"
 # 用了固定修订版的卷，出处链接指向那一版。
-OLDID = {48: 2531218, 55: 2666612, 84: 1568305, 86: 2388562, 81: 8735558, 92: 1483915, 109: 1765440, 62: 7903600, 77: 367917, 130: 2609362, 61: 2621133, 124: 367994, 129: 7904128, 47: 7903609, 6: 7907969, 68: 8764712, 65: 2567048, 76: 7909284, 63: 7903601, 41: 11132202, 66: 2621138, 82: 2529471, 80: 2089316, 75: 1965692, 83: 2089252, 85: 2027911, 78: 2089016, 87: 2364605, 69: 2621145, 70: 2621148, 79: 2549307, 53: 2087971, 73: 7909285, 56: 1961615, 107: 2540571, 126: 2609358, 105: 8842726, 89: 8744143, 91: 2509940, 97: 1383195, 117: 10371549, 57: 1569360, 9: 2087062, 10: 2599229, 43: 7903603, 74: 7908177, 122: 7904124, 49: 7903610, 44: 7903606, 1: 11133934, 4: 7909147, 2: 7903612, 3: 7909145, 12: 8733061, 64: 7895410, 67: 7869003, 111: 8730225, 110: 8735645, 123: 8736799, 120: 9166127, 5: 8744286, 54: 1490182, 102: 1753957, 101: 368092, 100: 1965696, 88: 1965690, 99: 368013, 119: 7904123, 96: 8770206, 125: 2273599, 108: 1765317, 106: 405869, 112: 2089420, 118: 7904122, 11: 2520527, 42: 2016409, 45: 7903607, 50: 8737728, 51: 2380315, 46: 2560838, 52: 5977113, 58: 8735555, 59: 2621125, 60: 7909290, 71: 2621152, 72: 367921, 90: 376055, 93: 368019, 94: 2171897, 95: 2298709, 98: 1490318, 103: 2096814, 104: 8739534, 113: 8735632, 114: 8735633, 115: 439220, 116: 7903636, 121: 8735621, 127: 2609359, 128: 7904127, 23: 2607039, 29: 1513337, 24: 2607042, 25: 366037, 30: 8730259, 26: 2637674, 28: 8738543, 27: 366041}
+OLDID = {48: 2531218, 55: 2666612, 84: 1568305, 86: 2388562, 81: 8735558, 92: 1483915, 109: 1765440, 62: 7903600, 77: 367917, 130: 2609362, 61: 2621133, 124: 367994, 129: 7904128, 47: 7903609, 6: 7907969, 68: 8764712, 65: 2567048, 76: 7909284, 63: 7903601, 41: 11132202, 66: 2621138, 82: 2529471, 80: 2089316, 75: 1965692, 83: 2089252, 85: 2027911, 78: 2089016, 87: 2364605, 69: 2621145, 70: 2621148, 79: 2549307, 53: 2087971, 73: 7909285, 56: 1961615, 107: 2540571, 126: 2609358, 105: 8842726, 89: 8744143, 91: 2509940, 97: 1383195, 117: 10371549, 57: 1569360, 9: 2087062, 10: 2599229, 43: 7903603, 74: 7908177, 122: 7904124, 49: 7903610, 44: 7903606, 1: 11133934, 4: 7909147, 2: 7903612, 3: 7909145, 12: 8733061, 64: 7895410, 67: 7869003, 111: 8730225, 110: 8735645, 123: 8736799, 120: 9166127, 5: 8744286, 54: 1490182, 102: 1753957, 101: 368092, 100: 1965696, 88: 1965690, 99: 368013, 119: 7904123, 96: 8770206, 125: 2273599, 108: 1765317, 106: 405869, 112: 2089420, 118: 7904122, 11: 2520527, 42: 2016409, 45: 7903607, 50: 8737728, 51: 2380315, 46: 2560838, 52: 5977113, 58: 8735555, 59: 2621125, 60: 7909290, 71: 2621152, 72: 367921, 90: 376055, 93: 368019, 94: 2171897, 95: 2298709, 98: 1490318, 103: 2096814, 104: 8739534, 113: 8735632, 114: 8735633, 115: 439220, 116: 7903636, 121: 8735621, 127: 2609359, 128: 7904127, 23: 2607039, 29: 1513337, 24: 2607042, 25: 366037, 30: 8730259, 26: 2637674, 28: 8738543, 27: 366041, 16: 2607007}
 
 
 def source_url(juan: int) -> str:
@@ -42,7 +42,7 @@ PUNCT = set("，。！？；、：·．…—～「」『』（）【】《》�
 CN_NUM = "〇一二三四五六七八九十百"
 
 # 已收的篇。以后每做一篇，在这里加卷号。
-DONE = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 23, 24, 25, 26, 27, 28, 29, 30, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130]
+DONE = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 16, 23, 24, 25, 26, 27, 28, 29, 30, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130]
 
 GROUPS = [
     ("benji", "本纪", 1, 12),
@@ -1950,6 +1950,18 @@ def emend_027(text: str) -> str:
     return text
 
 
+FIX_016 = [
+    # 文庫本作「其後乃放弒」
+    ("其后乃放弒", "其後乃放弒"),
+]
+
+
+def emend_016(text: str) -> str:
+    for old, new in FIX_016:
+        text = text.replace(old, new)
+    return text
+
+
 FIX_081 = [
     ("原以十五城請易璧", "願以十五城請易璧"),
     ("原王勿遣", "願王勿遣"),
@@ -2008,9 +2020,74 @@ def parse_index() -> list[dict]:
     return rows
 
 
+# 十表（卷十三至卷二十二）：维基文库把表格写成 {| … |}。表格单独解析成行列，
+# 正文里只留一个占位，记下表格排在第几段之前；序、表间的说明文字照常分句。
+BIAO = range(13, 23)
+BIAO_TABLES: dict[int, list[dict]] = {}
+
+
+def _biao_cell(raw: str, head: bool) -> dict:
+    attrs = {}
+    text = raw
+    m = re.match(r'^\s*((?:(?:colspan|rowspan|style|align|class)\s*=\s*"?[^"|]*"?\s*)+)\|(?!\|)(.*)$', raw)
+    if m:
+        for k, v in re.findall(r'(colspan|rowspan)\s*=\s*"?(\d+)"?', m.group(1)):
+            attrs["c" if k == "colspan" else "r"] = int(v)
+        text = m.group(2)
+    text = re.sub(r"\{\{!\|([^|}]+)\|[^}]*\}\}", r"\1", text)
+    text = re.sub(r"<br\s*/?>", " ", text)
+    text = clean_inline(text).strip()
+    cell = {"x": text}
+    if head:
+        cell["h"] = 1
+    cell.update(attrs)
+    return cell
+
+
+def parse_biao_table(block: str) -> list[list[dict]]:
+    rows: list[list[dict]] = []
+    cur: list[dict] | None = None
+    for line in block.splitlines()[1:]:
+        line = line.strip()
+        if not line or line.startswith("|}") or line.startswith("|+"):
+            continue
+        if line.startswith("|-"):
+            cur = []
+            rows.append(cur)
+            continue
+        if cur is None:
+            cur = []
+            rows.append(cur)
+        if line.startswith("!"):
+            for part in line[1:].split("!!"):
+                cur.append(_biao_cell(part, True))
+        elif line.startswith("|"):
+            for part in line[1:].split("||"):
+                cur.append(_biao_cell(part, False))
+        elif cur:
+            # 单元格跨行续写
+            cur[-1]["x"] += clean_inline(line)
+    return [r for r in rows if r]
+
+
+def extract_biao(juan: int, raw: str) -> str:
+    tables: list[dict] = []
+
+    def repl(m):
+        tables.append({"rows": parse_biao_table(m.group(0))})
+        return f"\n@@BIAO{len(tables) - 1}@@\n"
+
+    raw = re.sub(r"^\{\|.*?^\|\}", repl, raw, flags=re.S | re.M)
+    BIAO_TABLES[juan] = tables
+    return raw
+
+
 def parse_juan(juan: int) -> list[list[str]]:
     raw = (SRC / f"juan{juan:03d}.wikitext").read_text(encoding="utf-8")
+    if juan in BIAO:
+        raw = extract_biao(juan, raw)
     body = raw.split("}}", 1)[1]
+    section = ""
     paragraphs = []
     zan = False
     quote = False
@@ -2022,6 +2099,20 @@ def parse_juan(juan: int) -> list[list[str]]:
         line = line.strip().lstrip(":")
         # 卷一百一十七的生僻字写成 {{!|𨎥|左「車」右「惠」}}，取第一个参数（字本身），先换掉，免得行末的「}}」被当成引文结束。
         line = re.sub(r"\{\{!\|([^|}]+)\|[^}]*\}\}", r"\1", line)
+        # 十表：表格占位，记下排在第几段之前、所属小节和是否褚少孙补。
+        mb = re.fullmatch(r"@@BIAO(\d+)@@", line)
+        if mb:
+            tb = BIAO_TABLES[juan][int(mb.group(1))]
+            tb["at"] = len(paragraphs)
+            tb["name"] = section
+            tb["addendum"] = addendum
+            continue
+        if juan in BIAO and line.startswith("=="):
+            section = line.strip("= ")
+        if juan in BIAO and line.startswith("</onlyinclude>"):
+            break
+        if juan in BIAO and (line.startswith("張夫子問褚先生") or line.startswith("後進好事儒者褚先生")):
+            addendum = "chu"
         # 维基文库的空行写成 <br /><br />，不是正文。
         if re.fullmatch(r"(?:<br\s*/?>)+", line):
             continue
@@ -2031,7 +2122,7 @@ def parse_juan(juan: int) -> list[list[str]]:
         # 卷八十一的【索隱述贊】写成小节标题，下面一段也是司马贞的，不收。
         # 卷一篇末的「==校勘記==」是后人的校记，不是原文。
         # 卷一百二十七写成「== 索隱述贊 ==」，标题两边有空格。
-        if line.replace(" ", "").startswith(("==索隱述贊", "==校勘記")):
+        if line.replace(" ", "").startswith(("==索隱述贊", "==校勘記", "==索隐述赞", "==斠勘")):
             break
         # 卷六十三《说难》开头一段包在 {{Quote|…}} 里，到「}}」结束。
         # 卷一百一十七的赋和书信写作小写的 {{quote|…}}，可以跨好几行。
@@ -2262,6 +2353,8 @@ def parse_juan(juan: int) -> list[list[str]]:
             text = emend_028(text)
         if juan == 27:
             text = emend_027(text)
+        if juan == 16:
+            text = emend_016(text)
         text = emend(text)
         sents = split_sentences(text)
         if sents:
@@ -2453,7 +2546,53 @@ def article_for(entry: dict, lesson: dict) -> dict:
         "annotated": True,
         "paragraphs": paragraphs,
         "lesson": lesson["lesson"],
+        **biao_for(entry["juan"]),
     }
+
+
+def biao_for(juan: int) -> dict:
+    tables = BIAO_TABLES.get(juan)
+    if not tables:
+        return {}
+    out = []
+    for tb in tables:
+        rows_t = [[dict(c, x=emend(c["x"])) for c in row] for row in tb["rows"]]
+        if juan in BIAO_FIX:
+            rows_t = BIAO_FIX[juan](rows_t)
+        rows_s = [[dict(c, x=to_simplified(c["x"])) for c in row] for row in rows_t]
+        item = {"at": tb.get("at", 0), "name": {"t": tb.get("name", ""), "s": to_simplified(tb.get("name", ""))},
+                "rows": {"t": rows_t, "s": rows_s}}
+        if tb.get("addendum"):
+            item["addendum"] = ADDENDA[tb["addendum"]]
+        out.append(item)
+    return {"biao": out}
+
+
+def _biao016(rows: list[list[dict]]) -> list[list[dict]]:
+    """卷十六：月份写在秦（前一表）或汉（后一表）那一栏的开头，挪到首栏，和年份一起固定在左边。"""
+    if not rows or not rows[0] or rows[0][0]["x"] != "公元前":
+        return rows
+    head = rows[0]
+    names = [c["x"] for c in head]
+    col = 1 if names[1] == "秦" else sum(c.get("c", 1) for c in head[: names.index("漢")])
+    out = [[dict(head[0], x="年月")] + head[1:]]
+    era = ""
+    for row in rows[1:]:
+        cells = [dict(c) for c in row]
+        year = cells[0]["x"]
+        m = re.match(r"^(.*?)((?:後|閏|端)?[正一二三四五六七八九十]*月)[。\s]*(.*)$", cells[col]["x"]) if col < len(cells) else None
+        label = f"前{year}" if year else ""
+        if m:
+            if m.group(1).strip():
+                era = m.group(1).strip()
+            label = "\n".join(x for x in (label, era if year else "", m.group(2)) if x)
+            cells[col]["x"] = m.group(3)
+        cells[0] = dict(cells[0], x=label, h=1)
+        out.append(cells)
+    return out
+
+
+BIAO_FIX = {16: _biao016}
 
 
 def catalog_for(entries: list[dict]) -> dict:
