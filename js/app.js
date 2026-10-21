@@ -1398,9 +1398,9 @@
     wrap.appendChild(resume);
     const input = document.createElement("input");
     input.className = "catalog-search";
-    input.placeholder = "搜索则目";
+    input.placeholder = "搜索条目";
     input.value = state.renjianQuery;
-    input.setAttribute("aria-label", "搜索则目");
+    input.setAttribute("aria-label", "搜索条目");
     input.addEventListener("input", function () {
       state.renjianQuery = input.value;
       showRenjian();
@@ -1421,7 +1421,7 @@
     if (!shown.length) {
       const empty = document.createElement("p");
       empty.className = "catalog-empty";
-      empty.textContent = "没有匹配的则目。";
+      empty.textContent = "没有匹配的条目。";
       list.appendChild(empty);
     }
     shown.forEach(function (art) { list.appendChild(pieceLink(art, false)); });
