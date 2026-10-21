@@ -15,8 +15,8 @@
       },
       {
         "collection": "史记",
-        "pieces": 116,
-        "chars": 448178,
+        "pieces": 117,
+        "chars": 448341,
         "unexpected": "0"
       },
       {
@@ -53,8 +53,8 @@
     "unexpected": [],
     "reviewChars": 16,
     "cacheSingle": 54,
-    "glosses": 11537,
-    "lessonFlags": 152,
+    "glosses": 11552,
+    "lessonFlags": 153,
     "missingChars": 411,
     "missingHits": 691,
     "simp": [
@@ -73,7 +73,7 @@
       {
         "trad": "餘",
         "simp": "余",
-        "count": 1405,
+        "count": 1406,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
@@ -1045,6 +1045,15 @@
       "reading": "fēng shàn",
       "han": "禅→shàn（汉典 chàn、chán）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "loan",
+      "where": "通假",
+      "id": "s019",
+      "word": "禪",
+      "reading": "嬗",
+      "han": "http://wyw.hwxnet.com/view/hwxe7hwxa6hwx85.html",
+      "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
     },
     {
       "kind": "reading",
