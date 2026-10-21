@@ -15,8 +15,8 @@
       },
       {
         "collection": "史记",
-        "pieces": 118,
-        "chars": 448746,
+        "pieces": 119,
+        "chars": 448792,
         "unexpected": "0"
       },
       {
@@ -53,7 +53,7 @@
     "unexpected": [],
     "reviewChars": 16,
     "cacheSingle": 54,
-    "glosses": 11569,
+    "glosses": 11582,
     "lessonFlags": 153,
     "missingChars": 411,
     "missingHits": 691,
