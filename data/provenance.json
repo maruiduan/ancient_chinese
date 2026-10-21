@@ -4911,6 +4911,16 @@
         "status": "中华书局点校本是正文校点，不是译文。本站译文未按某一译注本核定"
       }
     },
+    "s116": {
+      "collection": "史记",
+      "edition": "维基文库《史記》卷116 西南夷列傳第五十六",
+      "url": "https://zh.wikisource.org/w/index.php?oldid=7903636",
+      "note": "正文按 sources/shiji/EDITION.md：只收本文和太史公曰，不收三家注、索隐述赞。白话和注释是本书编写的。",
+      "translation": {
+        "edition": "未取得中华书局《史记》全本全注全译本",
+        "status": "中华书局点校本是正文校点，不是译文。本站译文未按某一译注本核定"
+      }
+    },
     "s117": {
       "collection": "史记",
       "edition": "维基文库《史記》卷117 司馬相如列傳第五十七",
