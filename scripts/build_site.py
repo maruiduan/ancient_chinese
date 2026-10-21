@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import os
 import sys
 import tempfile
@@ -80,8 +81,45 @@ def pinyin_of(text: str) -> str:
     return " ".join(parts)
 
 
+DUNHAO_P = "，。；：！？、「」『』（）《》"
+DUNHAO_TAIL = "曰也矣者乎哉焉耳"
+
+
+def dunhao_to_comma(text: str) -> str:
+    """维基文库《古文观止》部分卷次通篇用顿号作句读，一个逗号也没有。
+
+    这种段落里把顿号改回逗号，「曰、」改冒号；两侧都是三字以内的并列短语时保留顿号。
+    """
+    segs = re.split("([%s]+)" % re.escape(DUNHAO_P), text)
+    for i in range(1, len(segs), 2):
+        mark = segs[i]
+        if "、" not in mark:
+            continue
+        left = segs[i - 1]
+        right = segs[i + 1] if i + 1 < len(segs) else ""
+        if mark != "、":
+            segs[i] = mark.replace("、", "，")
+            continue
+        if left.endswith("曰"):
+            segs[i] = "："
+            continue
+        if right.startswith("曰"):
+            segs[i] = "，"
+            continue
+        prev_mark = segs[i - 2] if i >= 2 else ""
+        next_mark = segs[i + 2] if i + 2 < len(segs) else ""
+        short = len(left) <= 3 and len(right) <= 3
+        listy = prev_mark == "、" or next_mark == "、" or (len(left) <= 2 and len(right) <= 2)
+        if short and listy and not (left and left[-1] in DUNHAO_TAIL):
+            continue
+        segs[i] = "，"
+    return "".join(segs)
+
+
 def normalize_paragraph(paragraph: str) -> str:
     paragraph = paragraph.replace("。。", "。")
+    if "，" not in paragraph and "、" in paragraph:
+        paragraph = dunhao_to_comma(paragraph)
     # 部分卷次用顿号充当句读，几乎不用句号。
     if paragraph.count("、") >= 8 and paragraph.count("。") <= 1:
         paragraph = paragraph.replace("、", "，")
