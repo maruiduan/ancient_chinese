@@ -61,6 +61,10 @@ def iter_units() -> list[dict]:
             continue
         art = load_json(path)
         pid = art["id"]
+        # 《史记》的名句由 build_shiji 从课注写入（每句都有白话和赏析），这里不再按字面撞句，
+        # 否则会生成没有卡片的重复条目，重建时报「名句卡片缺」。
+        if re.fullmatch(r"s\d{3}", pid):
+            continue
         if pid.startswith("d"):
             col = "道德经"
         elif pid.startswith("l"):
