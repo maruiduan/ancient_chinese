@@ -15,8 +15,8 @@
       },
       {
         "collection": "史记",
-        "pieces": 94,
-        "chars": 380868,
+        "pieces": 95,
+        "chars": 383061,
         "unexpected": "0"
       },
       {
@@ -53,33 +53,33 @@
     "unexpected": [],
     "reviewChars": 15,
     "cacheSingle": 54,
-    "glosses": 11109,
-    "lessonFlags": 149,
+    "glosses": 11129,
+    "lessonFlags": 150,
     "missingChars": 406,
-    "missingHits": 679,
+    "missingHits": 680,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 5474,
+        "count": 5482,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 1536,
+        "count": 1545,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 958,
+        "count": 968,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 177,
+        "count": 182,
         "note": "归并"
       },
       {
@@ -1107,6 +1107,15 @@
       "reading": "féng táng yì lǎo",
       "han": "冯→féng（汉典 píng）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "loan",
+      "where": "通假",
+      "id": "s104",
+      "word": "详",
+      "reading": "佯",
+      "han": "http://wyw.hwxnet.com/view/hwxe8hwxafhwxa6.html",
+      "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
     },
     {
       "kind": "reading",
