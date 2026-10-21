@@ -15,8 +15,8 @@
       },
       {
         "collection": "史记",
-        "pieces": 120,
-        "chars": 448876,
+        "pieces": 121,
+        "chars": 452605,
         "unexpected": "0"
       },
       {
@@ -53,7 +53,7 @@
     "unexpected": [],
     "reviewChars": 16,
     "cacheSingle": 54,
-    "glosses": 11584,
+    "glosses": 11607,
     "lessonFlags": 153,
     "missingChars": 410,
     "missingHits": 690,
@@ -61,19 +61,19 @@
       {
         "trad": "於",
         "simp": "于",
-        "count": 5984,
+        "count": 6044,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 1778,
+        "count": 1785,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 1407,
+        "count": 1422,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
@@ -85,7 +85,7 @@
       {
         "trad": "徵",
         "simp": "征",
-        "count": 109,
+        "count": 110,
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
@@ -103,7 +103,7 @@
       {
         "trad": "乾",
         "simp": "乾",
-        "count": 7,
+        "count": 8,
         "note": "乾坤、乾谿等读 qián，保留乾"
       },
       {
