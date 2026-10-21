@@ -15,8 +15,8 @@
       },
       {
         "collection": "史记",
-        "pieces": 84,
-        "chars": 355736,
+        "pieces": 85,
+        "chars": 358106,
         "unexpected": "0"
       },
       {
@@ -53,27 +53,27 @@
     "unexpected": [],
     "reviewChars": 15,
     "cacheSingle": 54,
-    "glosses": 10905,
-    "lessonFlags": 146,
+    "glosses": 10926,
+    "lessonFlags": 147,
     "missingChars": 404,
-    "missingHits": 671,
+    "missingHits": 673,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 5233,
+        "count": 5245,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 1474,
+        "count": 1487,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 912,
+        "count": 917,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
@@ -85,7 +85,7 @@
       {
         "trad": "徵",
         "simp": "征",
-        "count": 71,
+        "count": 72,
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
@@ -1043,6 +1043,15 @@
       "word": "风",
       "reading": "fěng",
       "han": "风→fěng（汉典 fēng）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "s059",
+      "word": "二千石",
+      "reading": "èr qiān dàn",
+      "han": "石→dàn（汉典 shí）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     },
     {
