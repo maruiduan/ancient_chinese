@@ -189,6 +189,10 @@ def emend(text: str) -> str:
 
 
 # 卷八十一维基文库本混入日本新字形，另有几处录错，逐条改。每一条都记在 EDITION.md。
+# 全书核查：维基文库底本混入的日文新字体、异写，全书统一换回正字（wenku 本同）。
+SHINJITAI_ALL = str.maketrans({"毎": "每", "歳": "歲", "説": "說", "撃": "擊", "呉": "吳", "倶": "俱", "髙": "高",
+                               "絶": "絕", "戸": "戶", "徴": "徵", "呑": "吞", "楡": "榆", "歴": "歷", "髪": "髮",
+                               "虚": "虛", "歩": "步"})
 SHINJITAI_081 = str.maketrans({"歳": "歲", "倶": "俱", "撃": "擊", "歩": "步", "毎": "每",
                                "髙": "高", "暦": "歷", "晩": "晚", "娯": "娛", "巻": "卷"})
 # 卷八十六同样混入日本字形。
@@ -2245,7 +2249,7 @@ def parse_juan(juan: int) -> list[list[str]]:
         # 卷二十七的维基文库本夹有三家注（{{*|【索隱】…}}，内含嵌套模板），整段按括号配对剥掉。
         if juan == 27:
             line = strip_star_notes(line)
-        text = clean_inline(line)
+        text = clean_inline(line).translate(SHINJITAI_ALL)
         if zan and not text.startswith("太史公曰"):
             text = "太史公曰：" + text
         zan = False
