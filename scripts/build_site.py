@@ -24,6 +24,8 @@ from parse_wikisource import parse_volume, split_sentences
 
 SRC = ROOT / "sources" / "wikisource"
 OUT = ROOT / "data"
+from prose_readings import fix_tokens as fix_readings  # noqa: E402
+
 T2S = opencc.OpenCC("t2s")
 S2T = opencc.OpenCC("s2t")
 
@@ -143,6 +145,7 @@ def char_tokens(sentence: str) -> list[dict]:
         else:
             buf.append(ch)
     flush_punct()
+    fix_readings(tokens)
     return tokens
 
 

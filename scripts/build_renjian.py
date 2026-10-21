@@ -21,6 +21,8 @@ ARTICLES = ROOT / "data" / "articles"
 CATALOG = ROOT / "data" / "renjian.json"
 DUMP = ROOT / "sources" / "renjian" / "sentences.json"
 
+from prose_readings import fix_tokens as fix_readings  # noqa: E402
+
 CC = OpenCC("t2s")
 NUMERALS = "〇一二三四五六七八九"
 # 维基文库卷上的三处错字。对照见 sources/renjian/EDITION.md。
@@ -124,6 +126,7 @@ def tokens_for(trad: str, simp: str) -> list[dict]:
             rows.append({"t": t_ch, "s": s_ch, "punct": True})
         else:
             rows.append({"t": t_ch, "s": s_ch, "py": "", "ctx": "", "pos": "", "extra": "", "level": "dict"})
+    fix_readings(rows)
     return rows
 
 

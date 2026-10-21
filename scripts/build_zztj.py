@@ -21,6 +21,8 @@ ARTICLES = ROOT / "data" / "articles"
 CATALOG = ROOT / "data" / "zztj.json"
 DUMP = SRC / "years.json"
 
+from prose_readings import fix_tokens as fix_readings  # noqa: E402
+
 CC = OpenCC("t2s")
 # 维基文库底本混入的日文新字体，一并回正。
 VARIANTS = str.maketrans({"髙": "高", "籐": "藤", "鄕": "乡", **dict(zip("毎歳説撃呉倶絶戸徴呑楡歴髪虚歩", "每歲說擊吳俱絕戶徵吞榆歷髮虛步"))})
@@ -312,6 +314,7 @@ def tokens_for(trad: str, simp: str) -> list[dict]:
             rows.append({"t": t_ch, "s": s_ch, "punct": True})
         else:
             rows.append({"t": t_ch, "s": s_ch, "py": "", "ctx": "", "pos": "", "extra": "", "level": "dict"})
+    fix_readings(rows)
     return rows
 
 
