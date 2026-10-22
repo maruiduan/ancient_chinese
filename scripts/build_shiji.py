@@ -2287,7 +2287,38 @@ def _biao_cell(raw: str, head: bool) -> dict:
     return cell
 
 
+def mark_daoshu(block: str) -> str:
+    """卷二十二的倒书（原表倒写，记薨卒、罢免）写作 {{~~|…}}，可能跨行、嵌套。
+    换成〖…〗留字，页面上另排样式；嵌套的只留最外一层，跨行的并成一行。"""
+    out, stack, i = [], [], 0
+    while i < len(block):
+        if block.startswith("{{~~|", i):
+            stack.append(True)
+            if stack.count(True) == 1:
+                out.append("〖")
+            i += 5
+        elif block.startswith("{{", i):
+            stack.append(False)
+            out.append("{{")
+            i += 2
+        elif block.startswith("}}", i) and stack:
+            dao = stack.pop()
+            if not dao:
+                out.append("}}")
+            elif stack.count(True) == 0:
+                out.append("〗")
+            i += 2
+        else:
+            ch = block[i]
+            if ch == "\n" and stack.count(True):
+                ch = ""
+            out.append(ch)
+            i += 1
+    return "".join(out)
+
+
 def parse_biao_table(block: str) -> list[list[dict]]:
+    block = mark_daoshu(block)
     rows: list[list[dict]] = []
     cur: list[dict] | None = None
     for line in block.splitlines()[1:]:

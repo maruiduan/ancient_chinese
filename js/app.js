@@ -2566,6 +2566,8 @@
     const hint = document.createElement("p");
     hint.className = "biao-hint";
     hint.textContent = "← 左右滑动看各栏 · 首栏和表头固定 →";
+    const hasDao = group.some(function (tb) { return JSON.stringify(tb.rows.s || []).indexOf("〖") >= 0; });
+    if (hasDao) hint.textContent += "　· 加框斜体是原表「倒书」，记大臣薨卒、罢免";
     const scroller = document.createElement("div");
     scroller.className = "biao-scroll";
     scroller.tabIndex = 0;
@@ -2594,7 +2596,17 @@
           if (c.r) cell.rowSpan = c.r;
           (c.x || "").split("\n").forEach(function (line, li) {
             if (li) cell.appendChild(document.createElement("br"));
-            cell.appendChild(document.createTextNode(line));
+            // 〖…〗是原表倒书（卷二十二记薨卒、罢免），另排样式。
+            line.split(/(〖[^〗]*〗)/).forEach(function (seg) {
+              if (!seg) return;
+              if (seg.charAt(0) === "〖" && seg.charAt(seg.length - 1) === "〗") {
+                const d = document.createElement("span");
+                d.className = "biao-dao";
+                d.title = "原表倒书";
+                d.textContent = seg.slice(1, -1);
+                cell.appendChild(d);
+              } else cell.appendChild(document.createTextNode(seg));
+            });
           });
           tr.appendChild(cell);
         });
