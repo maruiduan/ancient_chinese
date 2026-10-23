@@ -158,6 +158,630 @@
    "at": 2,
    "py": "shuò",
    "note": "屡次。（全书核查）"
+  },
+  {
+   "ctx": "相苍",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "代相",
+   "at": 1,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "赵相",
+   "at": 1,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相，相",
+   "at": 2,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相从",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相国",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相府",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "少而戚",
+   "at": 0,
+   "py": "shào",
+   "note": "年少义读 shào。"
+  },
+  {
+   "ctx": "赵相",
+   "at": 1,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相周",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相灌",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "丞相",
+   "at": 1,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "将相",
+   "at": 0,
+   "py": "jiàng",
+   "note": "将领、率领义读 jiàng。"
+  },
+  {
+   "ctx": "相公",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "丞相",
+   "at": 1,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "丞相",
+   "at": 1,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相十",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "当见",
+   "at": 1,
+   "py": "xiàn",
+   "note": "出现、显露义读 xiàn。"
+  },
+  {
+   "ctx": "见成",
+   "at": 0,
+   "py": "xiàn",
+   "note": "出现、显露义读 xiàn。"
+  },
+  {
+   "ctx": "相由",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相十",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "丞相",
+   "at": 1,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相嘉",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "丞相",
+   "at": 1,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "丞相",
+   "at": 1,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "丞相",
+   "at": 1,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相入",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相奏",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相府",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相府",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "度丞",
+   "at": 0,
+   "py": "duó",
+   "note": "揣度义读 duó。"
+  },
+  {
+   "ctx": "相已",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相曰",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相几",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相五",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相嘉",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相奏",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "长史",
+   "at": 0,
+   "py": "zhǎng",
+   "note": "年长、首领、长大义读 zhǎng。"
+  },
+  {
+   "ctx": "至舍",
+   "at": 1,
+   "py": "shè",
+   "note": "住所、住宿、星宿义读 shè。"
+  },
+  {
+   "ctx": "丞相",
+   "at": 1,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "丞相",
+   "at": 1,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相备",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相多",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "丞相",
+   "at": 1,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "丞相",
+   "at": 1,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相贤",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "丞相",
+   "at": 1,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相言",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "丞相",
+   "at": 1,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "丞相",
+   "at": 1,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相卒",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "丞相",
+   "at": 1,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相相",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "丞相",
+   "at": 1,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相奏",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "丞相",
+   "at": 1,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "丞相",
+   "at": 1,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相舍",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相司",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "丞相",
+   "at": 1,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相舍",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "长史",
+   "at": 0,
+   "py": "zhǎng",
+   "note": "年长、首领、长大义读 zhǎng。"
+  },
+  {
+   "ctx": "相竟",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相病",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相卒",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相吉",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "丞相",
+   "at": 1,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相病",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相卒",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "丞相",
+   "at": 1,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "丞相",
+   "at": 1,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "丞相",
+   "at": 1,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相微",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相也",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "更相",
+   "at": 1,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "丞相",
+   "at": 1,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相霸",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "丞相",
+   "at": 1,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相病",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相卒",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相已",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "尉传",
+   "at": 1,
+   "py": "zhuàn",
+   "note": "驿站、传车、传记义读 zhuàn。"
+  },
+  {
+   "ctx": "相去",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相玄",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相子",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "少时",
+   "at": 0,
+   "py": "shào",
+   "note": "年少义读 shào。"
+  },
+  {
+   "ctx": "相乞",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "丞相",
+   "at": 1,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "丞相",
+   "at": 1,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "丞相",
+   "at": 1,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "间美",
+   "at": 0,
+   "py": "jiān",
+   "note": "中间、之间义读 jiān。"
+  },
+  {
+   "ctx": "相卒",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相匡",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "中，至",
+   "at": 0,
+   "py": "zhòng",
+   "note": "击中、中伤、合乎义读 zhòng。"
+  },
+  {
+   "ctx": "中丙",
+   "at": 0,
+   "py": "zhòng",
+   "note": "击中、中伤、合乎义读 zhòng。"
+  },
+  {
+   "ctx": "少傅",
+   "at": 0,
+   "py": "shào",
+   "note": "年少义读 shào。"
+  },
+  {
+   "ctx": "相死",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "丞相",
+   "at": 1,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "之间",
+   "at": 1,
+   "py": "jiān",
+   "note": "中间、之间义读 jiān。"
+  },
+  {
+   "ctx": "丞相",
+   "at": 1,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相次",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相物",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "相死",
+   "at": 0,
+   "py": "xiàng",
+   "note": "辅佐、相国义读 xiàng。"
+  },
+  {
+   "ctx": "却邪",
+   "at": 1,
+   "py": "yé",
+   "note": "句末语气词，同“耶”，读 yé。"
   }
  ]
 }
