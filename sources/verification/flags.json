@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 255,
-        "chars": 128837,
+        "pieces": 264,
+        "chars": 137173,
         "unexpected": "0"
       },
       {
@@ -53,39 +53,39 @@
     "unexpected": [],
     "reviewChars": 17,
     "cacheSingle": 55,
-    "glosses": 12943,
-    "lessonFlags": 160,
-    "missingChars": 429,
-    "missingHits": 751,
+    "glosses": 13090,
+    "lessonFlags": 162,
+    "missingChars": 430,
+    "missingHits": 757,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 6998,
+        "count": 7079,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 2052,
+        "count": 2065,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 1601,
+        "count": 1635,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 244,
+        "count": 246,
         "note": "归并"
       },
       {
         "trad": "徵",
         "simp": "征",
-        "count": 138,
+        "count": 140,
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
@@ -2433,6 +2433,24 @@
       "reading": "wàn dàn jūn",
       "han": "石→dàn（汉典 shí）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z18-04",
+      "word": "厌胜",
+      "reading": "yā shèng",
+      "han": "厌→yā（汉典 yàn）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "虚词",
+      "id": "z18-04",
+      "word": "自……犹……况",
+      "reading": "yóu kuàng",
+      "han": "",
+      "detail": "读音音节数和字数不一致，无法逐字对照汉典。未改课注。"
     }
   ]
 }
