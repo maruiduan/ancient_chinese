@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 479,
-        "chars": 370256,
+        "pieces": 493,
+        "chars": 377848,
         "unexpected": "0"
       },
       {
@@ -53,33 +53,33 @@
     "unexpected": [],
     "reviewChars": 17,
     "cacheSingle": 57,
-    "glosses": 17427,
-    "lessonFlags": 248,
-    "missingChars": 653,
-    "missingHits": 1189,
+    "glosses": 17690,
+    "lessonFlags": 251,
+    "missingChars": 665,
+    "missingHits": 1217,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 8483,
+        "count": 8515,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 2741,
+        "count": 2777,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 2180,
+        "count": 2204,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 367,
+        "count": 368,
         "note": "归并"
       },
       {
@@ -3244,6 +3244,33 @@
       "word": "阏氏",
       "reading": "yān zhī",
       "han": "阏→yān（汉典 è）；氏→zhī（汉典 shì）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z48-01",
+      "word": "敛",
+      "reading": "liàn",
+      "han": "敛→liàn（汉典 liǎn）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z48-03",
+      "word": "龟兹",
+      "reading": "qiū cí",
+      "han": "龟→qiū（汉典 guī、jūn）；兹→cí（汉典 zī）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z48-11",
+      "word": "偻",
+      "reading": "lóu",
+      "han": "偻→lóu（汉典 lǚ）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     }
   ]
