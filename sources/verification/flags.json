@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 375,
-        "chars": 240125,
+        "pieces": 381,
+        "chars": 245880,
         "unexpected": "0"
       },
       {
@@ -53,39 +53,39 @@
     "unexpected": [],
     "reviewChars": 17,
     "cacheSingle": 55,
-    "glosses": 15260,
-    "lessonFlags": 216,
-    "missingChars": 495,
-    "missingHits": 909,
+    "glosses": 15363,
+    "lessonFlags": 218,
+    "missingChars": 500,
+    "missingHits": 919,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 7671,
+        "count": 7708,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 2383,
+        "count": 2409,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 1894,
+        "count": 1905,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 288,
+        "count": 295,
         "note": "归并"
       },
       {
         "trad": "徵",
         "simp": "征",
-        "count": 168,
+        "count": 175,
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
@@ -2937,6 +2937,24 @@
       "reading": "xiù liù",
       "han": "留→liù（汉典 liú）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "loan",
+      "where": "通假",
+      "id": "z32-01",
+      "word": "牙",
+      "reading": "芽",
+      "han": "http://wyw.hwxnet.com/view/hwxe7hwx89hwx99.html",
+      "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "loan",
+      "where": "通假",
+      "id": "z32-06",
+      "word": "欧",
+      "reading": "驱",
+      "han": "http://wyw.hwxnet.com/view/hwxe6hwxachwxa7.html",
+      "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
     }
   ]
 }
