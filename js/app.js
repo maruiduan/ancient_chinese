@@ -551,7 +551,7 @@
       catalog: "data/catalog.json", books: "data/books.json", proseAuthors: "data/prose-authors.json",
       renjian: "data/renjian.json", zztj: "data/zztj.json", shiji: "data/shiji.json", provenance: "data/provenance.json",
       readingPolicy: "data/reading-policy.json", glossSources: "data/gloss-sources.json", grades: "data/grades.json",
-      daode: "data/daode.json", lunyu: "data/lunyu.json", famous: "data/famous.json",
+      daode: "data/daode.json", lunyu: "data/lunyu.json",
     };
     const keys = Object.keys(paths);
     const data = await Promise.all(keys.map(function (key) { return fetchJson(paths[key]); }));
@@ -562,6 +562,15 @@
       if (meta && !isShijiId(meta.id)) state.openVol = Number(meta.id.slice(1, 3));
     }
     route();
+    // Famous-line marks only decorate text, so they load after the first render.
+    fetchJson("data/famous.json")
+      .then(function (data) {
+        state.famous = data;
+        if (state.view === "article" && state.article) renderArticle(true);
+        else if (state.view === "piece" && state.piece) renderPiece(true);
+        else if (state.famousOnly) route();
+      })
+      .catch(function () { state.famous = { pieces: {}, lines: [] }; });
     fetch(assetUrl("data/dict.json"))
       .then(function (r) { return r.json(); })
       .then(function (data) {
