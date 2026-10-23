@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 493,
-        "chars": 377848,
+        "pieces": 503,
+        "chars": 385809,
         "unexpected": "0"
       },
       {
@@ -53,27 +53,27 @@
     "unexpected": [],
     "reviewChars": 17,
     "cacheSingle": 57,
-    "glosses": 17690,
-    "lessonFlags": 251,
-    "missingChars": 665,
-    "missingHits": 1217,
+    "glosses": 17884,
+    "lessonFlags": 252,
+    "missingChars": 671,
+    "missingHits": 1243,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 8515,
+        "count": 8570,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 2777,
+        "count": 2796,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 2204,
+        "count": 2228,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
@@ -85,19 +85,19 @@
       {
         "trad": "徵",
         "simp": "征",
-        "count": 207,
+        "count": 209,
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
         "trad": "乾",
         "simp": "干",
-        "count": 38,
+        "count": 39,
         "note": "干燥作干"
       },
       {
         "trad": "裡",
         "simp": "里",
-        "count": 30,
+        "count": 31,
         "note": "归并"
       },
       {
@@ -3271,6 +3271,15 @@
       "word": "偻",
       "reading": "lóu",
       "han": "偻→lóu（汉典 lǚ）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z49-02",
+      "word": "僬侥",
+      "reading": "jiāo yáo",
+      "han": "侥→yáo（汉典 jiǎo）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     }
   ]
