@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 356,
-        "chars": 223008,
+        "pieces": 366,
+        "chars": 231780,
         "unexpected": "0"
       },
       {
@@ -53,27 +53,27 @@
     "unexpected": [],
     "reviewChars": 17,
     "cacheSingle": 55,
-    "glosses": 14908,
-    "lessonFlags": 211,
-    "missingChars": 486,
-    "missingHits": 876,
+    "glosses": 15103,
+    "lessonFlags": 215,
+    "missingChars": 492,
+    "missingHits": 901,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 7545,
+        "count": 7610,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 2329,
+        "count": 2354,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 1867,
+        "count": 1883,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
@@ -85,13 +85,13 @@
       {
         "trad": "徵",
         "simp": "征",
-        "count": 166,
+        "count": 167,
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
         "trad": "乾",
         "simp": "干",
-        "count": 30,
+        "count": 32,
         "note": "干燥作干"
       },
       {
@@ -103,7 +103,7 @@
       {
         "trad": "裡",
         "simp": "里",
-        "count": 10,
+        "count": 11,
         "note": "归并"
       },
       {
@@ -2891,6 +2891,42 @@
       "word": "幕",
       "reading": "漠",
       "han": "http://wyw.hwxnet.com/view/hwxe5hwxb9hwx95.html",
+      "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z30-02",
+      "word": "阏氏",
+      "reading": "yān zhī",
+      "han": "阏→yān（汉典 è）；氏→zhī（汉典 shì）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "loan",
+      "where": "通假",
+      "id": "z30-04",
+      "word": "右",
+      "reading": "佑",
+      "han": "http://wyw.hwxnet.com/view/hwxe5hwx8fhwxb3.html",
+      "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "loan",
+      "where": "通假",
+      "id": "z30-05",
+      "word": "放",
+      "reading": "仿",
+      "han": "http://wyw.hwxnet.com/view/hwxe6hwx94hwxbe.html",
+      "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "loan",
+      "where": "通假",
+      "id": "z30-05",
+      "word": "牙",
+      "reading": "芽",
+      "han": "http://wyw.hwxnet.com/view/hwxe7hwx89hwx99.html",
       "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
     }
   ]
