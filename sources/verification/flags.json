@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 533,
-        "chars": 413362,
+        "pieces": 544,
+        "chars": 421315,
         "unexpected": "0"
       },
       {
@@ -53,33 +53,33 @@
     "unexpected": [],
     "reviewChars": 17,
     "cacheSingle": 57,
-    "glosses": 18491,
-    "lessonFlags": 258,
-    "missingChars": 707,
-    "missingHits": 1318,
+    "glosses": 18697,
+    "lessonFlags": 260,
+    "missingChars": 723,
+    "missingHits": 1345,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 8746,
+        "count": 8818,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 2867,
+        "count": 2880,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 2300,
+        "count": 2316,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 374,
+        "count": 380,
         "note": "归并"
       },
       {
@@ -89,16 +89,16 @@
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
+        "trad": "裡",
+        "simp": "里",
+        "count": 39,
+        "note": "归并"
+      },
+      {
         "trad": "乾",
         "simp": "干",
         "count": 37,
         "note": "干燥作干"
-      },
-      {
-        "trad": "裡",
-        "simp": "里",
-        "count": 34,
-        "note": "归并"
       },
       {
         "trad": "裏",
@@ -115,7 +115,7 @@
       {
         "trad": "乾",
         "simp": "乾",
-        "count": 13,
+        "count": 14,
         "note": "乾坤、乾谿等读 qián，保留乾"
       },
       {
@@ -3335,6 +3335,24 @@
       "reading": "祥",
       "han": "http://wyw.hwxnet.com/view/hwxe8hwxafhwxa6.html",
       "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "reading",
+      "where": "虚词",
+      "id": "z53-10",
+      "word": "且",
+      "reading": "jū",
+      "han": "且→jū（汉典 qiě）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "虚词",
+      "id": "z53-10",
+      "word": "龟",
+      "reading": "qiū",
+      "han": "龟→qiū（汉典 guī、jūn）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     }
   ]
 }
