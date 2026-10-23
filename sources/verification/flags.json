@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 448,
-        "chars": 346897,
+        "pieces": 463,
+        "chars": 354465,
         "unexpected": "0"
       },
       {
@@ -53,33 +53,33 @@
     "unexpected": [],
     "reviewChars": 17,
     "cacheSingle": 57,
-    "glosses": 16813,
-    "lessonFlags": 241,
-    "missingChars": 623,
-    "missingHits": 1127,
+    "glosses": 17094,
+    "lessonFlags": 243,
+    "missingChars": 637,
+    "missingHits": 1154,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 8331,
+        "count": 8370,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 2676,
+        "count": 2704,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 2119,
+        "count": 2136,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 357,
+        "count": 361,
         "note": "归并"
       },
       {
@@ -3181,6 +3181,24 @@
       "word": "禅",
       "reading": "shàn",
       "han": "禅→shàn（汉典 chàn、chán）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z45-12",
+      "word": "祭",
+      "reading": "zhài",
+      "han": "祭→zhài（汉典 jì）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z45-14",
+      "word": "龟",
+      "reading": "qiū",
+      "han": "龟→qiū（汉典 guī、jūn）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     }
   ]
