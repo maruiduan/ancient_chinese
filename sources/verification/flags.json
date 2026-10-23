@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 219,
-        "chars": 104834,
+        "pieces": 234,
+        "chars": 112326,
         "unexpected": "0"
       },
       {
@@ -51,35 +51,35 @@
       }
     ],
     "unexpected": [],
-    "reviewChars": 16,
+    "reviewChars": 17,
     "cacheSingle": 55,
-    "glosses": 12405,
-    "lessonFlags": 155,
-    "missingChars": 421,
-    "missingHits": 724,
+    "glosses": 12650,
+    "lessonFlags": 157,
+    "missingChars": 425,
+    "missingHits": 737,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 6817,
+        "count": 6885,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 1998,
+        "count": 2015,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 1550,
+        "count": 1566,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 234,
+        "count": 240,
         "note": "归并"
       },
       {
@@ -643,6 +643,16 @@
       "han": "kuài",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
+    },
+    {
+      "kind": "reading",
+      "where": "字书默认音",
+      "id": "",
+      "word": "的",
+      "reading": "dī",
+      "han": "dì、dí、de",
+      "ui": "review",
+      "detail": "汉典有多个读音，说文音一个都不在里面。页面仍用说文音，弹层标为待复核。"
     },
     {
       "kind": "reading",
@@ -2377,6 +2387,24 @@
       "word": "榜笞",
       "reading": "péng chī",
       "han": "榜→péng（汉典 bǎng、bàng）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z15-02",
+      "word": "仟伯",
+      "reading": "qiān bǎi",
+      "han": "伯→bǎi（汉典 bà、bó）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z15-06",
+      "word": "封禅",
+      "reading": "fēng shàn",
+      "han": "禅→shàn（汉典 chàn、chán）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     }
   ]
