@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 201,
-        "chars": 89961,
+        "pieces": 211,
+        "chars": 97814,
         "unexpected": "0"
       },
       {
@@ -53,27 +53,27 @@
     "unexpected": [],
     "reviewChars": 16,
     "cacheSingle": 55,
-    "glosses": 12123,
+    "glosses": 12273,
     "lessonFlags": 155,
-    "missingChars": 412,
-    "missingHits": 704,
+    "missingChars": 414,
+    "missingHits": 711,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 6734,
+        "count": 6765,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 1968,
+        "count": 1980,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 1531,
+        "count": 1546,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
