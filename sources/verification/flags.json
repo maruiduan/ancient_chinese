@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 327,
-        "chars": 193526,
+        "pieces": 330,
+        "chars": 200322,
         "unexpected": "0"
       },
       {
@@ -53,39 +53,39 @@
     "unexpected": [],
     "reviewChars": 17,
     "cacheSingle": 55,
-    "glosses": 14387,
-    "lessonFlags": 202,
-    "missingChars": 467,
-    "missingHits": 842,
+    "glosses": 14455,
+    "lessonFlags": 203,
+    "missingChars": 469,
+    "missingHits": 846,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 7392,
+        "count": 7426,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 2231,
+        "count": 2251,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 1803,
+        "count": 1830,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 277,
+        "count": 278,
         "note": "归并"
       },
       {
         "trad": "徵",
         "simp": "征",
-        "count": 158,
+        "count": 160,
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
@@ -115,7 +115,7 @@
       {
         "trad": "裡",
         "simp": "里",
-        "count": 7,
+        "count": 8,
         "note": "归并"
       },
       {
@@ -2811,6 +2811,15 @@
       "reading": "佯",
       "han": "http://wyw.hwxnet.com/view/hwxe9hwx98hwxb3.html",
       "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "reading",
+      "where": "虚词",
+      "id": "z26-01",
+      "word": "卒",
+      "reading": "cù",
+      "han": "卒→cù（汉典 zú、cǜ）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     }
   ]
 }
