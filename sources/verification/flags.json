@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 264,
-        "chars": 137173,
+        "pieces": 270,
+        "chars": 145926,
         "unexpected": "0"
       },
       {
@@ -53,39 +53,39 @@
     "unexpected": [],
     "reviewChars": 17,
     "cacheSingle": 55,
-    "glosses": 13090,
-    "lessonFlags": 162,
-    "missingChars": 430,
-    "missingHits": 757,
+    "glosses": 13242,
+    "lessonFlags": 173,
+    "missingChars": 442,
+    "missingHits": 771,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 7079,
+        "count": 7130,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 2065,
+        "count": 2086,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 1635,
+        "count": 1678,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 246,
+        "count": 249,
         "note": "归并"
       },
       {
         "trad": "徵",
         "simp": "征",
-        "count": 140,
+        "count": 141,
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
@@ -2451,6 +2451,105 @@
       "reading": "yóu kuàng",
       "han": "",
       "detail": "读音音节数和字数不一致，无法逐字对照汉典。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "虚词",
+      "id": "z19-01",
+      "word": "非以……以……也",
+      "reading": "fēi yǐ……yǐ……yě",
+      "han": "",
+      "detail": "读音音节数和字数不一致，无法逐字对照汉典。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z19-02",
+      "word": "绝幕",
+      "reading": "jué mò",
+      "han": "幕→mò（汉典 mù）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "loan",
+      "where": "通假",
+      "id": "z19-02",
+      "word": "幕",
+      "reading": "漠",
+      "han": "http://wyw.hwxnet.com/view/hwxe5hwxb9hwx95.html",
+      "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z19-03",
+      "word": "身毒",
+      "reading": "yuān dú",
+      "han": "身→yuān（汉典 shēn）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z19-04",
+      "word": "圜陈",
+      "reading": "yuán zhèn",
+      "han": "陈→zhèn（汉典 chén）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z19-04",
+      "word": "阏氏",
+      "reading": "yān zhī",
+      "han": "阏→yān（汉典 è）；氏→zhī（汉典 shì）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "虚词",
+      "id": "z19-04",
+      "word": "何至……乎",
+      "reading": "hé zhì……hū",
+      "han": "",
+      "detail": "读音音节数和字数不一致，无法逐字对照汉典。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "虚词",
+      "id": "z19-06",
+      "word": "无以……为",
+      "reading": "wú yǐ……wéi",
+      "han": "",
+      "detail": "读音音节数和字数不一致，无法逐字对照汉典。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "虚词",
+      "id": "z19-06",
+      "word": "岂非……哉",
+      "reading": "qǐ fēi……zāi",
+      "han": "",
+      "detail": "读音音节数和字数不一致，无法逐字对照汉典。未改课注。"
+    },
+    {
+      "kind": "loan",
+      "where": "通假",
+      "id": "z19-06",
+      "word": "幕",
+      "reading": "漠",
+      "han": "http://wyw.hwxnet.com/view/hwxe5hwxb9hwx95.html",
+      "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "loan",
+      "where": "通假",
+      "id": "z19-06",
+      "word": "莫",
+      "reading": "幕",
+      "han": "http://wyw.hwxnet.com/view/hwxe8hwx8ehwxab.html",
+      "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
     }
   ]
 }
