@@ -1,0 +1,41 @@
+{
+  "id": "z23-11",
+  "lesson": {
+    "background": "汉昭帝元凤五年，前76年。夏季大旱。撤销象郡，分属郁林、牂柯。冬季十一月大雷。十二月，宜春侯王䜣去世。",
+    "theme": "本篇只有四句，记录了这一年的自然现象和行政区划变化。撤销象郡、分属两郡，是汉朝对南方边郡的调整。",
+    "technique": "全篇采用编年体的简练记事，每句只记一件事，「冬，十一月，大雷」，异常的天象也如实记录。",
+    "keyContentWords": [
+      {
+        "word": "象郡",
+        "reading": "xiàng jùn",
+        "note": "郡名，在今广西、越南北部一带。"
+      },
+      {
+        "word": "薨",
+        "reading": "hōng",
+        "note": "诸侯死。"
+      }
+    ],
+    "keyFunctionWords": [
+      {
+        "word": "分",
+        "reading": "fēn",
+        "note": "分别。「分属郁林、牂柯」。"
+      }
+    ],
+    "ancientModern": [],
+    "phoneticLoans": [],
+    "flexibleUsage": [
+      {
+        "word": "属",
+        "note": "「分属郁林、牂柯」，动词，隶属，读 shǔ。"
+      }
+    ],
+    "specialSyntax": [
+      {
+        "name": "省略句",
+        "note": "「罢象郡」，省略主语“朝廷”。"
+      }
+    ]
+  }
+}
