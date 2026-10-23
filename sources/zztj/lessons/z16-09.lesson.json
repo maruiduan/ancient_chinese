@@ -1,0 +1,36 @@
+{
+  "id": "z16-09",
+  "lesson": {
+    "background": "汉景帝中元四年，前146年。这一年只记了两件事：夏季发生蝗灾，冬季十月戊午日发生日食。",
+    "theme": "蝗灾和日食都被看作上天示警，史书照例记载。景帝在位期间灾异频繁，后来多次下诏劝农、宽刑，与这些灾害有一定关系。",
+    "technique": "两句都是标准的编年体记事，先写时间，再写事件，没有任何修饰，「日有食之」是史书记日食的固定说法。",
+    "keyContentWords": [
+      {
+        "word": "蝗",
+        "reading": "huáng",
+        "note": "蝗虫，这里指蝗灾。"
+      },
+      {
+        "word": "日食",
+        "reading": "rì shí",
+        "note": "月亮挡住太阳的天文现象。"
+      }
+    ],
+    "keyFunctionWords": [
+      {
+        "word": "之",
+        "reading": "zhī",
+        "note": "「日有食之」，代词，指太阳。"
+      }
+    ],
+    "ancientModern": [],
+    "phoneticLoans": [],
+    "flexibleUsage": [],
+    "specialSyntax": [
+      {
+        "name": "固定句式",
+        "note": "「日有食之」，史书记录日食的固定格式。"
+      }
+    ]
+  }
+}
