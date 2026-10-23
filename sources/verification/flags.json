@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 270,
-        "chars": 145926,
+        "pieces": 279,
+        "chars": 153804,
         "unexpected": "0"
       },
       {
@@ -53,33 +53,33 @@
     "unexpected": [],
     "reviewChars": 17,
     "cacheSingle": 55,
-    "glosses": 13242,
-    "lessonFlags": 173,
-    "missingChars": 442,
-    "missingHits": 771,
+    "glosses": 13413,
+    "lessonFlags": 178,
+    "missingChars": 443,
+    "missingHits": 780,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 7130,
+        "count": 7184,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 2086,
+        "count": 2104,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 1678,
+        "count": 1699,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 249,
+        "count": 254,
         "note": "归并"
       },
       {
@@ -109,7 +109,7 @@
       {
         "trad": "祇",
         "simp": "祇",
-        "count": 7,
+        "count": 8,
         "note": "神祇保留祇"
       },
       {
@@ -2549,6 +2549,51 @@
       "word": "莫",
       "reading": "幕",
       "han": "http://wyw.hwxnet.com/view/hwxe8hwx8ehwxab.html",
+      "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "loan",
+      "where": "通假",
+      "id": "z20-04",
+      "word": "放",
+      "reading": "仿",
+      "han": "http://wyw.hwxnet.com/view/hwxe6hwx94hwxbe.html",
+      "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z20-05",
+      "word": "雨雹",
+      "reading": "yù báo",
+      "han": "雨→yù（汉典 yǔ）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z20-06",
+      "word": "风谕",
+      "reading": "fěng yù",
+      "han": "风→fěng（汉典 fēng）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z20-08",
+      "word": "封禅",
+      "reading": "fēng shàn",
+      "han": "禅→shàn（汉典 chàn、chán）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "loan",
+      "where": "通假",
+      "id": "z20-08",
+      "word": "阳",
+      "reading": "佯",
+      "han": "http://wyw.hwxnet.com/view/hwxe9hwx98hwxb3.html",
       "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
     }
   ]
