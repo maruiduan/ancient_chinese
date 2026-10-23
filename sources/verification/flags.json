@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 381,
-        "chars": 245880,
+        "pieces": 383,
+        "chars": 253021,
         "unexpected": "0"
       },
       {
@@ -53,27 +53,27 @@
     "unexpected": [],
     "reviewChars": 17,
     "cacheSingle": 55,
-    "glosses": 15363,
+    "glosses": 15402,
     "lessonFlags": 218,
-    "missingChars": 500,
-    "missingHits": 919,
+    "missingChars": 503,
+    "missingHits": 923,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 7708,
+        "count": 7747,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 2409,
+        "count": 2430,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 1905,
+        "count": 1910,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
@@ -91,7 +91,7 @@
       {
         "trad": "乾",
         "simp": "干",
-        "count": 33,
+        "count": 34,
         "note": "干燥作干"
       },
       {
