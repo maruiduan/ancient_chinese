@@ -44,11 +44,13 @@ JUAN_ERA = {
     7: "qin",
     8: "qin",
     9: "han",
+    10: "han",
+    11: "han",
 }
 LAST_JUAN = max(JUAN_ERA)
 
 LATER_ERAS = [
-    {"id": "han", "title": "汉纪", "juan": "卷十起", "note": "陆续添加"},
+    {"id": "han", "title": "汉纪", "juan": "卷十二起", "note": "陆续添加"},
     {"id": "wei", "title": "魏纪", "juan": "卷六十九起", "note": "待添加"},
     {"id": "jin", "title": "晋纪", "juan": "卷七十九起", "note": "待添加"},
     {"id": "song", "title": "宋纪", "juan": "卷一百一十九起", "note": "待添加"},
@@ -138,6 +140,16 @@ def tidy_text(text: str) -> str:
     # 维基文库用「□+部件」拼不出的字。按《史记》同段文字补成单字。
     # 卷九韩信对策：维基文库误点作「何所不誅以？天下城邑」，「以」属下句。
     text = text.replace("何所不誅以？天下城邑", "何所不誅！以天下城邑")
+    # 卷十一：维基文库误字、误标点。臧荼、滕公、「予之亦可」依《史记》，「糠秕」依《法言》。
+    for wrong, right in (("虜藏荼", "虜臧荼"), ("隴晦", "隴畝"), ("糠枇", "糠秕"), ("聞田死", "聞田橫死"), ("見籐公", "見滕公"), ("見藤公", "見滕公"), ("冒頓日；", "冒頓曰："),
+                         ("予之亦乎，", "予之亦可，"), ("心乎?", "心乎？"), ("賢哉?", "賢哉？"), ("也非邪？」", "也非邪？』")):
+        text = text.replace(wrong, right)
+    # 卷十广武君对策：维基文库把「褕」拆写成「衣俞」，依《史记·淮阴侯列传》作「褕衣甘食」。
+    text = text.replace("衣俞衣甘食", "褕衣甘食")
+    # 卷十广武对峙：维基文库「乃為高祖」误，依《史记·项羽本纪》作「高俎」。
+    text = text.replace("乃為高祖，置太公", "乃為高俎，置太公")
+    # 卷十「笑謝曰；」冒号误作分号。
+    text = text.replace("笑謝曰；", "笑謝曰：")
     text = text.replace("□厄", "阨").replace("□夬", "玦").replace("韓□", "韓玘")
     text = re.sub(r"^，+", "", text)
     text = re.sub(r"，。", "。", text)
@@ -396,6 +408,8 @@ def volume_title(entry: dict) -> str:
         7: "秦纪二",
         8: "秦纪三",
         9: "汉纪一",
+        10: "汉纪二",
+        11: "汉纪三",
     }
     return names[entry["juan"]]
 
@@ -426,6 +440,7 @@ def to_traditional_head(text: str) -> str:
         "前": "前",
         "汉": "漢",
         "九": "九",
+        "十": "十",
     })
     return text.translate(table)
 
@@ -458,7 +473,7 @@ def catalog_for(entries: list[dict]) -> dict:
         "title": "资治通鉴",
         "author": "司马光",
         "articleCount": len(entries),
-        "scope": "周纪、秦纪、汉纪（卷一至卷九）",
+        "scope": "周纪、秦纪、汉纪（卷一至卷十一）",
         "volumes": volumes,
         "later": LATER_ERAS,
     }
