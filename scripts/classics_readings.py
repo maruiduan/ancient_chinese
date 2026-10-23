@@ -95,6 +95,12 @@ for c, a in [("有道则见", 3), ("见其二子", 0), ("从者见之", 2)]:
 # 行 hàng（刚强貌）
 add("子路行行如也", 2, "hàng"); add("子路行行如也", 3, "hàng")
 # 与 yú（句末语气词，同「欤」）在 fix_tokens 里按标点处理
+try:
+    from classics_review import REVIEW
+except ImportError:
+    from scripts.classics_review import REVIEW
+for _sid, _c, _a, _p in REVIEW:
+    add(_c, _a, _p)
 RULES = R
 
 

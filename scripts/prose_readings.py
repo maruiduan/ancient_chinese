@@ -417,6 +417,11 @@ SPOT = [
     ("*", "智者乐也", 2, "yào"),
     ("*", "仁者乐也", 2, "yào"),
 ]
+try:
+    from prose_spot_review import SPOT_REVIEW
+except ImportError:
+    from scripts.prose_spot_review import SPOT_REVIEW
+SPOT += SPOT_REVIEW
 
 
 SKIP = ["夫问其故"]
