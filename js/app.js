@@ -775,7 +775,7 @@
     if (state.books && state.books.books) return state.books.books;
     return [
       { id: "gwgz", title: "古文观止", href: "#/gwgz", meta: "十二卷 · 二百二十二篇", detail: "先读这一本。" },
-      { id: "zztj", title: "资治通鉴", href: "#/zztj", meta: "司马光 · 周纪、秦纪、汉纪一至四十三已收", detail: "汉纪四十四以后陆续添加。" },
+      { id: "zztj", title: "资治通鉴", href: "#/zztj", meta: "司马光 · 周纪、秦纪、汉纪一至四十四已收", detail: "汉纪四十五以后陆续添加。" },
       { id: "shiji", title: "史记", href: "#/shiji", meta: "司马迁 · 一百三十篇", detail: "先收项羽本纪。" },
       { id: "daode", title: "道德经", href: "#/daode", meta: "王弼本 · 八十一章", detail: "道经、德经。" },
       { id: "lunyu", title: "论语", href: "#/lunyu", meta: "二十篇", detail: "从《学而》读起。" },
@@ -946,7 +946,7 @@
     const lead = document.createElement("p");
     lead.className = "lead";
     lead.textContent = data
-      ? "司马光。周纪、秦纪、汉纪 " + articles.length + " 年，已读 " + learnedIn(articles) + "。汉纪四十四以后陆续添加。"
+      ? "司马光。周纪、秦纪、汉纪 " + articles.length + " 年，已读 " + learnedIn(articles) + "。汉纪四十五以后陆续添加。"
       : "目录还没有载入。";
     wrap.appendChild(h1);
     wrap.appendChild(lead);
