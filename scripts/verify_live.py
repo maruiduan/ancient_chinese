@@ -6,12 +6,32 @@ import hashlib
 import json
 import re
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 HASHED = re.compile(r"\.[0-9a-f]{12}\.[A-Za-z0-9]+$")
+
+
+RETRY_ATTEMPTS = 5
+
+
+def fetch_with_retry(request, attempts=RETRY_ATTEMPTS, sleep=time.sleep, opener=None):
+    """Fetch one URL, retrying transient failures (5xx, 429, network) with backoff."""
+    opener = opener or urllib.request.urlopen
+    for attempt in range(attempts):
+        try:
+            with opener(request, timeout=20) as response:
+                return response.read()
+        except urllib.error.HTTPError as exc:
+            if (exc.code < 500 and exc.code != 429) or attempt == attempts - 1:
+                raise
+        except (urllib.error.URLError, TimeoutError, ConnectionError):
+            if attempt == attempts - 1:
+                raise
+        sleep(2 ** attempt)
 
 
 def verify(site: Path, base: str, read=None) -> dict:
@@ -24,8 +44,7 @@ def verify(site: Path, base: str, read=None) -> dict:
             url = urllib.parse.urljoin(base, relative)
             request = urllib.request.Request(url + "?release-check=" + version["build"],
                                              headers={"Cache-Control": "no-cache"})
-            with urllib.request.urlopen(request, timeout=20) as response:
-                return response.read()
+            return fetch_with_retry(request)
     paths = {"index.html", "version.json", "js/asset-urls.js"}
     for path in site.rglob("*"):
         if path.is_file() and HASHED.search(path.name):
