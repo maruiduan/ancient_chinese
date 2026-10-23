@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 321,
-        "chars": 184939,
+        "pieces": 327,
+        "chars": 193526,
         "unexpected": "0"
       },
       {
@@ -53,39 +53,39 @@
     "unexpected": [],
     "reviewChars": 17,
     "cacheSingle": 55,
-    "glosses": 14267,
-    "lessonFlags": 200,
-    "missingChars": 466,
-    "missingHits": 834,
+    "glosses": 14387,
+    "lessonFlags": 202,
+    "missingChars": 467,
+    "missingHits": 842,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 7347,
+        "count": 7392,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 2197,
+        "count": 2231,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 1785,
+        "count": 1803,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 263,
+        "count": 277,
         "note": "归并"
       },
       {
         "trad": "徵",
         "simp": "征",
-        "count": 149,
+        "count": 158,
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
@@ -113,14 +113,14 @@
         "note": "神祇保留祇"
       },
       {
-        "trad": "幹",
-        "simp": "干",
-        "count": 6,
+        "trad": "裡",
+        "simp": "里",
+        "count": 7,
         "note": "归并"
       },
       {
-        "trad": "裡",
-        "simp": "里",
+        "trad": "幹",
+        "simp": "干",
         "count": 6,
         "note": "归并"
       },
@@ -2792,6 +2792,24 @@
       "word": "寝",
       "reading": "浸",
       "han": "http://wyw.hwxnet.com/view/hwxe5hwxafhwx9d.html",
+      "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "loan",
+      "where": "通假",
+      "id": "z25-05",
+      "word": "豪",
+      "reading": "毫",
+      "han": "http://wyw.hwxnet.com/view/hwxe8hwxb1hwxaa.html",
+      "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "loan",
+      "where": "通假",
+      "id": "z25-06",
+      "word": "阳",
+      "reading": "佯",
+      "han": "http://wyw.hwxnet.com/view/hwxe9hwx98hwxb3.html",
       "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
     }
   ]
