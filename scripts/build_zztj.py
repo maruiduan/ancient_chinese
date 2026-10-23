@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""从维基文库《资治通鉴》卷一至卷八生成周纪、秦纪篇目。
+"""从维基文库《资治通鉴》生成周纪、秦纪、汉纪篇目（卷一至 LAST_JUAN）。
 
 正文是司马光的纪事。标明「增补」或「据近人考证移入」的段落不收。
 课注在 sources/zztj/lessons/。底本说明见 sources/zztj/EDITION.md。
@@ -43,11 +43,13 @@ JUAN_ERA = {
     6: "qin",
     7: "qin",
     8: "qin",
+    9: "han",
 }
+LAST_JUAN = max(JUAN_ERA)
 
 LATER_ERAS = [
-    {"id": "han", "title": "汉纪", "juan": "卷九起", "note": "待添加"},
-    {"id": "wei", "title": "魏纪", "juan": "卷六十起", "note": "待添加"},
+    {"id": "han", "title": "汉纪", "juan": "卷十起", "note": "陆续添加"},
+    {"id": "wei", "title": "魏纪", "juan": "卷六十九起", "note": "待添加"},
     {"id": "jin", "title": "晋纪", "juan": "卷七十九起", "note": "待添加"},
     {"id": "song", "title": "宋纪", "juan": "卷一百一十九起", "note": "待添加"},
     {"id": "qi", "title": "齐纪", "juan": "卷一百三十五起", "note": "待添加"},
@@ -133,6 +135,10 @@ def tidy_text(text: str) -> str:
     text = text.replace("、，", "，").replace("、。", "。")
     # 代与光狼城是两处。维基文库这一句没有顿号，繁简都补上，避免对不齐。
     text = text.replace("取代光狼城", "取代、光狼城")
+    # 维基文库用「□+部件」拼不出的字。按《史记》同段文字补成单字。
+    # 卷九韩信对策：维基文库误点作「何所不誅以？天下城邑」，「以」属下句。
+    text = text.replace("何所不誅以？天下城邑", "何所不誅！以天下城邑")
+    text = text.replace("□厄", "阨").replace("□夬", "玦").replace("韓□", "韓玘")
     text = re.sub(r"^，+", "", text)
     text = re.sub(r"，。", "。", text)
     text = re.sub(r"。，", "。", text)
@@ -320,7 +326,7 @@ def tokens_for(trad: str, simp: str) -> list[dict]:
 
 def load_years() -> list[dict]:
     entries = []
-    for juan in range(1, 9):
+    for juan in range(1, LAST_JUAN + 1):
         path = SRC / f"juan{juan:02d}.wikitext"
         span, years = parse_juan(juan, path.read_text(encoding="utf-8"))
         for index, year in enumerate(years, 1):
@@ -389,6 +395,7 @@ def volume_title(entry: dict) -> str:
         6: "秦纪一",
         7: "秦纪二",
         8: "秦纪三",
+        9: "汉纪一",
     }
     return names[entry["juan"]]
 
@@ -417,13 +424,15 @@ def to_traditional_head(text: str) -> str:
         "四": "四",
         "五": "五",
         "前": "前",
+        "汉": "漢",
+        "九": "九",
     })
     return text.translate(table)
 
 
 def catalog_for(entries: list[dict]) -> dict:
     volumes = []
-    for juan in range(1, 9):
+    for juan in range(1, LAST_JUAN + 1):
         group = [item for item in entries if item["juan"] == juan]
         if not group:
             continue
@@ -449,7 +458,7 @@ def catalog_for(entries: list[dict]) -> dict:
         "title": "资治通鉴",
         "author": "司马光",
         "articleCount": len(entries),
-        "scope": "周纪、秦纪（卷一至卷八）",
+        "scope": "周纪、秦纪、汉纪（卷一至卷九）",
         "volumes": volumes,
         "later": LATER_ERAS,
     }
@@ -472,6 +481,20 @@ def load_lesson(entry: dict) -> dict:
     return {"id": entry["id"], "trs": trs, "lesson": body}
 
 
+def keep_glosses(old: dict, new: dict) -> None:
+    """名句标注写在已发布的文章里。正文没变的字，保留原来的句中义。"""
+    for p_old, p_new in zip(old.get("paragraphs", []), new["paragraphs"]):
+        for s_old, s_new in zip(p_old.get("sentences", []), p_new["sentences"]):
+            if len(s_old.get("tokens", [])) != len(s_new["tokens"]):
+                continue
+            for t_old, t_new in zip(s_old["tokens"], s_new["tokens"]):
+                if t_new.get("punct") or t_old.get("t") != t_new["t"]:
+                    continue
+                for key in ("py", "ctx", "pos", "extra", "level"):
+                    if key in t_old:
+                        t_new[key] = t_old[key]
+
+
 def write_articles(entries: list[dict]) -> None:
     missing = []
     for entry in entries:
@@ -489,8 +512,33 @@ def write_articles(entries: list[dict]) -> None:
             raise SystemExit(f"{entry['id']} 课注 id 不符")
         if len(lesson.get("trs") or []) != expected:
             raise SystemExit(f"{entry['id']} 译文 {len(lesson.get('trs') or [])} 句，原文 {expected} 句")
-        dump_json(ARTICLES / f"{entry['id']}.json", article_for(entry, lesson))
+        path = ARTICLES / f"{entry['id']}.json"
+        art = article_for(entry, lesson)
+        if path.exists():
+            keep_glosses(json.loads(path.read_text(encoding="utf-8")), art)
+        dump_json(path, art)
     dump_json(CATALOG, catalog_for(entries))
+    extend_dict(entries)
+
+
+def extend_dict(entries: list[dict]) -> None:
+    """新卷用到、字典里还没有的字，从《说文》补进 data/dict.json。已有条目不动。"""
+    path = ROOT / "data" / "dict.json"
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    chars = payload["chars"]
+    need = set()
+    for entry in entries:
+        for para in entry["paragraphs_t"]:
+            for sent in para:
+                need.update(ch for ch in sent if ch not in PUNCT and ch not in chars)
+    if not need:
+        return
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from build_site import build_dict
+
+    chars.update(build_dict(need))
+    path.write_text(json.dumps(payload, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    print(f"dict +{len(need)}: {''.join(sorted(need))}")
 
 
 def write_dump(entries: list[dict]) -> None:
@@ -510,7 +558,7 @@ def write_dump(entries: list[dict]) -> None:
 
 def report(entries: list[dict]) -> None:
     print(f"years {len(entries)} sentences {sum(sentence_count(item) for item in entries)}")
-    for juan in range(1, 9):
+    for juan in range(1, LAST_JUAN + 1):
         group = [item for item in entries if item["juan"] == juan]
         chars = sum(len(sent) for item in group for para in item["paragraphs_s"] for sent in para)
         print(f"  juan {juan} {volume_title(group[0]) if group else '?'} years {len(group)} chars {chars}")
@@ -520,7 +568,7 @@ def report(entries: list[dict]) -> None:
     dirty = []
     for entry in entries:
         blob = "".join(sent for para in entry["paragraphs_s"] for sent in para)
-        if any(mark in blob for mark in ("〔", "〕", "<", ">", "{", "}", "'''", "==")):
+        if any(mark in blob for mark in ("□", "〔", "〕", "<", ">", "{", "}", "'''", "==")):
             dirty.append(entry["id"])
     print("dirty", dirty[:12], "count", len(dirty))
 
