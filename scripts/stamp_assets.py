@@ -28,6 +28,7 @@ CANONICAL_REFS = (
     ("js/asset-urls.js", re.compile(r"js/asset-urls\.[0-9a-f]{12}\.js")),
     ("favicon.svg", re.compile(r"favicon\.[0-9a-f]{12}\.svg")),
 )
+FONT_URL = re.compile(r"url\((fonts/[^)]+?)(?:\.[0-9a-f]{12})?(\.woff2?)\)")
 OPTIONAL_REFS = (
     ("js/account.js", re.compile(r"js/account\.[0-9a-f]{12}\.js")),
 )
@@ -73,11 +74,32 @@ def reset_tree(root: Path) -> None:
     index_path = root / "index.html"
     if not index_path.is_file():
         return
+    css_path = root / "css" / "app.css"
+    if css_path.is_file():
+        css = css_path.read_text(encoding="utf-8")
+        css_path.write_text(FONT_URL.sub(lambda m: f"url({m[1]}{m[2]})", css), encoding="utf-8")
     index = index_path.read_text(encoding="utf-8")
     for canonical, pattern in CANONICAL_REFS + OPTIONAL_REFS:
         index = pattern.sub(canonical, index)
     index = re.sub(r'data-build="[0-9a-f]*"', 'data-build=""', index)
     index_path.write_text(index, encoding="utf-8")
+
+
+def version_font_urls(root: Path) -> None:
+    """Point css/app.css at content-hashed font copies so slices can be immutable."""
+    css_path = root / "css" / "app.css"
+    if not css_path.is_file():
+        return
+
+    def repl(match: re.Match[str]) -> str:
+        rel = "css/" + match[1] + match[2]
+        font = root / rel
+        if not font.is_file():
+            raise FileNotFoundError(f"app.css references missing font {rel}")
+        return f"url({match[1]}.{digest(font.read_bytes())}{match[2]})"
+
+    css = css_path.read_text(encoding="utf-8")
+    css_path.write_text(FONT_URL.sub(repl, css), encoding="utf-8")
 
 
 def main(args: list[str] | None = None) -> int:
@@ -92,6 +114,7 @@ def main(args: list[str] | None = None) -> int:
         return 1
     reset_tree(root)
 
+    version_font_urls(root)
     originals = collect(root)
     url_map: dict[str, str] = {}
     parts: list[str] = []
