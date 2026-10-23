@@ -4,7 +4,7 @@
 正文对照仓库里的底本缓存，不是现场去抓网页：
 
 - 古文观止：sources/wikisource/vol01–12.wikitext（维基文库）
-- 资治通鉴卷一至卷十：sources/zztj/juan01–10.wikitext（维基文库）
+- 资治通鉴卷一至卷十一：sources/zztj/juan01–11.wikitext（维基文库）
 - 人间词话六十四则：sources/renjian/guocui-juan-shang.wikitext（维基文库）
 - 唐诗、宋词：sources/poetry/canonical.json
   （chinese-poetry 指定 commit 的选篇缓存）
