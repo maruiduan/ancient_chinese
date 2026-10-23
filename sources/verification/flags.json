@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 503,
-        "chars": 385809,
+        "pieces": 512,
+        "chars": 395296,
         "unexpected": "0"
       },
       {
@@ -53,51 +53,51 @@
     "unexpected": [],
     "reviewChars": 17,
     "cacheSingle": 57,
-    "glosses": 17884,
-    "lessonFlags": 252,
-    "missingChars": 671,
-    "missingHits": 1243,
+    "glosses": 18070,
+    "lessonFlags": 254,
+    "missingChars": 686,
+    "missingHits": 1268,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 8570,
+        "count": 8631,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 2796,
+        "count": 2820,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 2228,
+        "count": 2256,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 368,
+        "count": 369,
         "note": "归并"
       },
       {
         "trad": "徵",
         "simp": "征",
-        "count": 209,
+        "count": 210,
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
         "trad": "乾",
         "simp": "干",
-        "count": 39,
+        "count": 37,
         "note": "干燥作干"
       },
       {
         "trad": "裡",
         "simp": "里",
-        "count": 31,
+        "count": 33,
         "note": "归并"
       },
       {
@@ -109,7 +109,7 @@
       {
         "trad": "幹",
         "simp": "干",
-        "count": 18,
+        "count": 19,
         "note": "归并"
       },
       {
@@ -121,7 +121,7 @@
       {
         "trad": "乾",
         "simp": "乾",
-        "count": 8,
+        "count": 12,
         "note": "乾坤、乾谿等读 qián，保留乾"
       },
       {
@@ -3280,6 +3280,24 @@
       "word": "僬侥",
       "reading": "jiāo yáo",
       "han": "侥→yáo（汉典 jiǎo）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z50-04",
+      "word": "氏",
+      "reading": "zhī",
+      "han": "氏→zhī（汉典 shì）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "虚词",
+      "id": "z50-06",
+      "word": "卒",
+      "reading": "cù",
+      "han": "卒→cù（汉典 zú、cǜ）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     }
   ]
