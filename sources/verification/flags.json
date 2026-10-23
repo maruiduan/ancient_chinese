@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 396,
-        "chars": 275321,
+        "pieces": 402,
+        "chars": 284351,
         "unexpected": "0"
       },
       {
@@ -52,46 +52,46 @@
     ],
     "unexpected": [],
     "reviewChars": 17,
-    "cacheSingle": 55,
-    "glosses": 15654,
-    "lessonFlags": 223,
-    "missingChars": 529,
-    "missingHits": 959,
+    "cacheSingle": 56,
+    "glosses": 15779,
+    "lessonFlags": 226,
+    "missingChars": 541,
+    "missingHits": 978,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 7869,
+        "count": 7927,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 2498,
+        "count": 2525,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 1939,
+        "count": 1958,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 321,
+        "count": 328,
         "note": "归并"
       },
       {
         "trad": "徵",
         "simp": "征",
-        "count": 178,
+        "count": 179,
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
         "trad": "乾",
         "simp": "干",
-        "count": 34,
+        "count": 37,
         "note": "干燥作干"
       },
       {
@@ -103,7 +103,7 @@
       {
         "trad": "裡",
         "simp": "里",
-        "count": 16,
+        "count": 17,
         "note": "归并"
       },
       {
@@ -831,6 +831,16 @@
       "word": "詰",
       "reading": "jí",
       "han": "jié",
+      "ui": "silent",
+      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
+    },
+    {
+      "kind": "reading",
+      "where": "字书默认音",
+      "id": "",
+      "word": "謷",
+      "reading": "áo",
+      "han": "ào",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
     },
@@ -2999,6 +3009,33 @@
       "word": "匮",
       "reading": "guì",
       "han": "匮→guì（汉典 kuì）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z37-01",
+      "word": "黾",
+      "reading": "miǎn",
+      "han": "黾→miǎn（汉典 mǐn、měng）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "loan",
+      "where": "通假",
+      "id": "z37-01",
+      "word": "缪",
+      "reading": "谬",
+      "han": "http://wyw.hwxnet.com/view/hwxe7hwxbchwxaa.html",
+      "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z37-06",
+      "word": "队",
+      "reading": "suì",
+      "han": "队→suì（汉典 duì、zhuì）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     }
   ]
