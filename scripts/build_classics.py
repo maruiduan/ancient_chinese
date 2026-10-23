@@ -16,6 +16,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from fill_textbook_gloss import PHRASES, fill_tokens  # noqa: E402
 from hanzi import only_han  # noqa: E402
+from classics_readings import fix_tokens  # noqa: E402
 
 SRC = ROOT / "sources" / "classics"
 ART = ROOT / "data" / "articles"
@@ -250,6 +251,7 @@ def apply_py(tokens: list[dict]) -> None:
             continue
         rows = pinyin(tok["s"], style=Style.TONE, errors="ignore")
         tok["py"] = rows[0][0] if rows and rows[0] else ""
+    fix_tokens(tokens)
 
 
 def tokens_for(trad: str, simp: str) -> list[dict]:

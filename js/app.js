@@ -23,6 +23,7 @@
     renjian: null,
     renjianQuery: "",
     zztj: null,
+    shiji: null,
     provenance: null,
     readingPolicy: null,
     glossSources: null,
@@ -466,6 +467,18 @@
     return list;
   }
 
+  function shijiArticles() {
+    const list = [];
+    ((state.shiji && state.shiji.volumes) || []).forEach(function (vol) {
+      vol.articles.forEach(function (art) { list.push(art); });
+    });
+    return list;
+  }
+
+  function isShijiId(id) {
+    return /^s\d{3}$/.test(id || "");
+  }
+
   function isZztjId(id) {
     return /^z\d{2}-\d{2}$/.test(id || "");
   }
@@ -489,6 +502,7 @@
 
   function articleList(id) {
     if (isZztjId(id)) return zztjArticles();
+    if (isShijiId(id)) return shijiArticles();
     if (isRenjianId(id)) return renjianArticles();
     if (isDaodeId(id)) return classicArticles("daode");
     if (isLunyuId(id)) return classicArticles("lunyu");
@@ -497,6 +511,7 @@
 
   function bookNameFor(id) {
     if (isZztjId(id)) return "资治通鉴";
+    if (isShijiId(id)) return "史记";
     if (isRenjianId(id)) return "人间词话";
     if (isDaodeId(id)) return "道德经";
     if (isLunyuId(id)) return "论语";
@@ -508,7 +523,7 @@
   }
 
   function findArticleMeta(id) {
-    const lists = [articleList(id), flatArticles(), renjianArticles(), zztjArticles()];
+    const lists = [articleList(id), flatArticles(), renjianArticles(), zztjArticles(), shijiArticles()];
     for (let i = 0; i < lists.length; i += 1) {
       const found = lists[i].find(function (art) { return art.id === id; });
       if (found) return found;
@@ -534,7 +549,7 @@
     skeleton("正在载入");
     const paths = {
       catalog: "data/catalog.json", books: "data/books.json", proseAuthors: "data/prose-authors.json",
-      renjian: "data/renjian.json", zztj: "data/zztj.json", provenance: "data/provenance.json",
+      renjian: "data/renjian.json", zztj: "data/zztj.json", shiji: "data/shiji.json", provenance: "data/provenance.json",
       readingPolicy: "data/reading-policy.json", glossSources: "data/gloss-sources.json", grades: "data/grades.json",
       daode: "data/daode.json", lunyu: "data/lunyu.json", famous: "data/famous.json",
     };
@@ -544,7 +559,7 @@
     loadAudioManifest().catch(function () { /* The reader works without audio. */ });
     if (state.progress.last) {
       const meta = findArticleMeta(state.progress.last);
-      if (meta) state.openVol = Number(meta.id.slice(1, 3));
+      if (meta && !isShijiId(meta.id)) state.openVol = Number(meta.id.slice(1, 3));
     }
     route();
     fetch(assetUrl("data/dict.json"))
@@ -679,8 +694,8 @@
   function analyticsPath(hash) {
     // Build public paths from known catalog entries, never from arbitrary hash text.
     if (!hash || hash === "#/") return "/#/";
-    if (/^#\/(gwgz|zztj|rjch|daode|lunyu|tang|ci|ke)$/.test(hash)) return "/" + hash;
-    let match = hash.match(/^#\/read\/([vzhdl]\d{2}-\d{2})$/);
+    if (/^#\/(gwgz|zztj|shiji|rjch|daode|lunyu|tang|ci|ke)$/.test(hash)) return "/" + hash;
+    let match = hash.match(/^#\/read\/([vzhdl]\d{2}-\d{2}|s\d{3})$/);
     if (match) {
       const meta = findArticleMeta(match[1]);
       return meta ? "/#/read/" + meta.id : null;
@@ -735,7 +750,7 @@
   function dispatchRoute() {
     stopReading();
     const hash = location.hash || "#/";
-    const read = hash.match(/^#\/read\/((?:v|h|z|d|l)\d{2}-\d{2})$/);
+    const read = hash.match(/^#\/read\/((?:v|h|z|d|l)\d{2}-\d{2}|s\d{3})$/);
     const vol = hash.match(/^#\/gwgz\/(\d{1,2})$/);
     const zjuan = hash.match(/^#\/zztj\/(\d{1,2})$/);
     const authorPage = hash.match(/^#\/(tang|ci|ke)\/author\/(.+)$/);
@@ -745,6 +760,7 @@
     else if (zjuan) return showZztjJuan(Number(zjuan[1]));
     else if (hash === "#/gwgz") showBook();
     else if (hash === "#/zztj") showZztj();
+    else if (hash === "#/shiji") showShiji();
     else if (hash === "#/rjch") showRenjian();
     else if (hash === "#/daode") return showClassic("daode");
     else if (hash === "#/lunyu") return showClassic("lunyu");
@@ -760,6 +776,7 @@
     return [
       { id: "gwgz", title: "古文观止", href: "#/gwgz", meta: "十二卷 · 二百二十二篇", detail: "先读这一本。" },
       { id: "zztj", title: "资治通鉴", href: "#/zztj", meta: "司马光 · 周纪、秦纪、汉纪一已收", detail: "汉纪二以后陆续添加。" },
+      { id: "shiji", title: "史记", href: "#/shiji", meta: "司马迁 · 一百三十篇", detail: "先收项羽本纪。" },
       { id: "daode", title: "道德经", href: "#/daode", meta: "王弼本 · 八十一章", detail: "道经、德经。" },
       { id: "lunyu", title: "论语", href: "#/lunyu", meta: "二十篇", detail: "从《学而》读起。" },
       { id: "tang", title: "唐诗", href: "#/tang", meta: "精选名篇", detail: "从《静夜思》读起。" },
@@ -999,6 +1016,72 @@
     wrap.appendChild(chips);
     main.replaceChildren(wrap);
     document.title = "资治通鉴 · 典籍";
+    syncChrome();
+  }
+
+  function showShiji() {
+    loadToken += 1;
+    closePopup();
+    state.view = "shiji";
+    state.article = null;
+    const data = state.shiji;
+    const wrap = document.createElement("article");
+    wrap.className = "home";
+    const h1 = document.createElement("h1");
+    h1.textContent = "史记";
+    const articles = shijiArticles();
+    const lead = document.createElement("p");
+    lead.className = "lead";
+    lead.textContent = data
+      ? "司马迁。一百三十篇，已收 " + articles.length + " 篇，已读 " + learnedIn(articles) + "。" + (articles.length < 130 ? "其余待添加。" : "")
+      : "目录还没有载入。";
+    wrap.appendChild(h1);
+    wrap.appendChild(lead);
+    appendCatalogTools(wrap, "shiji");
+    if (state.gradeFilter || state.famousOnly) {
+      appendGradeHits(wrap, articles, function (art) { return pieceLink(art, false); });
+      main.replaceChildren(wrap);
+      document.title = "史记 · 典籍";
+      syncChrome();
+      return;
+    }
+    ((data && data.volumes) || []).forEach(function (vol) {
+      const block = document.createElement("section");
+      block.className = "era-block shiji-block";
+      const h2 = document.createElement("h2");
+      h2.textContent = vol.title;
+      const small = document.createElement("small");
+      small.textContent = vol.entries.length + " 篇";
+      h2.appendChild(small);
+      block.appendChild(h2);
+      const list = document.createElement("div");
+      list.className = "shiji-grid";
+      vol.entries.forEach(function (item) {
+        const el = document.createElement(item.id ? "a" : "span");
+        el.className = item.id ? "shiji-item" : "shiji-item pending";
+        if (item.id) el.href = "#/read/" + item.id;
+        const num = document.createElement("i");
+        num.textContent = String(item.juan);
+        const name = document.createElement("b");
+        name.textContent = item.title;
+        el.appendChild(num);
+        el.appendChild(name);
+        if (item.id && state.progress.learned[item.id]) {
+          const mark = document.createElement("em");
+          mark.textContent = "已读";
+          el.appendChild(mark);
+        } else if (!item.id) {
+          const note = document.createElement("em");
+          note.textContent = item.note || "待添加";
+          el.appendChild(note);
+        }
+        list.appendChild(el);
+      });
+      block.appendChild(list);
+      wrap.appendChild(block);
+    });
+    main.replaceChildren(wrap);
+    document.title = "史记 · 典籍";
     syncChrome();
   }
 
@@ -1316,9 +1399,9 @@
     wrap.appendChild(resume);
     const input = document.createElement("input");
     input.className = "catalog-search";
-    input.placeholder = "搜索则目";
+    input.placeholder = "搜索条目";
     input.value = state.renjianQuery;
-    input.setAttribute("aria-label", "搜索则目");
+    input.setAttribute("aria-label", "搜索条目");
     input.addEventListener("input", function () {
       state.renjianQuery = input.value;
       showRenjian();
@@ -1339,7 +1422,7 @@
     if (!shown.length) {
       const empty = document.createElement("p");
       empty.className = "catalog-empty";
-      empty.textContent = "没有匹配的则目。";
+      empty.textContent = "没有匹配的条目。";
       list.appendChild(empty);
     }
     shown.forEach(function (art) { list.appendChild(pieceLink(art, false)); });
@@ -1443,6 +1526,8 @@
         if (kind === "tang" || kind === "ci" || kind === "ke") renderCollection(kind);
         else if (kind === "gwgz") showBook();
         else if (kind === "zztj") showZztj();
+      else if (kind === "shiji") showShiji();
+        else if (kind === "shiji") showShiji();
         else if (kind === "rjch") showRenjian();
         else if (kind === "daode" || kind === "lunyu") showClassic(kind);
       });
@@ -1459,6 +1544,7 @@
       if (kind === "tang" || kind === "ci" || kind === "ke") renderCollection(kind);
       else if (kind === "gwgz") showBook();
       else if (kind === "zztj") showZztj();
+      else if (kind === "shiji") showShiji();
       else if (kind === "rjch") showRenjian();
       else if (kind === "daode" || kind === "lunyu") showClassic(kind);
     });
@@ -2128,9 +2214,11 @@
     const lesson = art.lesson;
     if (tab === "vernacular") {
       let any = false;
-      art.paragraphs.forEach(function (para) {
+      art.paragraphs.forEach(function (para, pi) {
         const text = para.sentences.map(function (sent) { return sent.tr || ""; }).join("");
         if (!text) return;
+        const add = addendumStart(art.paragraphs, pi);
+        if (add) panel.appendChild(addendumBanner(add));
         any = true;
         panel.appendChild(sheetP(text));
       });
@@ -2191,7 +2279,9 @@
     }
     const credit = document.createElement("p");
     credit.className = "sheet-credit";
-    if (isZztjId(art.id)) {
+    if (isShijiId(art.id)) {
+      credit.textContent = "白话、注释和赏析是本书编写的。正文用维基文库《史记》本文和太史公曰，不收三家注和索隐述赞。部分多音字按句中意思标读音。";
+    } else if (isZztjId(art.id)) {
       credit.textContent = "白话、注释和赏析是本书编写的。正文用司马光《资治通鉴》周纪、秦纪（卷一至卷八）。标明增补或移入的段落没有收。";
     } else if (isRenjianId(art.id)) {
       credit.textContent = "白话、注释和赏析是本书编写的。正文用王国维《人间词话》一九〇八年至一九〇九年《国粹学报》已刊六十四则。";
@@ -2444,6 +2534,115 @@
     return a;
   }
 
+  // 后人补写的段落（褚少孙补、班固《秦纪论》）：在每段补写开头标明出处。
+  function addendumStart(paras, index) {
+    const add = paras[index] && paras[index].addendum;
+    if (!add) return null;
+    const prev = index > 0 ? paras[index - 1].addendum : null;
+    if (prev && prev.label === add.label) return null;
+    return add;
+  }
+
+  function addendumBanner(add) {
+    const p = document.createElement("p");
+    p.className = "pair-missing addendum-note";
+    const b = document.createElement("strong");
+    b.textContent = "【" + add.label + "】";
+    p.appendChild(b);
+    p.appendChild(document.createTextNode(add.note));
+    return p;
+  }
+
+  // 十表：表格按 at（排在第几段之前）插进正文；同一处相邻的几张表做成切换页。
+  function appendBiaoAt(body, art, at) {
+    if (!art.biao) return;
+    const group = art.biao.filter(function (tb) { return tb.at === at; });
+    if (!group.length) return;
+    const font = state.progress.font === "t" ? "t" : "s";
+    const box = document.createElement("section");
+    box.className = "biao-block";
+    if (group[0].addendum) box.appendChild(addendumBanner(group[0].addendum));
+    const tabs = document.createElement("div");
+    tabs.className = "biao-tabs";
+    const hint = document.createElement("p");
+    hint.className = "biao-hint";
+    hint.textContent = "← 左右滑动看各栏 · 首栏和表头固定 →";
+    const hasDao = group.some(function (tb) { return JSON.stringify(tb.rows.s || []).indexOf("〖") >= 0; });
+    if (hasDao) hint.textContent += "　· 加框斜体是原表「倒书」，记大臣薨卒、罢免";
+    const scroller = document.createElement("div");
+    scroller.className = "biao-scroll";
+    scroller.tabIndex = 0;
+    function show(k) {
+      const tb = group[k];
+      const table = document.createElement("table");
+      table.className = "biao";
+      const rows = tb.rows[font] || tb.rows.s;
+      let thead = null;
+      const tbody = document.createElement("tbody");
+      const yrRe = /^前?\d/;
+      const nYr = rows.filter(function (r) { return r[0] && yrRe.test(r[0].x || ""); }).length;
+      const markYr = nYr * 2 < rows.length;
+      rows.forEach(function (row, ri) {
+        const tr = document.createElement("tr");
+        const isHead = ri === 0 && row.every(function (c) { return c.h; });
+        if (markYr && !isHead && row[0] && yrRe.test(row[0].x || "")) tr.className = "biao-yr";
+        row.forEach(function (c, ci) {
+          const cell = document.createElement(c.h || ci === 0 ? "th" : "td");
+          if (ci === 0) cell.className = "biao-k";
+          else if (!isHead) {
+            const plain = (c.x || "").replace(/。$/, "");
+            cell.className = /^[一二三四五六七八九十〇]*$/.test(plain) ? "biao-n" : "biao-ev";
+          }
+          if (c.c) cell.colSpan = c.c;
+          if (c.r) cell.rowSpan = c.r;
+          (c.x || "").split("\n").forEach(function (line, li) {
+            if (li) cell.appendChild(document.createElement("br"));
+            // 〖…〗是原表倒书（卷二十二记薨卒、罢免），另排样式。
+            line.split(/(〖[^〗]*〗)/).forEach(function (seg) {
+              if (!seg) return;
+              if (seg.charAt(0) === "〖" && seg.charAt(seg.length - 1) === "〗") {
+                const d = document.createElement("span");
+                d.className = "biao-dao";
+                d.title = "原表倒书";
+                d.textContent = seg.slice(1, -1);
+                cell.appendChild(d);
+              } else cell.appendChild(document.createTextNode(seg));
+            });
+          });
+          tr.appendChild(cell);
+        });
+        if (isHead) {
+          thead = document.createElement("thead");
+          thead.appendChild(tr);
+        } else tbody.appendChild(tr);
+      });
+      if (thead) table.appendChild(thead);
+      table.appendChild(tbody);
+      scroller.replaceChildren(table);
+      scroller.scrollLeft = 0;
+      Array.prototype.forEach.call(tabs.children, function (b, i) { b.classList.toggle("on", i === k); });
+    }
+    if (group.length > 1) {
+      group.forEach(function (tb, k) {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.textContent = tb.name[font] || ("表" + (k + 1));
+        b.addEventListener("click", function () { show(k); });
+        tabs.appendChild(b);
+      });
+      box.appendChild(tabs);
+    } else if (group[0].name[font]) {
+      const h = document.createElement("h3");
+      h.className = "biao-title";
+      h.textContent = group[0].name[font];
+      box.appendChild(h);
+    }
+    box.appendChild(hint);
+    box.appendChild(scroller);
+    show(0);
+    body.appendChild(box);
+  }
+
   function renderProseBody(art) {
     const body = document.createElement("div");
     const hasTr = art.paragraphs.some(function (para) {
@@ -2451,7 +2650,10 @@
     });
     if (!sentenceMode()) {
       body.className = "body prose";
-      art.paragraphs.forEach(function (para) {
+      art.paragraphs.forEach(function (para, pi) {
+        appendBiaoAt(body, art, pi);
+        const add = addendumStart(art.paragraphs, pi);
+        if (add) body.appendChild(addendumBanner(add));
         const p = document.createElement("p");
         p.className = "orig para" + (state.progress.pinyin ? " with-py" : "");
         para.sentences.forEach(function (sent) {
@@ -2459,6 +2661,7 @@
         });
         body.appendChild(p);
       });
+      appendBiaoAt(body, art, art.paragraphs.length);
       return body;
     }
     body.className = "body prose sentence";
@@ -2468,7 +2671,10 @@
       banner.textContent = "这一篇还没有逐句译文。下面按句断开，点开字看《说文》。注释在底部。";
       body.appendChild(banner);
     }
-    art.paragraphs.forEach(function (para) {
+    art.paragraphs.forEach(function (para, pi) {
+      appendBiaoAt(body, art, pi);
+      const add = addendumStart(art.paragraphs, pi);
+      if (add) body.appendChild(addendumBanner(add));
       para.sentences.forEach(function (sent, index) {
         const pair = document.createElement("div");
         pair.className = "pair" + (index === para.sentences.length - 1 ? " para-end" : "");
@@ -2486,13 +2692,17 @@
         body.appendChild(pair);
       });
     });
+    appendBiaoAt(body, art, art.paragraphs.length);
     return body;
   }
 
   function renderBody(art, mode) {
     const body = document.createElement("div");
     body.className = "body";
-    art.paragraphs.forEach(function (para) {
+    art.paragraphs.forEach(function (para, pi) {
+      appendBiaoAt(body, art, pi);
+      const add = addendumStart(art.paragraphs, pi);
+      if (add) body.appendChild(addendumBanner(add));
       if (mode === "parallel") {
         para.sentences.forEach(function (sent) {
           const pair = document.createElement("div");
@@ -2518,6 +2728,7 @@
         body.appendChild(p);
       }
     });
+    appendBiaoAt(body, art, art.paragraphs.length);
     return body;
   }
 
@@ -2709,6 +2920,8 @@
           ruby.className = "py-ruby";
           ruby.textContent = syllable;
           btn.appendChild(ruby);
+          // 字格按拼音宽度撑开，长音节不再和邻字的拼音挤在一起。
+          btn.dataset.py = syllable;
         }
         btn.appendChild(document.createTextNode(glyph));
         btn.addEventListener("click", function () {
@@ -2764,7 +2977,13 @@
     card.appendChild(h2);
     const ol = document.createElement("ol");
     ol.className = "sentence-list";
-    art.paragraphs.forEach(function (para) {
+    art.paragraphs.forEach(function (para, pi) {
+      const add = addendumStart(art.paragraphs, pi);
+      if (add) {
+        const li = document.createElement("li");
+        li.appendChild(addendumBanner(add));
+        ol.appendChild(li);
+      }
       para.sentences.forEach(function (sent) {
         if (!sent.tr) return;
         const li = document.createElement("li");
@@ -3435,7 +3654,9 @@
     const sub = document.createElement("p");
     sub.className = "sub";
     const bits = [];
-    if (dictPy && !samePy(dictPy, syllable)) bits.push("字书 " + dictPy);
+    if (dictPy && !samePy(dictPy, syllable)) bits.push("常用 " + dictPy);
+    const swPy = entry.pending ? "" : normalizePy(entry.pySw);
+    if (swPy && !samePy(swPy, syllable) && !samePy(swPy, dictPy)) bits.push("说文 " + swPy);
     if (entry.fanqie) bits.push("反切 " + entry.fanqie);
     sub.textContent = bits.join(" · ");
     const ben = document.createElement("p");
@@ -3503,6 +3724,9 @@
     } else if (state.view === "zztj" || hash === "#/zztj") {
       tab = "zztj";
       crumbs.push({ href: "#/", label: "典籍" });
+    } else if (state.view === "shiji" || hash === "#/shiji") {
+      tab = "shiji";
+      crumbs.push({ href: "#/", label: "典籍" });
     } else if (state.view === "daode" || hash === "#/daode") {
       tab = "daode";
       crumbs.push({ href: "#/", label: "典籍" });
@@ -3527,9 +3751,12 @@
       const tongjian = isZztjId(state.article.id);
       const daode = isDaodeId(state.article.id);
       const lunyu = isLunyuId(state.article.id);
-      tab = tongjian ? "zztj" : renjian ? "rjch" : daode ? "daode" : lunyu ? "lunyu" : "gwgz";
+      const shiji = isShijiId(state.article.id);
+      tab = shiji ? "shiji" : tongjian ? "zztj" : renjian ? "rjch" : daode ? "daode" : lunyu ? "lunyu" : "gwgz";
       crumbs.push({ href: "#/", label: "典籍" });
-      if (daode) {
+      if (shiji) {
+        crumbs.push({ href: "#/shiji", label: "史记" });
+      } else if (daode) {
         crumbs.push({ href: "#/daode", label: "道德经" });
       } else if (lunyu) {
         crumbs.push({ href: "#/lunyu", label: "论语" });
@@ -3574,9 +3801,10 @@
     const onZztj = tab === "zztj";
     const onDaode = tab === "daode";
     const onLunyu = tab === "lunyu";
-    const total = onZztj ? zztjArticles().length : onRenjian ? renjianArticles().length : onDaode ? classicArticles("daode").length : onLunyu ? classicArticles("lunyu").length : (state.catalog ? state.catalog.articleCount : 0);
-    const n = onZztj ? learnedIn(zztjArticles()) : onRenjian ? learnedIn(renjianArticles()) : onDaode ? learnedIn(classicArticles("daode")) : onLunyu ? learnedIn(classicArticles("lunyu")) : learnedIn(flatArticles());
-    const showMeter = (tab === "gwgz" || tab === "rjch" || tab === "zztj" || tab === "daode" || tab === "lunyu") && total;
+    const onShiji = tab === "shiji";
+    const total = onShiji ? shijiArticles().length : onZztj ? zztjArticles().length : onRenjian ? renjianArticles().length : onDaode ? classicArticles("daode").length : onLunyu ? classicArticles("lunyu").length : (state.catalog ? state.catalog.articleCount : 0);
+    const n = onShiji ? learnedIn(shijiArticles()) : onZztj ? learnedIn(zztjArticles()) : onRenjian ? learnedIn(renjianArticles()) : onDaode ? learnedIn(classicArticles("daode")) : onLunyu ? learnedIn(classicArticles("lunyu")) : learnedIn(flatArticles());
+    const showMeter = (tab === "gwgz" || tab === "rjch" || tab === "zztj" || tab === "shiji" || tab === "daode" || tab === "lunyu") && total;
     topProgress.textContent = showMeter ? "已读 " + n + " / " + total : "";
     meter.style.width = showMeter ? Math.round((n / total) * 100) + "%" : "0%";
     if (rail === "rj") renderRenjianRail();

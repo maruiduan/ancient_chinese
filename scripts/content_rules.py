@@ -91,7 +91,8 @@ def article_gaps(article: dict, authors: dict) -> list[str]:
             if len(text) < MIN_PROSE:
                 gaps.append(f"{label}不足（{len(text)} 字，至少 {MIN_PROSE}）")
         notes = note_items(lesson)
-        if notes < MIN_NOTES:
+        # 只有表格、没有正文的篇（如卷二十二）无可注之字。
+        if notes < MIN_NOTES and not (not sentences and article.get("biao")):
             gaps.append(f"注释条目不足（{notes}，至少 {MIN_NOTES}）")
     author = article.get("author") or ""
     bio = authors.get(author) or {}
@@ -133,7 +134,7 @@ def overlay_problems(article: dict, overlay: dict) -> list[str]:
             text = (lesson.get(key) or "").strip()
             if len(text) < MIN_PROSE:
                 problems.append(f"{label}不足（{len(text)} 字）")
-        if note_items(lesson) < MIN_NOTES:
+        if note_items(lesson) < MIN_NOTES and not (not texts and article.get("biao")):
             problems.append(f"注释条目不足（{note_items(lesson)}）")
         for key in NOTE_LISTS:
             if key in lesson and not isinstance(lesson[key], list):

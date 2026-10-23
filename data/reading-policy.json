@@ -3,23 +3,22 @@
   "sourceName": "汉典文言",
   "rule": "不根据这份缓存改读音。汉典有多个读音、而说文音都不在其中的，弹层标为待复核。",
   "chars": {
-    "噁": {
+    "不": {
       "status": "review",
       "py": "",
-      "shuowen": "ě",
+      "shuowen": "bù",
       "han": [
-        "è",
-        "wū",
-        "wù"
+        "fǒu",
+        "bú"
       ]
     },
-    "噫": {
+    "哆": {
       "status": "review",
       "py": "",
-      "shuowen": "ǎi",
+      "shuowen": "duō",
       "han": [
-        "yī",
-        "ài"
+        "chǐ",
+        "chě"
       ]
     },
     "培": {
@@ -49,22 +48,13 @@
         "ǎo"
       ]
     },
-    "拓": {
+    "怵": {
       "status": "review",
       "py": "",
-      "shuowen": "zhí",
+      "shuowen": "chù",
       "han": [
-        "tuò",
-        "tà"
-      ]
-    },
-    "捲": {
-      "status": "review",
-      "py": "",
-      "shuowen": "quán",
-      "han": [
-        "juàn",
-        "juǎn"
+        "xù",
+        "chǔ"
       ]
     },
     "揣": {
@@ -77,6 +67,15 @@
         "chuāi"
       ]
     },
+    "擿": {
+      "status": "review",
+      "py": "",
+      "shuowen": "tī",
+      "han": [
+        "tì",
+        "zhì"
+      ]
+    },
     "昳": {
       "status": "review",
       "py": "",
@@ -86,49 +85,13 @@
         "yì"
       ]
     },
-    "朴": {
+    "澇": {
       "status": "review",
       "py": "",
-      "shuowen": "pò",
+      "shuowen": "lào",
       "han": [
-        "bú",
-        "pǔ"
-      ]
-    },
-    "榜": {
-      "status": "review",
-      "py": "",
-      "shuowen": "bēng",
-      "han": [
-        "bǎng",
-        "bàng"
-      ]
-    },
-    "橈": {
-      "status": "review",
-      "py": "",
-      "shuowen": "nào",
-      "han": [
-        "ráo",
-        "náo"
-      ]
-    },
-    "禪": {
-      "status": "review",
-      "py": "",
-      "shuowen": "shàn",
-      "han": [
-        "chàn",
-        "chán"
-      ]
-    },
-    "種": {
-      "status": "review",
-      "py": "",
-      "shuowen": "chóng",
-      "han": [
-        "zhǒng",
-        "zhòng"
+        "lǎo",
+        "láo"
       ]
     },
     "翟": {
@@ -140,13 +103,22 @@
         "zhái"
       ]
     },
-    "衰": {
+    "莞": {
       "status": "review",
       "py": "",
-      "shuowen": "suō",
+      "shuowen": "guǎn",
       "han": [
-        "cuī",
-        "shuāi"
+        "guān",
+        "wǎn"
+      ]
+    },
+    "菲": {
+      "status": "review",
+      "py": "",
+      "shuowen": "fēi",
+      "han": [
+        "fěi",
+        "féi"
       ]
     },
     "逮": {
@@ -158,22 +130,22 @@
         "dǎi"
       ]
     },
-    "還": {
+    "那": {
       "status": "review",
       "py": "",
-      "shuowen": "huán",
+      "shuowen": "nà",
       "han": [
-        "xuán",
-        "hái"
+        "nuó",
+        "nǎ"
       ]
     },
-    "鞅": {
+    "頡": {
       "status": "review",
       "py": "",
-      "shuowen": "yǎng",
+      "shuowen": "jié",
       "han": [
-        "yāng",
-        "yàng"
+        "xié",
+        "jiá"
       ]
     }
   }
