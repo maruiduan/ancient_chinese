@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 512,
-        "chars": 395296,
+        "pieces": 521,
+        "chars": 405138,
         "unexpected": "0"
       },
       {
@@ -53,39 +53,39 @@
     "unexpected": [],
     "reviewChars": 17,
     "cacheSingle": 57,
-    "glosses": 18070,
-    "lessonFlags": 254,
-    "missingChars": 686,
-    "missingHits": 1268,
+    "glosses": 18249,
+    "lessonFlags": 255,
+    "missingChars": 697,
+    "missingHits": 1291,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 8631,
+        "count": 8697,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 2820,
+        "count": 2849,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 2256,
+        "count": 2273,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 369,
+        "count": 371,
         "note": "归并"
       },
       {
         "trad": "徵",
         "simp": "征",
-        "count": 210,
+        "count": 223,
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
@@ -3298,6 +3298,15 @@
       "word": "卒",
       "reading": "cù",
       "han": "卒→cù（汉典 zú、cǜ）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z51-02",
+      "word": "且",
+      "reading": "jū",
+      "han": "且→jū（汉典 qiě）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     }
   ]
