@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 521,
-        "chars": 405138,
+        "pieces": 533,
+        "chars": 413362,
         "unexpected": "0"
       },
       {
@@ -53,39 +53,39 @@
     "unexpected": [],
     "reviewChars": 17,
     "cacheSingle": 57,
-    "glosses": 18249,
-    "lessonFlags": 255,
-    "missingChars": 697,
-    "missingHits": 1291,
+    "glosses": 18491,
+    "lessonFlags": 258,
+    "missingChars": 707,
+    "missingHits": 1318,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 8697,
+        "count": 8746,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 2849,
+        "count": 2867,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 2273,
+        "count": 2300,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 371,
+        "count": 374,
         "note": "归并"
       },
       {
         "trad": "徵",
         "simp": "征",
-        "count": 223,
+        "count": 224,
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
@@ -97,7 +97,7 @@
       {
         "trad": "裡",
         "simp": "里",
-        "count": 33,
+        "count": 34,
         "note": "归并"
       },
       {
@@ -113,16 +113,16 @@
         "note": "归并"
       },
       {
+        "trad": "乾",
+        "simp": "乾",
+        "count": 13,
+        "note": "乾坤、乾谿等读 qián，保留乾"
+      },
+      {
         "trad": "祇",
         "simp": "祇",
         "count": 13,
         "note": "神祇、地祇保留祇"
-      },
-      {
-        "trad": "乾",
-        "simp": "乾",
-        "count": 12,
-        "note": "乾坤、乾谿等读 qián，保留乾"
       },
       {
         "trad": "祇",
@@ -3308,6 +3308,33 @@
       "reading": "jū",
       "han": "且→jū（汉典 qiě）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "虚词",
+      "id": "z52-03",
+      "word": "卒",
+      "reading": "cù",
+      "han": "卒→cù（汉典 zú、cǜ）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "虚词",
+      "id": "z52-05",
+      "word": "卒",
+      "reading": "cù",
+      "han": "卒→cù（汉典 zú、cǜ）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "loan",
+      "where": "通假",
+      "id": "z52-12",
+      "word": "详",
+      "reading": "祥",
+      "han": "http://wyw.hwxnet.com/view/hwxe8hwxafhwxa6.html",
+      "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
     }
   ]
 }
