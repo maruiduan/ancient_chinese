@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 412,
-        "chars": 302473,
+        "pieces": 414,
+        "chars": 311387,
         "unexpected": "0"
       },
       {
@@ -53,39 +53,39 @@
     "unexpected": [],
     "reviewChars": 17,
     "cacheSingle": 56,
-    "glosses": 15992,
+    "glosses": 16041,
     "lessonFlags": 227,
-    "missingChars": 559,
-    "missingHits": 1007,
+    "missingChars": 568,
+    "missingHits": 1021,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 8035,
+        "count": 8090,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 2562,
+        "count": 2584,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 2005,
+        "count": 2031,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 341,
+        "count": 344,
         "note": "归并"
       },
       {
         "trad": "徵",
         "simp": "征",
-        "count": 185,
+        "count": 193,
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
@@ -103,7 +103,7 @@
       {
         "trad": "裡",
         "simp": "里",
-        "count": 19,
+        "count": 21,
         "note": "归并"
       },
       {
@@ -121,7 +121,7 @@
       {
         "trad": "幹",
         "simp": "干",
-        "count": 7,
+        "count": 8,
         "note": "归并"
       },
       {
