@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 423,
-        "chars": 329278,
+        "pieces": 434,
+        "chars": 337973,
         "unexpected": "0"
       },
       {
@@ -52,40 +52,40 @@
     ],
     "unexpected": [],
     "reviewChars": 17,
-    "cacheSingle": 56,
-    "glosses": 16264,
-    "lessonFlags": 229,
-    "missingChars": 590,
-    "missingHits": 1059,
+    "cacheSingle": 57,
+    "glosses": 16529,
+    "lessonFlags": 237,
+    "missingChars": 607,
+    "missingHits": 1098,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 8218,
+        "count": 8274,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 2619,
+        "count": 2641,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 2076,
+        "count": 2105,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 349,
+        "count": 351,
         "note": "归并"
       },
       {
         "trad": "徵",
         "simp": "征",
-        "count": 194,
+        "count": 207,
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
@@ -103,7 +103,7 @@
       {
         "trad": "裡",
         "simp": "里",
-        "count": 23,
+        "count": 24,
         "note": "归并"
       },
       {
@@ -113,16 +113,16 @@
         "note": "神祇保留祇"
       },
       {
+        "trad": "幹",
+        "simp": "干",
+        "count": 9,
+        "note": "归并"
+      },
+      {
         "trad": "乾",
         "simp": "乾",
         "count": 8,
         "note": "乾坤、乾谿等读 qián，保留乾"
-      },
-      {
-        "trad": "幹",
-        "simp": "干",
-        "count": 8,
-        "note": "归并"
       },
       {
         "trad": "祇",
@@ -441,6 +441,16 @@
       "word": "寸",
       "reading": "cùn",
       "han": "cǔn",
+      "ui": "silent",
+      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
+    },
+    {
+      "kind": "reading",
+      "where": "字书默认音",
+      "id": "",
+      "word": "嶠",
+      "reading": "jiào",
+      "han": "qiáo",
       "ui": "silent",
       "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
     },
@@ -3063,6 +3073,78 @@
       "word": "况",
       "reading": "贶",
       "han": "http://wyw.hwxnet.com/view/hwxe5hwx86hwxb5.html",
+      "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "loan",
+      "where": "通假",
+      "id": "z43-01",
+      "word": "忽",
+      "reading": "勿",
+      "han": "http://wyw.hwxnet.com/view/hwxe5hwxbfhwxbd.html",
+      "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "loan",
+      "where": "通假",
+      "id": "z43-01",
+      "word": "阳",
+      "reading": "佯",
+      "han": "http://wyw.hwxnet.com/view/hwxe9hwx98hwxb3.html",
+      "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z43-08",
+      "word": "峤",
+      "reading": "jiào",
+      "han": "峤→jiào（汉典 qiáo）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "loan",
+      "where": "通假",
+      "id": "z43-08",
+      "word": "挺",
+      "reading": "铤",
+      "han": "http://wyw.hwxnet.com/view/hwxe6hwx8chwxba.html",
+      "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "loan",
+      "where": "通假",
+      "id": "z43-09",
+      "word": "辨",
+      "reading": "办",
+      "han": "http://wyw.hwxnet.com/view/hwxe8hwxbehwxa8.html",
+      "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "loan",
+      "where": "通假",
+      "id": "z43-10",
+      "word": "保",
+      "reading": "堡",
+      "han": "http://wyw.hwxnet.com/view/hwxe4hwxbfhwx9d.html",
+      "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z43-11",
+      "word": "龟兹",
+      "reading": "qiū cí",
+      "han": "龟→qiū（汉典 guī、jūn）；兹→cí（汉典 zī）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "loan",
+      "where": "通假",
+      "id": "z43-11",
+      "word": "幕",
+      "reading": "漠",
+      "han": "http://wyw.hwxnet.com/view/hwxe5hwxb9hwx95.html",
       "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
     }
   ]
