@@ -1889,6 +1889,7 @@ h1 { font-weight: 600; letter-spacing: 0.06em; }
 @font-face{font-family:"GW Serif";font-weight:400;font-display:swap;src:url(fonts/xcz/serif-400-198.woff2) format("woff2");unicode-range:U+5D3D,U+7696,U+849F,U+90EB,U+9E8A}
 @font-face{font-family:"GW Serif";font-weight:400;font-display:swap;src:url(fonts/xcz/serif-400-199.woff2) format("woff2");unicode-range:U+4FEC,U+50A2,U+5C2C,U+5C34,U+5D27,U+6829,U+69D8,U+709F,U+7BE3,U+82E1,U+8581,U+858F,U+97E3}
 @font-face{font-family:"GW Serif";font-weight:400;font-display:swap;src:url(fonts/xcz/serif-400-200.woff2) format("woff2");unicode-range:U+5864,U+5BCB,U+90A1}
+@font-face{font-family:"GW Serif";font-weight:400;font-display:swap;src:url(fonts/xcz/serif-400-201.woff2) format("woff2");unicode-range:U+6E73,U+6E87,U+6F0A,U+75A4,U+8DF1,U+8E50,U+99F0,U+9A22,U+9A83}
 :root, :root[data-theme="light"] {
   color-scheme: light;
   --bg: #ffffff; --surface: #ffffff; --ink: #1a1a1a; --ink-soft: #4d4d4d; --muted: #999999;
