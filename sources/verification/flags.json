@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 417,
-        "chars": 320879,
+        "pieces": 423,
+        "chars": 329278,
         "unexpected": "0"
       },
       {
@@ -53,33 +53,33 @@
     "unexpected": [],
     "reviewChars": 17,
     "cacheSingle": 56,
-    "glosses": 16117,
-    "lessonFlags": 228,
-    "missingChars": 574,
-    "missingHits": 1035,
+    "glosses": 16264,
+    "lessonFlags": 229,
+    "missingChars": 590,
+    "missingHits": 1059,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 8162,
+        "count": 8218,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 2607,
+        "count": 2619,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 2059,
+        "count": 2076,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 348,
+        "count": 349,
         "note": "归并"
       },
       {
@@ -103,7 +103,7 @@
       {
         "trad": "裡",
         "simp": "里",
-        "count": 21,
+        "count": 23,
         "note": "归并"
       },
       {
@@ -3054,6 +3054,15 @@
       "word": "傥",
       "reading": "倘",
       "han": "http://wyw.hwxnet.com/view/hwxe5hwx82hwxa5.html",
+      "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "loan",
+      "where": "通假",
+      "id": "z42-02",
+      "word": "况",
+      "reading": "贶",
+      "han": "http://wyw.hwxnet.com/view/hwxe5hwx86hwxb5.html",
       "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
     }
   ]
