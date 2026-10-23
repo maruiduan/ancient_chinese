@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 366,
-        "chars": 231780,
+        "pieces": 375,
+        "chars": 240125,
         "unexpected": "0"
       },
       {
@@ -53,45 +53,45 @@
     "unexpected": [],
     "reviewChars": 17,
     "cacheSingle": 55,
-    "glosses": 15103,
-    "lessonFlags": 215,
-    "missingChars": 492,
-    "missingHits": 901,
+    "glosses": 15260,
+    "lessonFlags": 216,
+    "missingChars": 495,
+    "missingHits": 909,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 7610,
+        "count": 7671,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 2354,
+        "count": 2383,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 1883,
+        "count": 1894,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 284,
+        "count": 288,
         "note": "归并"
       },
       {
         "trad": "徵",
         "simp": "征",
-        "count": 167,
+        "count": 168,
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
         "trad": "乾",
         "simp": "干",
-        "count": 32,
+        "count": 33,
         "note": "干燥作干"
       },
       {
@@ -103,20 +103,20 @@
       {
         "trad": "裡",
         "simp": "里",
-        "count": 11,
+        "count": 12,
         "note": "归并"
+      },
+      {
+        "trad": "祇",
+        "simp": "祇",
+        "count": 11,
+        "note": "神祇保留祇"
       },
       {
         "trad": "乾",
         "simp": "乾",
         "count": 8,
         "note": "乾坤、乾谿等读 qián，保留乾"
-      },
-      {
-        "trad": "祇",
-        "simp": "祇",
-        "count": 8,
-        "note": "神祇保留祇"
       },
       {
         "trad": "幹",
@@ -2928,6 +2928,15 @@
       "reading": "芽",
       "han": "http://wyw.hwxnet.com/view/hwxe7hwx89hwx99.html",
       "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z31-04",
+      "word": "宿留",
+      "reading": "xiù liù",
+      "han": "留→liù（汉典 liú）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     }
   ]
 }
