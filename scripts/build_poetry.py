@@ -479,6 +479,8 @@ def main() -> None:
     ci_path = ROOT / "data" / "songci.json"
     tang_path.write_text(json.dumps(tang, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     ci_path.write_text(json.dumps(ci, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    import subprocess, sys as _sys
+    subprocess.run([_sys.executable, str(Path(__file__).with_name("apply_poetry_review.py"))], check=True)
     review = []
     for piece in tang_pieces + ci_pieces:
         review.append("[%s] %s · %s" % (piece["id"], piece["title"]["t"], piece["author"]["t"]))
