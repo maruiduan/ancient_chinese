@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 234,
-        "chars": 112326,
+        "pieces": 248,
+        "chars": 121086,
         "unexpected": "0"
       },
       {
@@ -53,33 +53,33 @@
     "unexpected": [],
     "reviewChars": 17,
     "cacheSingle": 55,
-    "glosses": 12650,
-    "lessonFlags": 157,
-    "missingChars": 425,
-    "missingHits": 737,
+    "glosses": 12833,
+    "lessonFlags": 159,
+    "missingChars": 428,
+    "missingHits": 745,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 6885,
+        "count": 6940,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 2015,
+        "count": 2038,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 1566,
+        "count": 1587,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 240,
+        "count": 243,
         "note": "归并"
       },
       {
@@ -2405,6 +2405,24 @@
       "word": "封禅",
       "reading": "fēng shàn",
       "han": "禅→shàn（汉典 chàn、chán）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "虚词",
+      "id": "z16-05",
+      "word": "卒",
+      "reading": "cù",
+      "han": "卒→cù（汉典 zú、cǜ）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z16-06",
+      "word": "雨雹",
+      "reading": "yù báo",
+      "han": "雨→yù（汉典 yǔ）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     }
   ]
