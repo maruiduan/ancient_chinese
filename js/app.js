@@ -3155,12 +3155,12 @@
     const chars = Array.from(tok.t);
     const curated = syllables(tok.py);
     if (curated.length === chars.length) {
-      const source = tok.level === "sentence" ? "sentence" : "dict";
+      const source = tok.level === "sentence" ? "sentence" : tok.level === "title" ? "title" : "dict";
       return { parts: curated, source: source, text: curated.join(" ") };
     }
     if (chars.length === 1 && curated.length) {
       const text = curated.join(" ");
-      const source = tok.level === "sentence" ? "sentence" : "dict";
+      const source = tok.level === "sentence" ? "sentence" : tok.level === "title" ? "title" : "dict";
       return { parts: [text], source: source, text: text };
     }
     if (curated.length && tok.level === "sentence") {
@@ -3528,7 +3528,7 @@
   function openPopup(tok, index, anchor) {
     closeFamous();
     state.popupTok = { tok: tok, index: index, anchor: anchor };
-    document.querySelectorAll(".zi.on").forEach(function (el) { el.classList.remove("on"); });
+    document.querySelectorAll(".zi.on, .tz.on").forEach(function (el) { el.classList.remove("on"); });
     if (anchor) anchor.classList.add("on");
     const trad = Array.from(tok.t);
     const shown = shownChars(tok);
@@ -3622,6 +3622,7 @@
     const tags = document.createElement("div");
     tags.className = "tags";
     if (reading.source === "sentence") tags.appendChild(tag("本句读音", "accent"));
+    else if (reading.source === "title") tags.appendChild(tag("题中读音", "accent"));
     else tags.appendChild(tag("今读参考", ""));
     if (focusShown !== focus) tags.appendChild(tag(focus, ""));
     if (tok.pos) tags.appendChild(tag(tok.pos, ""));
@@ -3632,10 +3633,11 @@
     sense.className = "pop-sec";
     const senseLabel = document.createElement("p");
     senseLabel.className = "pop-label";
-    senseLabel.textContent = "本句";
+    senseLabel.textContent = tok.titleText ? "标题" : "本句";
     const ctx = document.createElement("p");
     ctx.className = "ctx";
     if (tok.ctx) ctx.textContent = tok.ctx;
+    else if (tok.titleText) ctx.textContent = "「" + tok.titleText + "」" + (syllable ? "里读 " + syllable + "，按题意标注。" : "。") + "标题不做逐字释义，下面是《说文》本义。";
     else ctx.textContent = "这一篇还没有逐句审定的义项。下面的《说文》本义用来帮助判断，不等于已经核定的句中义。";
     sense.appendChild(senseLabel);
     sense.appendChild(ctx);
@@ -3876,7 +3878,7 @@
     popup.innerHTML = "";
     state.popupTok = null;
     closeFamous();
-    document.querySelectorAll(".zi.on").forEach(function (el) { el.classList.remove("on"); });
+    document.querySelectorAll(".zi.on, .tz.on").forEach(function (el) { el.classList.remove("on"); });
   }
 
   scrim.addEventListener("click", closePopup);
@@ -3927,6 +3929,188 @@
     if (dx < 0 && nav.next) location.hash = "#/read/" + nav.next.id;
     if (dx > 0 && nav.prev) location.hash = "#/read/" + nav.prev.id;
   }, { passive: true });
+
+
+  // 标题点字：篇题、卷名、目录里的字也能查。不改标题外观，也不显示拼音；
+  // 读音来自 data/titles.json（按题意标注）。正文外的标题点一下即查；
+  // 链接里的标题（目录、列表）点一下照常打开，长按查字。
+  let titleData = null;
+  let titlePromise = null;
+  let titleChars = {};
+  const TITLE_HAN = /[\u3400-\u9fff\uf900-\ufaff]|[\ud840-\ud87f][\udc00-\udfff]/;
+  const TITLE_SCOPE = "h1, h2, h3, .kicker, .rail-title, main a, .catalog a";
+
+  function ensureTitles() {
+    if (titleData) return Promise.resolve(titleData);
+    if (!titlePromise) {
+      titlePromise = fetchJson("data/titles.json")
+        .then(function (data) {
+          titleData = (data && data.titles) || {};
+          titleChars = (data && data.chars) || {};
+          return titleData;
+        })
+        .catch(function () { titlePromise = null; return {}; });
+    }
+    return titlePromise;
+  }
+
+  // 在一串标题文字里找第 index 个字所在的那一段（卷名 · 副题 之类拼起来的标题拆开查）。
+  function titleRecord(text, index) {
+    const data = titleData || {};
+    const chars = Array.from(text);
+    if (data[text]) return { rec: data[text], chars: chars, at: index };
+    let start = 0;
+    const parts = text.split(/(\s*·\s*|\s+|《|》|：|\s*\/\s*)/);
+    for (let i = 0; i < parts.length; i += 1) {
+      const seg = Array.from(parts[i]);
+      if (index < start + seg.length) {
+        const rec = data[parts[i]] || data[parts[i].replace(/[「」『』]/g, "")];
+        if (rec) return { rec: rec, chars: seg, at: index - start };
+        break;
+      }
+      start += seg.length;
+    }
+    return { rec: null, chars: chars, at: index };
+  }
+
+  function titleTok(text, index) {
+    const found = titleRecord(text, index);
+    const chars = found.chars;
+    const ch = chars[found.at] || "";
+    const rec = found.rec;
+    let trad = ch;
+    let syl = "";
+    if (rec) {
+      const tradChars = rec.length > 1 ? Array.from(rec[0]) : chars;
+      const py = String(rec[rec.length - 1] || "").split(" ");
+      if (tradChars.length === chars.length) trad = tradChars[found.at] || ch;
+      if (py.length === chars.length && py[found.at] !== "-") syl = py[found.at] || "";
+    }
+    if (trad === ch && titleChars[ch]) trad = titleChars[ch];
+    return { t: trad, s: ch, py: syl, ctx: "", pos: "", extra: "", level: syl ? "title" : "dict", titleText: text };
+  }
+
+  function charAtPoint(x, y) {
+    let node = null;
+    let offset = 0;
+    if (document.caretRangeFromPoint) {
+      const r = document.caretRangeFromPoint(x, y);
+      if (r) { node = r.startContainer; offset = r.startOffset; }
+    } else if (document.caretPositionFromPoint) {
+      const pos = document.caretPositionFromPoint(x, y);
+      if (pos) { node = pos.offsetNode; offset = pos.offset; }
+    }
+    if (!node || node.nodeType !== 3) return null;
+    const text = node.data;
+    // 光标可能落在字的前后两侧，取真正盖住点击位置的那个字。
+    const tryAt = [offset, offset - 1, offset - 2, offset + 1];
+    for (let i = 0; i < tryAt.length; i += 1) {
+      let k = tryAt[i];
+      if (k < 0 || k >= text.length) continue;
+      let len = 1;
+      const code = text.charCodeAt(k);
+      if (code >= 0xdc00 && code <= 0xdfff && k > 0) { k -= 1; }
+      if (text.charCodeAt(k) >= 0xd800 && text.charCodeAt(k) <= 0xdbff) len = 2;
+      const range = document.createRange();
+      range.setStart(node, k);
+      range.setEnd(node, k + len);
+      const rect = range.getBoundingClientRect();
+      if (x >= rect.left - 1 && x <= rect.right + 1 && y >= rect.top - 2 && y <= rect.bottom + 2) {
+        const glyph = text.slice(k, k + len);
+        if (!TITLE_HAN.test(glyph)) return null;
+        return { node: node, start: k, len: len, glyph: glyph };
+      }
+    }
+    return null;
+  }
+
+  function titleHost(target) {
+    if (!target || !target.closest) return null;
+    if (target.closest(".popup, #popup, .zi, .body, .verse-panel, button.zi, input, textarea, .read-tools, .reading-bar, .account")) return null;
+    const host = target.closest(TITLE_SCOPE);
+    if (!host || !(main.contains(host) || host.closest(".catalog"))) return null;
+    return host;
+  }
+
+  function openTitleChar(host, hit) {
+    // 链接里常把篇名、序号、作者分开排；只取这个字所在的那一段文字。
+    let own = hit.node.parentNode;
+    if (own && own.classList && own.classList.contains("tz")) own = own.parentNode;
+    if (own && own !== host && host.contains(own)) host = own;
+    // 文字在标题里的位置：把前面的文字长度加起来。
+    const walker = document.createTreeWalker(host, NodeFilter.SHOW_TEXT);
+    let before = "";
+    let node = walker.nextNode();
+    while (node && node !== hit.node) { before += node.data; node = walker.nextNode(); }
+    let full = before;
+    while (node) { full += node.data; node = walker.nextNode(); }
+    const index = Array.from(before + hit.node.data.slice(0, hit.start)).length;
+    let anchor = hit.node.parentNode;
+    if (!(anchor && anchor.classList && anchor.classList.contains("tz") && anchor.textContent === hit.glyph)) {
+      const range = document.createRange();
+      range.setStart(hit.node, hit.start);
+      range.setEnd(hit.node, hit.start + hit.len);
+      anchor = document.createElement("span");
+      anchor.className = "tz";
+      range.surroundContents(anchor);
+    }
+    return ensureTitles().then(function () {
+      const tok = titleTok(full, index);
+      openPopup(tok, 0, anchor);
+      anchor.classList.add("on");
+    });
+  }
+
+  let titlePress = null;
+  let titleSuppressUntil = 0;
+  document.addEventListener("pointerdown", function (event) {
+    titlePress = null;
+    if (event.button !== 0 && event.pointerType === "mouse") return;
+    const host = titleHost(event.target);
+    if (!host) return;
+    const link = event.target.closest("a");
+    if (!link) return;
+    const x = event.clientX;
+    const y = event.clientY;
+    titlePress = {
+      x: x, y: y,
+      timer: setTimeout(function () {
+        const hit = charAtPoint(x, y);
+        titlePress = null;
+        if (!hit) return;
+        titleSuppressUntil = Date.now() + 800;
+        if (navigator.vibrate) { try { navigator.vibrate(8); } catch (err) { /* 不支持就算了 */ } }
+        openTitleChar(host, hit);
+      }, 480),
+    };
+  });
+  function cancelTitlePress(event) {
+    if (!titlePress) return;
+    if (event && event.type === "pointermove" && Math.abs(event.clientX - titlePress.x) < 8 && Math.abs(event.clientY - titlePress.y) < 8) return;
+    clearTimeout(titlePress.timer);
+    titlePress = null;
+  }
+  document.addEventListener("pointermove", cancelTitlePress, { passive: true });
+  document.addEventListener("pointerup", cancelTitlePress);
+  document.addEventListener("pointercancel", cancelTitlePress);
+  document.addEventListener("contextmenu", function (event) {
+    if (titleHost(event.target) && event.target.closest("a")) event.preventDefault();
+  });
+  document.addEventListener("click", function (event) {
+    if (Date.now() < titleSuppressUntil) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+    const host = titleHost(event.target);
+    if (!host || event.target.closest("a")) return;
+    if (Date.now() - lastSwipeAt < 450) return;
+    const hit = charAtPoint(event.clientX, event.clientY);
+    if (!hit) return;
+    event.preventDefault();
+    event.stopPropagation();
+    openTitleChar(host, hit);
+  }, true);
 
   document.getElementById("tool-font").addEventListener("click", function () {
     state.progress.font = state.progress.font === "t" ? "s" : "t";

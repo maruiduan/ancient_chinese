@@ -1994,3 +1994,9 @@ table.biao { border-collapse: separate; border-spacing: 0; font-family: var(--se
 /* 长拼音撑开字格：用不可见的同字号拼音占位，拼音仍居中在字上，邻字不再重叠 */
 .reader .body .orig.with-py .zi[data-py]::before { content: attr(data-py); display: block; height: 0; overflow: hidden; visibility: hidden; font-family: var(--py-font); font-weight: 400; font-size: 12px; letter-spacing: 0; white-space: nowrap; padding: 0 2px; }
 @media (min-width: 861px) { .reader .body .orig.with-py .zi[data-py]::before { font-size: 13px; } }
+
+/* 标题点字：外观不变，点中的字和正文一样高亮。 */
+h1, h2, .title, .rail-title { -webkit-tap-highlight-color: transparent; }
+main a, .catalog a { -webkit-touch-callout: none; }
+.tz { border-radius: 4px; transition: background-color .15s, color .15s; }
+.tz.on { background-color: var(--accent-soft); color: var(--accent); }
