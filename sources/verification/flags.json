@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 248,
-        "chars": 121086,
+        "pieces": 255,
+        "chars": 128837,
         "unexpected": "0"
       },
       {
@@ -53,33 +53,33 @@
     "unexpected": [],
     "reviewChars": 17,
     "cacheSingle": 55,
-    "glosses": 12833,
-    "lessonFlags": 159,
-    "missingChars": 428,
-    "missingHits": 745,
+    "glosses": 12943,
+    "lessonFlags": 160,
+    "missingChars": 429,
+    "missingHits": 751,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 6940,
+        "count": 6998,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 2038,
+        "count": 2052,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 1587,
+        "count": 1601,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 243,
+        "count": 244,
         "note": "归并"
       },
       {
@@ -2423,6 +2423,15 @@
       "word": "雨雹",
       "reading": "yù báo",
       "han": "雨→yù（汉典 yǔ）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z17-02",
+      "word": "万石君",
+      "reading": "wàn dàn jūn",
+      "han": "石→dàn（汉典 shí）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     }
   ]
