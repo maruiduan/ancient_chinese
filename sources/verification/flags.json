@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 410,
-        "chars": 292788,
+        "pieces": 412,
+        "chars": 302473,
         "unexpected": "0"
       },
       {
@@ -53,33 +53,33 @@
     "unexpected": [],
     "reviewChars": 17,
     "cacheSingle": 56,
-    "glosses": 15944,
-    "lessonFlags": 226,
-    "missingChars": 553,
-    "missingHits": 997,
+    "glosses": 15992,
+    "lessonFlags": 227,
+    "missingChars": 559,
+    "missingHits": 1007,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 7983,
+        "count": 8035,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 2547,
+        "count": 2562,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 1980,
+        "count": 2005,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 340,
+        "count": 341,
         "note": "归并"
       },
       {
@@ -103,7 +103,7 @@
       {
         "trad": "裡",
         "simp": "里",
-        "count": 18,
+        "count": 19,
         "note": "归并"
       },
       {
@@ -3037,6 +3037,15 @@
       "reading": "suì",
       "han": "队→suì（汉典 duì、zhuì）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "loan",
+      "where": "通假",
+      "id": "z39-02",
+      "word": "邪",
+      "reading": "揶",
+      "han": "http://wyw.hwxnet.com/view/hwxe9hwx82hwxaa.html",
+      "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
     }
   ]
 }
