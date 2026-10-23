@@ -4,7 +4,7 @@
 正文对照仓库里的底本缓存，不是现场去抓网页：
 
 - 古文观止：sources/wikisource/vol01–12.wikitext（维基文库）
-- 资治通鉴卷一至卷四十三：sources/zztj/juan01–43.wikitext（维基文库）
+- 资治通鉴卷一至卷四十四：sources/zztj/juan01–44.wikitext（维基文库）
 - 人间词话六十四则：sources/renjian/guocui-juan-shang.wikitext（维基文库）
 - 唐诗、宋词：sources/poetry/canonical.json
   （chinese-poetry 指定 commit 的选篇缓存）
@@ -263,7 +263,7 @@ def translation_ref(collection: str) -> dict:
 def audit_simplified() -> tuple[list[dict], list[dict]]:
     """简体按《简化字总表》的通行归并核，不把 OpenCC 整篇结果当定本。
 
-    中华书局简体古籍通常：雲后裏只余于征归并；乾（qián）、乐律徵、樊於期、神祇不归并。
+    中华书局简体古籍通常：雲后裏只余于征归并；乾（qián）、乐律徵、樊於期、神祇、地祇不归并。
     馀的正条是余，附注说可能混淆时可用馀。没有中华书局该书，馀不改成馀字。
     """
     from collections import Counter
@@ -314,7 +314,7 @@ def audit_simplified() -> tuple[list[dict], list[dict]]:
                 problems.append({"id": art["id"], "detail": "流徵被简成流征"})
             elif src == "祇" and dst == "只" and prev == "神":
                 problems.append({"id": art["id"], "detail": "神祇被简成神只"})
-            elif src == "祇" and dst == "祇" and prev != "神":
+            elif src == "祇" and dst == "祇" and prev not in ("神", "地"):
                 problems.append({"id": art["id"], "detail": "祇没有作只"})
             elif src == "乾" and dst not in ("乾", "干"):
                 problems.append({"id": art["id"], "detail": "乾简成了%s" % dst})
@@ -343,8 +343,8 @@ def audit_simplified() -> tuple[list[dict], list[dict]]:
         ("禕", "祎"): "费祎。不从 OpenCC 把褘收成袆",
         ("隻", "只"): "归并",
         ("幹", "干"): "归并",
-        ("祇", "只"): "只辱。神祇不在此列",
-        ("祇", "祇"): "神祇保留祇",
+        ("祇", "只"): "只辱。神祇、地祇不在此列",
+        ("祇", "祇"): "神祇、地祇保留祇",
     }
     rows = []
     for key, num in sorted(counts.items(), key=lambda item: (-item[1], item[0])):
