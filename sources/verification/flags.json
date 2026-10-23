@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 472,
-        "chars": 362516,
+        "pieces": 479,
+        "chars": 370256,
         "unexpected": "0"
       },
       {
@@ -53,33 +53,33 @@
     "unexpected": [],
     "reviewChars": 17,
     "cacheSingle": 57,
-    "glosses": 17280,
-    "lessonFlags": 247,
-    "missingChars": 641,
-    "missingHits": 1171,
+    "glosses": 17427,
+    "lessonFlags": 248,
+    "missingChars": 653,
+    "missingHits": 1189,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 8422,
+        "count": 8483,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 2726,
+        "count": 2741,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 2154,
+        "count": 2180,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 364,
+        "count": 367,
         "note": "归并"
       },
       {
@@ -91,13 +91,13 @@
       {
         "trad": "乾",
         "simp": "干",
-        "count": 37,
+        "count": 38,
         "note": "干燥作干"
       },
       {
         "trad": "裡",
         "simp": "里",
-        "count": 27,
+        "count": 30,
         "note": "归并"
       },
       {
@@ -109,7 +109,7 @@
       {
         "trad": "幹",
         "simp": "干",
-        "count": 15,
+        "count": 18,
         "note": "归并"
       },
       {
@@ -3235,6 +3235,15 @@
       "word": "峤",
       "reading": "jiào",
       "han": "峤→jiào（汉典 qiáo）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z47-06",
+      "word": "阏氏",
+      "reading": "yān zhī",
+      "han": "阏→yān（汉典 è）；氏→zhī（汉典 shì）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     }
   ]
