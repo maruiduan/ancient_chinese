@@ -17,7 +17,7 @@ def upload_command(site: Path, relative: str, destination: str) -> list[str]:
     path = site / relative
     hashed = bool(re.search(r"\.[0-9a-f]{12}\.[A-Za-z0-9]+$", path.name))
     cache = "public, max-age=31536000, immutable" if hashed else "no-cache, must-revalidate"
-    types = {".js": "text/javascript", ".json": "application/json", ".ogg": "audio/ogg"}
+    types = {".js": "application/javascript", ".json": "application/json", ".ogg": "audio/ogg"}
     content_type = types.get(path.suffix) or mimetypes.guess_type(path.name)[0] or "application/octet-stream"
     if content_type.startswith("text/") or content_type == "application/json":
         content_type += "; charset=utf-8"
