@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 463,
-        "chars": 354465,
+        "pieces": 472,
+        "chars": 362516,
         "unexpected": "0"
       },
       {
@@ -53,33 +53,33 @@
     "unexpected": [],
     "reviewChars": 17,
     "cacheSingle": 57,
-    "glosses": 17094,
-    "lessonFlags": 243,
-    "missingChars": 637,
-    "missingHits": 1154,
+    "glosses": 17280,
+    "lessonFlags": 247,
+    "missingChars": 641,
+    "missingHits": 1171,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 8370,
+        "count": 8422,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 2704,
+        "count": 2726,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 2136,
+        "count": 2154,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 361,
+        "count": 364,
         "note": "归并"
       },
       {
@@ -95,15 +95,21 @@
         "note": "干燥作干"
       },
       {
+        "trad": "裡",
+        "simp": "里",
+        "count": 27,
+        "note": "归并"
+      },
+      {
         "trad": "裏",
         "simp": "里",
         "count": 25,
         "note": "归并"
       },
       {
-        "trad": "裡",
-        "simp": "里",
-        "count": 24,
+        "trad": "幹",
+        "simp": "干",
+        "count": 15,
         "note": "归并"
       },
       {
@@ -111,12 +117,6 @@
         "simp": "祇",
         "count": 13,
         "note": "神祇、地祇保留祇"
-      },
-      {
-        "trad": "幹",
-        "simp": "干",
-        "count": 9,
-        "note": "归并"
       },
       {
         "trad": "乾",
@@ -3199,6 +3199,42 @@
       "word": "龟",
       "reading": "qiū",
       "han": "龟→qiū（汉典 guī、jūn）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z46-05",
+      "word": "氏",
+      "reading": "zhī",
+      "han": "氏→zhī（汉典 shì）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z46-05",
+      "word": "番",
+      "reading": "pān",
+      "han": "番→pān（汉典 fān）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z46-07",
+      "word": "厌",
+      "reading": "yā",
+      "han": "厌→yā（汉典 yàn）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z46-08",
+      "word": "峤",
+      "reading": "jiào",
+      "han": "峤→jiào（汉典 qiáo）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     }
   ]
