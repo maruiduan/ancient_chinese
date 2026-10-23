@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 314,
-        "chars": 176188,
+        "pieces": 321,
+        "chars": 184939,
         "unexpected": "0"
       },
       {
@@ -53,39 +53,39 @@
     "unexpected": [],
     "reviewChars": 17,
     "cacheSingle": 55,
-    "glosses": 14111,
-    "lessonFlags": 195,
-    "missingChars": 462,
-    "missingHits": 826,
+    "glosses": 14267,
+    "lessonFlags": 200,
+    "missingChars": 466,
+    "missingHits": 834,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 7297,
+        "count": 7347,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 2171,
+        "count": 2197,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 1760,
+        "count": 1785,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 258,
+        "count": 263,
         "note": "归并"
       },
       {
         "trad": "徵",
         "simp": "征",
-        "count": 142,
+        "count": 149,
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
@@ -2747,6 +2747,51 @@
       "word": "阳",
       "reading": "佯",
       "han": "http://wyw.hwxnet.com/view/hwxe9hwx98hwxb3.html",
+      "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "reading",
+      "where": "虚词",
+      "id": "z24-01",
+      "word": "卒",
+      "reading": "cù",
+      "han": "卒→cù（汉典 zú、cǜ）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "loan",
+      "where": "通假",
+      "id": "z24-04",
+      "word": "与",
+      "reading": "豫",
+      "han": "http://wyw.hwxnet.com/view/hwxe4hwxb8hwx8e.html",
+      "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "loan",
+      "where": "通假",
+      "id": "z24-04",
+      "word": "卤",
+      "reading": "虏",
+      "han": "http://wyw.hwxnet.com/view/hwxe5hwx8dhwxa4.html",
+      "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "loan",
+      "where": "通假",
+      "id": "z24-07",
+      "word": "填",
+      "reading": "镇",
+      "han": "http://wyw.hwxnet.com/view/hwxe5hwxa1hwxab.html",
+      "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "loan",
+      "where": "通假",
+      "id": "z24-07",
+      "word": "寝",
+      "reading": "浸",
+      "han": "http://wyw.hwxnet.com/view/hwxe5hwxafhwx9d.html",
       "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
     }
   ]
