@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 559,
-        "chars": 446346,
+        "pieces": 568,
+        "chars": 454532,
         "unexpected": "0"
       },
       {
@@ -53,33 +53,33 @@
     "unexpected": [],
     "reviewChars": 17,
     "cacheSingle": 57,
-    "glosses": 19082,
-    "lessonFlags": 268,
-    "missingChars": 744,
-    "missingHits": 1393,
+    "glosses": 19273,
+    "lessonFlags": 271,
+    "missingChars": 751,
+    "missingHits": 1412,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 8956,
+        "count": 9012,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 2934,
+        "count": 2947,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 2397,
+        "count": 2415,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 402,
+        "count": 406,
         "note": "归并"
       },
       {
@@ -89,16 +89,16 @@
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
-        "trad": "裡",
-        "simp": "里",
-        "count": 38,
-        "note": "归并"
-      },
-      {
         "trad": "乾",
         "simp": "干",
         "count": 37,
         "note": "干燥作干"
+      },
+      {
+        "trad": "裡",
+        "simp": "里",
+        "count": 33,
+        "note": "归并"
       },
       {
         "trad": "裏",
@@ -121,7 +121,7 @@
       {
         "trad": "祇",
         "simp": "祇",
-        "count": 13,
+        "count": 14,
         "note": "神祇、地祇保留祇"
       },
       {
@@ -3425,6 +3425,33 @@
       "reading": "yàng",
       "han": "养→yàng（汉典 yǎng）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "虚词",
+      "id": "z57-04",
+      "word": "而已",
+      "reading": "éryǐ",
+      "han": "",
+      "detail": "读音音节数和字数不一致，无法逐字对照汉典。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "虚词",
+      "id": "z57-06",
+      "word": "若乃",
+      "reading": "ruònǎi",
+      "han": "",
+      "detail": "读音音节数和字数不一致，无法逐字对照汉典。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "虚词",
+      "id": "z57-08",
+      "word": "既而",
+      "reading": "jì'ér",
+      "han": "",
+      "detail": "读音音节数和字数不一致，无法逐字对照汉典。未改课注。"
     }
   ]
 }
