@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 544,
-        "chars": 421315,
+        "pieces": 551,
+        "chars": 429652,
         "unexpected": "0"
       },
       {
@@ -53,45 +53,45 @@
     "unexpected": [],
     "reviewChars": 17,
     "cacheSingle": 57,
-    "glosses": 18697,
-    "lessonFlags": 260,
-    "missingChars": 723,
-    "missingHits": 1345,
+    "glosses": 18858,
+    "lessonFlags": 261,
+    "missingChars": 733,
+    "missingHits": 1367,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 8818,
+        "count": 8852,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 2880,
+        "count": 2898,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 2316,
+        "count": 2345,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 380,
+        "count": 395,
         "note": "归并"
       },
       {
         "trad": "徵",
         "simp": "征",
-        "count": 224,
+        "count": 225,
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
         "trad": "裡",
         "simp": "里",
-        "count": 39,
+        "count": 43,
         "note": "归并"
       },
       {
@@ -109,7 +109,7 @@
       {
         "trad": "幹",
         "simp": "干",
-        "count": 19,
+        "count": 20,
         "note": "归并"
       },
       {
@@ -131,16 +131,16 @@
         "note": "只辱。神祇、地祇不在此列"
       },
       {
+        "trad": "隻",
+        "simp": "只",
+        "count": 5,
+        "note": "归并"
+      },
+      {
         "trad": "於",
         "simp": "於",
         "count": 4,
         "note": "樊於期保留於"
-      },
-      {
-        "trad": "隻",
-        "simp": "只",
-        "count": 4,
-        "note": "归并"
       },
       {
         "trad": "禕",
@@ -3352,6 +3352,15 @@
       "word": "龟",
       "reading": "qiū",
       "han": "龟→qiū（汉典 guī、jūn）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "虚词",
+      "id": "z54-01",
+      "word": "卒",
+      "reading": "cù",
+      "han": "卒→cù（汉典 zú、cǜ）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     }
   ]
