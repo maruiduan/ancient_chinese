@@ -731,11 +731,25 @@
     return null;
   }
 
+  function signedInUserId() {
+    try {
+      const token = localStorage.getItem("gwgz-session-v1") || "";
+      const userId = localStorage.getItem("gwgz-user-v1") || "";
+      if (!token || !/^[a-f0-9]{32}$/.test(userId)) return "";
+      return userId;
+    } catch (err) {
+      return "";
+    }
+  }
+
   function trackPageview(hash) {
     try {
       const path = analyticsPath(hash);
       if (!path || path === trackPageview.last) return;
-      (window._hmt = window._hmt || []).push(["_trackPageview", path]);
+      const userId = signedInUserId();
+      const hmt = (window._hmt = window._hmt || []);
+      if (userId) hmt.push(["_setUserId", userId]);
+      hmt.push(["_trackPageview", path]);
       trackPageview.last = path;
     } catch (err) {}
   }
