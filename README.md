@@ -25,8 +25,8 @@ python3 -m http.server 8765 --directory /tmp/dianji-preview
 
 ## 验证和发布
 
-GitHub Pages 的 Source 必须设为 **GitHub Actions**（`build_type=workflow`），不能停在 Deploy from a branch。设置在仓库 Settings → Pages → Build and deployment → Source，选 GitHub Actions（选中即生效，没有单独的 Save）。否则 `pages-build-deployment` 仍会把 `master` 原文直接发出去，和审计发布抢同一个站点。
-`Audit and release` 在 `master` 上先执行 Python、Node 回归和三项内容审计，再生成并校验同一份打过戳的站点产物。读取上一版公开 Pages 时，如果下载过程中站点被换掉，会等到这一版稳定后再继续，然后才发布。只有审计成功才发布：Pages 用 `configure-pages`、`upload-pages-artifact` 和 `deploy-pages`，OSS 上传同一份产物。两边都和这份产物逐字节核对，最后再确认两个公开 `version.json` 是同一个 build。`codex/reader-fixes-*` 分支仅运行检查和打包，不发布；PR 同样只检查。工作流不再修改或回推源码。
+正式站点只发布到阿里云 OSS（`guwen.lucca.top`）；GitHub Pages 已停用，不再作为发布目标。
+`Audit and release` 在 `master` 上先执行 Python、Node 回归和三项内容审计，再生成并校验同一份打过戳的站点产物。读取上一版公开 OSS（`https://guwen.lucca.top/`）时，如果下载过程中站点被换掉，会等到这一版稳定后再继续，然后才发布。只有审计成功才把同一份产物上传到 OSS，并与公开字节逐一核对。`codex/reader-fixes-*` 分支仅运行检查和打包，不发布；PR 同样只检查。工作流不再修改或回推源码。
 
 ```bash
 python3 -m pip install -r requirements-dev.txt
@@ -42,7 +42,7 @@ Python 依赖版本锁定在 `requirements-dev.txt`；CI 使用 Python 3.12 和 
 
 `stage_site.py` 只写新的输出目录，校验哈希、入口引用、文章目录和音频 manifest 中的真实录音。OSS 先完成全部资源上传，再依次上传首页和 `version.json`；任何资源失败都不会切换入口，旧远端哈希不删除。音频缺失时显示“暂无录音”，不生成虚构音频。
 
-Pages 产物保留**上一版成功发布的活动哈希资源**，不递归积累更早版本。发布前从公开 Pages 入口读取当前版本、资源映射及真实资源，逐文件验证 SHA-256，并再次检查版本以防下载期间发生切换；不读取或扩展任何凭据权限。第一次迁移若没有公开版本文件，则使用 checkout 的活动哈希。仅在哈希一致时，才能从真实 canonical 文件恢复 checkout 中缺失的哈希副本。`compatibility.json` 记录兼容版本和文件列表，审核产物保留 90 天供追溯。
+发布产物保留**上一版成功发布的活动哈希资源**，不递归积累更早版本。发布前从公开 OSS 入口读取当前版本、资源映射及真实资源，逐文件验证 SHA-256，并再次检查版本以防下载期间发生切换；不读取或扩展任何凭据权限。第一次迁移若没有公开版本文件，则使用 checkout 的活动哈希。仅在哈希一致时，才能从真实 canonical 文件恢复 checkout 中缺失的哈希副本。`compatibility.json` 记录兼容版本和文件列表，审核产物保留 90 天供追溯。
 
 本地复现两版兼容：
 
@@ -97,4 +97,4 @@ python3 scripts/stage_site.py /tmp/site-next --previous-site /tmp/site-previous
 
 这个仓库原来是一套古代汉语词典爬虫。它和现在的学习站点不是同一件事，所以整目录移到了 `legacy/`，没有在它上面继续改。词典改用 Apache-2.0 的《说文》开源数据。
 
-发布后 CI 会从公开 Pages 和 OSS 逐一读取入口、版本、哈希资源（含兼容窗口内旧资源）及录音样本，与通过审计的产物逐字节摘要比较。此检查不发送凭据，也不替代真实浏览器的视觉和交互验收。每次审计另产出 `repair-patches-*` 下载包，包含固定基准补丁、应用检查和 SHA256SUMS。
+发布后 CI 会从公开 OSS 逐一读取入口、版本、哈希资源（含兼容窗口内旧资源）及录音样本，与通过审计的产物逐字节摘要比较。此检查不发送凭据，也不替代真实浏览器的视觉和交互验收。每次审计另产出 `repair-patches-*` 下载包，包含固定基准补丁、应用检查和 SHA256SUMS。

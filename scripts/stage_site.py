@@ -110,6 +110,6 @@ def stage(output: Path, previous_site: Path | None = None) -> None:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("output", type=Path)
-    parser.add_argument("--previous-site", type=Path, help="previous successful Pages artifact; retain its active hashes")
+    parser.add_argument("--previous-site", type=Path, help="previous successful public OSS artifact; retain its active hashes")
     args = parser.parse_args()
     stage(args.output, args.previous_site)
