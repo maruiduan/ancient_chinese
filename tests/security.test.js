@@ -147,6 +147,16 @@ test('the static homepage reports only its canonical path without reading visito
   assert.match(html, /https:\/\/guwen\.lucca\.top\/stats\.html/);
 });
 
+
+test('guwen entry has viewport-fit, color-scheme, and share meta', () => {
+  const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+  assert.match(html, /viewport-fit=cover/);
+  assert.match(html, /color-scheme/);
+  assert.match(html, /og:title/);
+  assert.match(html, /canonical/);
+  assert.equal(html.includes('已上线'), false);
+});
+
 test('lucca homepage lists live modules without 已上线 badges', () => {
   const html = fs.readFileSync(path.join(root, 'www/index.html'), 'utf8');
   assert.match(html, /guwen\.lucca\.top/);
