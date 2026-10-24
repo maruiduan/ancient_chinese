@@ -349,6 +349,35 @@ h1 {
   .book-list { grid-template-columns: repeat(4, 1fr); }
 }
 .orig-sent { display: inline; }
+.body.prose:not(.sentence) .sent-unit { display: inline; }
+.body.prose:not(.sentence) .sent-unit.gloss-open {
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.body.prose:not(.sentence) .sent-gloss { display: none; text-indent: 0; }
+.body.prose:not(.sentence) .sent-unit.gloss-open .sent-gloss {
+  display: block;
+  margin: 0.4em 0 0.75em;
+  padding: 0.2em 0 0.15em 0.7em;
+  border-left: 2px solid var(--accent);
+  background: var(--surface);
+  color: var(--ink-soft);
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  line-height: 1.75;
+  letter-spacing: 0.02em;
+  text-indent: 0;
+}
+.body.prose:not(.sentence) .sent-gloss i {
+  display: block;
+  margin: 0 0 0.12em;
+  font-style: normal;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  color: var(--accent);
+}
+.body.prose:not(.sentence) .sent-unit .punct.sent-tap { cursor: pointer; }
 .verse-text { position: relative; }
 .famous-phrase {
   display: inline;
@@ -1905,6 +1934,7 @@ h1 { font-weight: 600; letter-spacing: 0.06em; }
 @font-face{font-family:"GW Serif";font-weight:400;font-display:swap;src:url(fonts/xcz/serif-400-214.woff2) format("woff2");unicode-range:U+4908,U+4F37,U+5EDB,U+631D,U+64BE,U+6B3B,U+6BD6,U+7A91,U+97D9,U+97EA}
 @font-face{font-family:"GW Serif";font-weight:400;font-display:swap;src:url(fonts/xcz/serif-400-215.woff2) format("woff2");unicode-range:U+396A,U+3B59,U+5095,U+5588,U+5F63,U+6047,U+617A,U+6229,U+7168,U+8110,U+81CD,U+8A29,U+8BBB}
 @font-face{font-family:"GW Serif";font-weight:400;font-display:swap;src:url(fonts/xcz/serif-400-216.woff2) format("woff2");unicode-range:U+414C,U+43F0,U+7399,U+74A0,U+74B5,U+7600,U+8920,U+89A1,U+89CB,U+266A7}
+@font-face{font-family:"GW Serif";font-weight:400;font-display:swap;src:url(fonts/xcz/serif-400-217.woff2) format("woff2");unicode-range:U+506D}
 :root, :root[data-theme="light"] {
   color-scheme: light;
   --bg: #ffffff; --surface: #ffffff; --ink: #1a1a1a; --ink-soft: #4d4d4d; --muted: #999999;
