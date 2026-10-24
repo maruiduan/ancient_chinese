@@ -3,6 +3,8 @@
 
   var API = String(window.API_BASE || "").replace(/\/$/, "");
   var TOKEN_KEY = "gwgz-session-v1";
+  var USER_KEY = "gwgz-user-v1";
+  var tongjiUserId = "";
   var enabled = false;
   var queue = [];
   var flushTimer = 0;
@@ -23,6 +25,37 @@
 
   function clearToken() {
     try { localStorage.removeItem(TOKEN_KEY); } catch (_) {}
+    clearTongjiUser();
+  }
+
+  function validUserId(value) {
+    return typeof value === "string" && /^[a-f0-9]{32}$/.test(value) ? value : "";
+  }
+
+  function readUser() {
+    try { return localStorage.getItem(USER_KEY) || ""; } catch (_) { return ""; }
+  }
+
+  function hmtPush(command, value) {
+    (window._hmt = window._hmt || []).push([command, value]);
+  }
+
+  function rememberUser(userId) {
+    var id = validUserId(userId);
+    if (!id || !token()) return;
+    try { localStorage.setItem(USER_KEY, id); } catch (_) {}
+    if (tongjiUserId === id) return;
+    tongjiUserId = id;
+    hmtPush("_setUserId", id);
+  }
+
+  function clearTongjiUser() {
+    var previous = tongjiUserId;
+    var stored = validUserId(readUser());
+    tongjiUserId = "";
+    try { localStorage.removeItem(USER_KEY); } catch (_) {}
+    if (!previous && !stored) return;
+    hmtPush("_setUserId", "");
   }
 
   function request(method, path, body) {
@@ -216,6 +249,7 @@
         go.disabled = true;
         request("POST", "/auth/verify", { email: email.value, code: code.value }).then(function (data) {
           try { localStorage.setItem(TOKEN_KEY, data.token); } catch (_) {}
+          rememberUser(data && data.userId);
           refreshEntry();
           pullHistory();
           location.hash = "#/me";
@@ -299,7 +333,7 @@
         "未登录时，打开篇目和查字都不会上传。最近阅读和已读标记也只留在这台设备上。登录之后，这两项会同步到你的账号，同一篇以较新的时间为准。",
         "登录之后，才会记下两类行为：打开了哪一篇（page_view），以及查了哪个字（char_lookup）。这些记录先暂存在页面里，再成批发给服务器，只挂在你的账号下。",
         "账号和行为数据存放在阿里云香港的函数计算和表格存储。邮件从邮件推送发出，发信域名是 mail.lucca.top。",
-        "这些资料不出售，也不用来发广告。网站另有百度统计和不蒜子的访问计数，与账号无关。",
+        "这些资料不出售，也不用来发广告。网站另有百度统计和不蒜子的访问计数。登录后，百度统计会收到这个账号的用户编号，用来区分登录和未登录的浏览，不含邮箱。",
         "在「我的」里删除账号后，云端的用户、会话、验证码、行为记录和阅读记录会删除。浏览器里的本地阅读进度需要你自己清除。",
       ]);
     });
@@ -388,7 +422,13 @@
       var id = pieceFromHash();
       if (id) track({ type: "page_view", pieceId: id });
     }
-    if (token()) pullHistory();
+    if (token()) {
+      rememberUser(readUser());
+      pullHistory();
+      request("GET", "/me").then(function (data) {
+        if (token()) rememberUser(data && data.userId);
+      }).catch(function () {});
+    }
   }
 
   document.addEventListener("visibilitychange", function () {

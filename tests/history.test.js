@@ -102,11 +102,19 @@ function bootAccount(options) {
     location: { hash: options.hash || "#/" },
     fetch(url, init) {
       fetches.push({ url: url, method: init.method, body: init.body, headers: init.headers });
-      const status = options.status || 200;
+      let status = options.status || 200;
+      let body = options.reply || { recent: [], read: {} };
+      if (typeof options.route === "function") {
+        const routed = options.route(url, init);
+        if (routed) {
+          if (routed.status) status = routed.status;
+          if (Object.prototype.hasOwnProperty.call(routed, "body")) body = routed.body;
+        }
+      }
       return Promise.resolve({
         ok: status >= 200 && status < 300,
         status: status,
-        json() { return Promise.resolve(options.reply || { recent: [], read: {} }); },
+        json() { return Promise.resolve(body); },
       });
     },
     setTimeout(fn) { later.push(fn); return later.length; },
@@ -114,7 +122,7 @@ function bootAccount(options) {
     console: { error() {}, log() {} },
   });
   vm.runInContext(fs.readFileSync(path.join(__dirname, "../js/account.js"), "utf8"), context, { filename: "js/account.js" });
-  return { fetches: fetches, applied: applied, later: later, window: window };
+  return { fetches: fetches, applied: applied, later: later, window: window, storage: storage };
 }
 
 test("logged-out account code does not request reading state", () => {
@@ -123,6 +131,7 @@ test("logged-out account code does not request reading state", () => {
   booted.window.gwgzAccount.onHistory();
   assert.equal(booted.fetches.length, 0);
   assert.equal(booted.later.length, 0);
+  assert.equal(booted.window._hmt, undefined);
 });
 
 test("a stored token pulls state and a later change pushes the local snapshot", async () => {
@@ -141,18 +150,231 @@ test("a stored token pulls state and a later change pushes the local snapshot", 
   });
   await new Promise(function (resolve) { setImmediate(resolve); });
   await new Promise(function (resolve) { setImmediate(resolve); });
-  assert.equal(booted.fetches.length, 1);
+  assert.equal(booted.fetches.length, 2);
   assert.equal(booted.fetches[0].method, "GET");
   assert.equal(booted.fetches[0].url, "https://api.lucca.top/state");
   assert.equal(booted.fetches[0].headers.Authorization, "Bearer token-1");
+  assert.equal(booted.fetches[1].method, "GET");
+  assert.equal(booted.fetches[1].url, "https://api.lucca.top/me");
   assert.equal(applied.length, 1);
   assert.equal(applied[0].recent[0].id, "ci:sumu");
+  assert.equal(booted.window._hmt, undefined);
   assert.equal(booted.later.length, 1);
   booted.later[0]();
   await new Promise(function (resolve) { setImmediate(resolve); });
   await new Promise(function (resolve) { setImmediate(resolve); });
-  assert.equal(booted.fetches.length, 2);
-  assert.equal(booted.fetches[1].method, "PUT");
-  assert.equal(booted.fetches[1].url, "https://api.lucca.top/state");
-  assert.equal(JSON.parse(booted.fetches[1].body).recent[0].id, "v01-01");
+  assert.equal(booted.fetches.length, 3);
+  assert.equal(booted.fetches[2].method, "PUT");
+  assert.equal(booted.fetches[2].url, "https://api.lucca.top/state");
+  assert.equal(JSON.parse(booted.fetches[2].body).recent[0].id, "v01-01");
+});
+
+const TONGJI_USER = "0123456789abcdef0123456789abcdef";
+
+function flushSoon() {
+  return new Promise(function (resolve) { setImmediate(resolve); });
+}
+
+test("session restore publishes the /me userId and never the email", async () => {
+  const booted = bootAccount({
+    apiBase: "https://api.lucca.top",
+    storage: { "gwgz-session-v1": "token-1" },
+    route(url) {
+      if (url.endsWith("/me")) return { body: { email: "a@example.com", userId: TONGJI_USER } };
+      return null;
+    },
+  });
+  assert.equal(booted.window._hmt, undefined);
+  await flushSoon();
+  await flushSoon();
+  assert.equal(booted.storage.get("gwgz-user-v1"), TONGJI_USER);
+  assert.deepEqual(JSON.parse(JSON.stringify(booted.window._hmt)), [["_setUserId", TONGJI_USER]]);
+  assert.equal(JSON.stringify(booted.window._hmt).includes("a@example.com"), false);
+});
+
+test("a stored user id is sent before /me returns and is not repeated", async () => {
+  const booted = bootAccount({
+    apiBase: "https://api.lucca.top",
+    storage: { "gwgz-session-v1": "token-1", "gwgz-user-v1": TONGJI_USER },
+    route(url) {
+      if (url.endsWith("/me")) return { body: { email: "a@example.com", userId: TONGJI_USER } };
+      return null;
+    },
+  });
+  assert.deepEqual(JSON.parse(JSON.stringify(booted.window._hmt)), [["_setUserId", TONGJI_USER]]);
+  await flushSoon();
+  await flushSoon();
+  assert.deepEqual(JSON.parse(JSON.stringify(booted.window._hmt)), [["_setUserId", TONGJI_USER]]);
+});
+
+test("email and missing user ids are not sent to Tongji", async () => {
+  const emailId = bootAccount({
+    apiBase: "https://api.lucca.top",
+    storage: { "gwgz-session-v1": "token-1" },
+    route(url) {
+      if (url.endsWith("/me")) return { body: { email: "a@example.com", userId: "a@example.com" } };
+      return null;
+    },
+  });
+  await flushSoon();
+  await flushSoon();
+  assert.equal(emailId.window._hmt, undefined);
+  assert.equal(emailId.storage.has("gwgz-user-v1"), false);
+
+  const missing = bootAccount({
+    apiBase: "https://api.lucca.top",
+    storage: { "gwgz-session-v1": "token-1" },
+    route(url) {
+      if (url.endsWith("/me")) return { body: { email: "a@example.com" } };
+      return null;
+    },
+  });
+  await flushSoon();
+  await flushSoon();
+  assert.equal(missing.window._hmt, undefined);
+  assert.equal(missing.storage.has("gwgz-user-v1"), false);
+});
+
+test("a rejected session clears the Tongji user id", async () => {
+  const booted = bootAccount({
+    apiBase: "https://api.lucca.top",
+    storage: { "gwgz-session-v1": "token-1", "gwgz-user-v1": TONGJI_USER },
+    route(url) {
+      if (url.endsWith("/me")) return { status: 401, body: { error: "请先登录" } };
+      return null;
+    },
+  });
+  await flushSoon();
+  await flushSoon();
+  assert.equal(booted.storage.has("gwgz-session-v1"), false);
+  assert.equal(booted.storage.has("gwgz-user-v1"), false);
+  assert.deepEqual(JSON.parse(JSON.stringify(booted.window._hmt)), [
+    ["_setUserId", TONGJI_USER],
+    ["_setUserId", ""],
+  ]);
+});
+
+function walkClicks(node, out) {
+  if (!node || typeof node !== "object") return;
+  if (node.listeners && node.listeners.click) out.push(node);
+  const children = node.children || [];
+  for (let i = 0; i < children.length; i += 1) walkClicks(children[i], out);
+}
+
+function pageAccount(options) {
+  const fetches = [];
+  const storage = new Map(Object.entries(options.storage || {}));
+  const location = { hash: options.hash || "#/" };
+  const main = { children: [], replaceChildren(node) { this.children = [node]; } };
+  function make() {
+    return {
+      children: [],
+      style: {},
+      hidden: false,
+      listeners: {},
+      appendChild(child) { this.children.push(child); return child; },
+      addEventListener(type, fn) {
+        this.listeners[type] = this.listeners[type] || [];
+        this.listeners[type].push(fn);
+      },
+      setAttribute() {},
+      focus() {},
+    };
+  }
+  const window = {
+    API_BASE: "https://api.lucca.top",
+    _hmt: [],
+    addEventListener() {},
+    confirm() { return false; },
+  };
+  const document = {
+    title: "",
+    addEventListener() {},
+    querySelector() { return null; },
+    getElementById(id) { return id === "main" ? main : null; },
+    createElement: make,
+    createTextNode() { return { textContent: "" }; },
+  };
+  const context = vm.createContext({
+    window: window,
+    document: document,
+    location: location,
+    localStorage: {
+      getItem(key) { return storage.has(key) ? storage.get(key) : ""; },
+      setItem(key, value) { storage.set(key, String(value)); },
+      removeItem(key) { storage.delete(key); },
+    },
+    fetch(url) {
+      fetches.push(url);
+      const found = options.onFetch(url) || {};
+      const status = found.status || 200;
+      return Promise.resolve({
+        ok: status >= 200 && status < 300,
+        status: status,
+        json() { return Promise.resolve(found.body || {}); },
+      });
+    },
+    setTimeout() { return 0; },
+    clearTimeout() {},
+    console: { error() {}, log() {} },
+  });
+  vm.runInContext(fs.readFileSync(path.join(__dirname, "../js/account.js"), "utf8"), context, { filename: "js/account.js" });
+  return { fetches: fetches, storage: storage, window: window, main: main, location: location };
+}
+
+function clickNamed(root, text) {
+  const found = [];
+  walkClicks(root, found);
+  const node = found.find(function (item) { return item.textContent === text; });
+  assert.ok(node, text);
+  node.listeners.click[0]();
+}
+
+test("login sets the Tongji user id and logout clears it", async () => {
+  const booted = pageAccount({
+    hash: "#/login",
+    onFetch(url) {
+      if (url.endsWith("/auth/verify")) return { body: { token: "tok-1", email: "a@example.com", userId: TONGJI_USER } };
+      if (url.endsWith("/auth/logout")) return { body: { ok: true } };
+      if (url.endsWith("/me")) return { body: { email: "a@example.com", userId: TONGJI_USER } };
+      return { body: { recent: [], read: {} } };
+    },
+  });
+  assert.deepEqual(booted.window._hmt, []);
+  clickNamed(booted.main, "登录");
+  await flushSoon();
+  await flushSoon();
+  assert.equal(booted.storage.get("gwgz-session-v1"), "tok-1");
+  assert.equal(booted.storage.get("gwgz-user-v1"), TONGJI_USER);
+  assert.deepEqual(JSON.parse(JSON.stringify(booted.window._hmt)), [["_setUserId", TONGJI_USER]]);
+  assert.equal(JSON.stringify(booted.window._hmt).includes("@"), false);
+
+  booted.window.gwgzAccount.route("#/me");
+  await flushSoon();
+  clickNamed(booted.main, "退出登录");
+  await flushSoon();
+  await flushSoon();
+  assert.equal(booted.storage.has("gwgz-session-v1"), false);
+  assert.equal(booted.storage.has("gwgz-user-v1"), false);
+  assert.equal(booted.location.hash, "#/login");
+  assert.deepEqual(JSON.parse(JSON.stringify(booted.window._hmt)), [
+    ["_setUserId", TONGJI_USER],
+    ["_setUserId", ""],
+  ]);
+});
+
+test("login without a userId does not invent one", async () => {
+  const booted = pageAccount({
+    hash: "#/login",
+    onFetch(url) {
+      if (url.endsWith("/auth/verify")) return { body: { token: "tok-1", email: "a@example.com" } };
+      return { body: {} };
+    },
+  });
+  clickNamed(booted.main, "登录");
+  await flushSoon();
+  await flushSoon();
+  assert.equal(booted.storage.get("gwgz-session-v1"), "tok-1");
+  assert.equal(booted.storage.has("gwgz-user-v1"), false);
+  assert.deepEqual(booted.window._hmt, []);
 });

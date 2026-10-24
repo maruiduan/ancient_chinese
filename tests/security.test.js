@@ -4,7 +4,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
-const { reader } = require('./reader-harness.cjs');
+const { reader, storage } = require('./reader-harness.cjs');
 const root = path.join(__dirname, '..');
 const json = name => JSON.parse(fs.readFileSync(path.join(root, 'data', name + '.json'), 'utf8'));
 const walk = node => [node, ...(node.children || []).flatMap(walk)];
@@ -106,6 +106,41 @@ test('analytics sends the first safe view once and deduplicates canonical aliase
   for (const hash of ['#/gwgz/01', '#/gwgz/1', '#/bad?secret=private', '#/read/v01-01']) t.app.trackPageview(hash);
   assert.deepEqual(JSON.parse(JSON.stringify(t.window._hmt)), [
     ['_trackPageview', '/#/gwgz/1'], ['_trackPageview', '/#/read/v01-01'],
+  ]);
+});
+
+test('logged-in pageviews set the Baidu user id and anonymous pageviews do not', () => {
+  const userId = '0123456789abcdef0123456789abcdef';
+  const loggedOut = reader();
+  catalogs(loggedOut);
+  loggedOut.app.trackPageview('#/gwgz');
+  assert.deepEqual(JSON.parse(JSON.stringify(loggedOut.window._hmt)), [
+    ['_trackPageview', '/#/gwgz'],
+  ]);
+
+  const idOnly = reader(storage({ 'gwgz-user-v1': userId }));
+  catalogs(idOnly);
+  idOnly.app.trackPageview('#/gwgz');
+  assert.deepEqual(JSON.parse(JSON.stringify(idOnly.window._hmt)), [
+    ['_trackPageview', '/#/gwgz'],
+  ]);
+
+  const email = reader(storage({ 'gwgz-session-v1': 'tok', 'gwgz-user-v1': 'reader@example.com' }));
+  catalogs(email);
+  email.app.trackPageview('#/tang');
+  assert.deepEqual(JSON.parse(JSON.stringify(email.window._hmt)), [
+    ['_trackPageview', '/#/tang'],
+  ]);
+  assert.equal(JSON.stringify(email.window._hmt).includes('reader@example.com'), false);
+
+  const loggedIn = reader(storage({ 'gwgz-session-v1': 'tok', 'gwgz-user-v1': userId }));
+  catalogs(loggedIn);
+  loggedIn.app.trackPageview('#/gwgz');
+  loggedIn.app.trackPageview('#/gwgz');
+  loggedIn.app.trackPageview('#/tang');
+  assert.deepEqual(JSON.parse(JSON.stringify(loggedIn.window._hmt)), [
+    ['_setUserId', userId], ['_trackPageview', '/#/gwgz'],
+    ['_setUserId', userId], ['_trackPageview', '/#/tang'],
   ]);
 });
 
