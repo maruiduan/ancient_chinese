@@ -59,14 +59,18 @@ jobs:
           grep -q 'hm.js?b5b9eb7e229dc60c4ebcd43c57100446' www/index.html
           grep -q 'busuanzi.pure.mini.js' www/index.html
           grep -q 'https://guwen.lucca.top/stats.html' www/index.html
+          test -f www/robots.txt
+          test -f www/sitemap.xml
           ! grep -q '已上线' www/index.html
+          ! grep -q '可以读了' www/index.html
+          grep -q '即将上线' www/index.html
           grep -q 'en.lucca.top' www/index.html
           grep -q 'ai.lucca.top' www/index.html
-          if ossutil cp www/index.html oss://lucca-www/index.html \
-            --content-type "text/html; charset=utf-8" \
-            --cache-control "no-cache, must-revalidate" \
-            --force \
-            --no-progress; then
+          grep -q 'Sitemap: https://www.lucca.top/sitemap.xml' www/robots.txt
+          grep -q 'https://www.lucca.top/' www/sitemap.xml
+          if python3 scripts/put_oss_object.py www/index.html oss://lucca-www/index.html \
+            && python3 scripts/put_oss_object.py www/robots.txt oss://lucca-www/robots.txt \
+            && python3 scripts/put_oss_object.py www/sitemap.xml oss://lucca-www/sitemap.xml; then
             echo "Published lucca homepage"
           else
             echo "::warning::Skipped lucca-www upload. This key cannot write the bucket; upload www/index.html manually."

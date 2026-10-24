@@ -49,7 +49,7 @@ def verify(site: Path, base: str, read=None) -> dict:
     for path in site.rglob("*"):
         if path.is_file() and HASHED.search(path.name):
             paths.add(path.relative_to(site).as_posix())
-    for relative in ("compatibility.json", "audio/manifest.json", "audio/pu4.ogg", "stats.html"):
+    for relative in ("compatibility.json", "audio/manifest.json", "audio/pu4.ogg", "stats.html", "robots.txt", "sitemap.xml"):
         if (site / relative).is_file():
             paths.add(relative)
 

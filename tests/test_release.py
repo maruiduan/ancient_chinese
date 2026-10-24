@@ -7,6 +7,7 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 import deploy_oss
+import oss_headers
 import stage_site
 import stamp_assets
 
@@ -76,9 +77,26 @@ class ReleaseTests(unittest.TestCase):
 
     def test_cache_headers(self):
         hashed = deploy_oss.upload_command(self.site, "js/app.0123456789ab.js", "oss://example")
-        entry = deploy_oss.upload_command(self.site, "index.html", "oss://example")
+        entry = deploy_oss.upload_command(self.site, "index.html", "oss://guwen-lucca")
+        robots = deploy_oss.upload_command(self.site, "robots.txt", "oss://guwen-lucca")
+        sitemap = deploy_oss.upload_command(self.site, "sitemap.xml", "oss://lucca-www")
+        self.assertEqual(hashed[0], "ossutil")
         self.assertIn("public, max-age=31536000, immutable", hashed)
-        self.assertIn("no-cache, must-revalidate", entry)
+        self.assertNotIn("put_oss_object.py", " ".join(hashed))
+        for command in (entry, robots, sitemap):
+            self.assertTrue(command[1].endswith("put_oss_object.py"), command)
+            self.assertNotIn("--delete", command)
+        self.assertTrue(entry[3].endswith("/index.html"))
+        html_type, html_cache = oss_headers.object_metadata("index.html")
+        text_type, text_cache = oss_headers.object_metadata("robots.txt")
+        xml_type, xml_cache = oss_headers.object_metadata("sitemap.xml")
+        self.assertEqual(html_type, "text/html; charset=utf-8")
+        self.assertEqual(text_type, "text/plain; charset=utf-8")
+        self.assertEqual(xml_type, "application/xml")
+        self.assertNotIn("charset", xml_type)
+        self.assertEqual(html_cache, text_cache)
+        self.assertEqual(text_cache, xml_cache)
+        self.assertEqual(html_cache, "no-cache, must-revalidate")
 
     def test_pages_retains_exactly_one_previous_release_active_hashes(self):
         source = fixture(Path(self.temp.name) / "source")
@@ -125,6 +143,19 @@ class ReleaseTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Previous asset hash disagrees"):
             stage_site.active_hashes(self.site)
 
+    def test_stage_copies_robots_and_sitemap_as_real_files(self):
+        source = fixture(Path(self.temp.name) / "seo-source")
+        robots = "User-agent: *\nAllow: /\n\nSitemap: https://guwen.lucca.top/sitemap.xml\n"
+        sitemap = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset></urlset>\n"
+        (source / "robots.txt").write_text(robots)
+        (source / "sitemap.xml").write_text(sitemap)
+        output = Path(self.temp.name) / "seo-release"
+        with patch.object(stage_site, "ROOT", source):
+            stage_site.stage(output)
+        self.assertEqual((output / "robots.txt").read_text(), robots)
+        self.assertEqual((output / "sitemap.xml").read_text(), sitemap)
+        self.assertNotIn("<!DOCTYPE html", (output / "robots.txt").read_text())
+
     def test_only_audited_artifact_can_reach_deploy_workflows(self):
         root = Path(__file__).resolve().parents[1]
         workflow = (root / ".github/workflows/audit-content.yml").read_text()
@@ -140,3 +171,11 @@ class ReleaseTests(unittest.TestCase):
         self.assertNotIn("git push", text)
         self.assertNotIn("stamp_assets.py", text)
         self.assertIn("artifact-ids: ${{ inputs.artifact-id }}", text)
+        www = (root / ".github/workflows/publish-www.yml").read_text()
+        for workflow in (www, text):
+            self.assertIn("scripts/put_oss_object.py", workflow)
+            self.assertNotIn("ossutil cp ", workflow)
+            self.assertIn("! grep -q '可以读了'", workflow)
+            self.assertIn("www/robots.txt", workflow)
+            self.assertIn("www/sitemap.xml", workflow)
+        self.assertNotIn("ossutil", www)

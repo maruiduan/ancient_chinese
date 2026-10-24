@@ -84,7 +84,7 @@ def stage(output: Path, previous_site: Path | None = None) -> None:
     with tempfile.TemporaryDirectory(prefix=".site-stage-", dir=output.parent) as temp:
         site = Path(temp) / "site"
         site.mkdir()
-        for name in ("index.html", "favicon.svg", ".nojekyll", "stats.html"):
+        for name in ("index.html", "favicon.svg", ".nojekyll", "stats.html", "robots.txt", "sitemap.xml"):
             source = ROOT / name
             if source.is_file():
                 shutil.copy2(source, site / name)

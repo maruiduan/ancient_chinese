@@ -4,7 +4,12 @@ on:
   workflow_dispatch:
   push:
     branches: [master]
-    paths: [www/index.html]
+    paths:
+      - www/index.html
+      - www/robots.txt
+      - www/sitemap.xml
+      - scripts/oss_headers.py
+      - scripts/put_oss_object.py
 
 permissions:
   contents: read
@@ -16,14 +21,7 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
-      - name: Install ossutil 2.4.0
-        run: |
-          set -euo pipefail
-          curl -fsSL -o /tmp/ossutil.zip https://gosspublic.alicdn.com/ossutil/v2/2.4.0/ossutil-2.4.0-linux-amd64.zip
-          echo "85edf66b2fb7238f5c7e25cab820cf29312319fe4935b7c86a6b8485eb434f3c  /tmp/ossutil.zip" | sha256sum -c
-          unzip -q /tmp/ossutil.zip -d /tmp
-          sudo mv /tmp/ossutil-2.4.0-linux-amd64/ossutil /usr/local/bin/ossutil
-      - name: Upload www/index.html to lucca-www
+      - name: Upload www pages to lucca-www
         env:
           OSS_ACCESS_KEY_ID: ${{ secrets.OSS_ACCESS_KEY_ID }}
           OSS_ACCESS_KEY_SECRET: ${{ secrets.OSS_ACCESS_KEY_SECRET }}
@@ -32,16 +30,21 @@ jobs:
         run: |
           set -euo pipefail
           test -f www/index.html
+          test -f www/robots.txt
+          test -f www/sitemap.xml
           grep -q 'hm.js?b5b9eb7e229dc60c4ebcd43c57100446' www/index.html
           grep -q 'busuanzi.pure.mini.js' www/index.html
           grep -q 'https://guwen.lucca.top/stats.html' www/index.html
           ! grep -q '已上线' www/index.html
+          ! grep -q '可以读了' www/index.html
+          grep -q '即将上线' www/index.html
           grep -q 'en.lucca.top' www/index.html
           grep -q 'ai.lucca.top' www/index.html
-          if ossutil cp www/index.html oss://lucca-www/index.html \
-            --content-type "text/html; charset=utf-8" \
-            --cache-control "no-cache, must-revalidate" \
-            --force --no-progress; then
+          grep -q 'Sitemap: https://www.lucca.top/sitemap.xml' www/robots.txt
+          grep -q 'https://www.lucca.top/' www/sitemap.xml
+          if python3 scripts/put_oss_object.py www/index.html oss://lucca-www/index.html \
+            && python3 scripts/put_oss_object.py www/robots.txt oss://lucca-www/robots.txt \
+            && python3 scripts/put_oss_object.py www/sitemap.xml oss://lucca-www/sitemap.xml; then
             echo "Published lucca homepage"
           else
             echo "::warning::lucca-www upload denied for this key; homepage must be uploaded with a key that can write lucca-www."
