@@ -1977,6 +1977,68 @@
     });
   }
 
+  function eventElement(event) {
+    const target = event.target;
+    if (!target) return null;
+    return target.nodeType === 1 ? target : target.parentElement;
+  }
+
+  function setSentenceGloss(unit, open) {
+    unit.classList.toggle("gloss-open", open);
+    const gloss = unit.querySelector(".sent-gloss");
+    if (gloss) gloss.hidden = !open;
+    unit.querySelectorAll(".sent-tap").forEach(function (stop) {
+      stop.setAttribute("aria-expanded", open ? "true" : "false");
+      stop.setAttribute("aria-label", open ? "收起这一句译文" : "展开这一句译文");
+    });
+  }
+
+  function toggleSentenceGloss(unit) {
+    if (Date.now() - lastSwipeAt < 450) return;
+    const sel = window.getSelection && window.getSelection();
+    if (sel && !sel.isCollapsed && unit.contains(sel.anchorNode)) return;
+    const open = !unit.classList.contains("gloss-open");
+    const scope = unit.closest(".body") || unit.parentElement;
+    if (scope) {
+      scope.querySelectorAll(".sent-unit.gloss-open").forEach(function (other) {
+        if (other !== unit) setSentenceGloss(other, false);
+      });
+    }
+    setSentenceGloss(unit, open);
+    if (open) {
+      const gloss = unit.querySelector(".sent-gloss");
+      if (gloss && gloss.scrollIntoView) gloss.scrollIntoView({ block: "nearest" });
+    }
+  }
+
+  function appendInlineGloss(unit, translation) {
+    const gloss = document.createElement("span");
+    gloss.className = "sent-gloss";
+    gloss.hidden = true;
+    const lab = document.createElement("i");
+    lab.textContent = "译文";
+    gloss.appendChild(lab);
+    gloss.appendChild(document.createTextNode(translation));
+    unit.appendChild(gloss);
+    unit.querySelectorAll(".punct-stop").forEach(function (stop) {
+      stop.classList.add("sent-tap");
+      stop.setAttribute("role", "button");
+      stop.tabIndex = 0;
+      stop.setAttribute("aria-expanded", "false");
+      stop.setAttribute("aria-label", "展开这一句译文");
+      stop.addEventListener("keydown", function (event) {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        toggleSentenceGloss(unit);
+      });
+    });
+    unit.addEventListener("click", function (event) {
+      const el = eventElement(event);
+      if (el && el.closest(".zi, .famous-mark, a")) return;
+      toggleSentenceGloss(unit);
+    });
+  }
+
   function appendSentenceGloss(pair, translation) {
     if (translation) {
       const vern = document.createElement("p");
@@ -2527,7 +2589,9 @@
     foot.appendChild(turn);
     const note = document.createElement("p");
     note.className = "py-hint";
-    note.textContent = "点一个字，看《说文》。左右滑动换一篇。";
+    note.textContent = sentenceMode()
+      ? "点一个字查义。这一页按句对照译文。左右滑动换一篇。"
+      : "点一个字查义。点标点或字间空白，只展开这一句译文。左右滑动换一篇。";
     foot.appendChild(note);
     return foot;
   }
@@ -2666,7 +2730,12 @@
         const p = document.createElement("p");
         p.className = "orig para" + (state.progress.pinyin ? " with-py" : "");
         para.sentences.forEach(function (sent) {
-          appendMarked(p, sent.tokens, art.id, (sent.tr || "").trim());
+          const tr = (sent.tr || "").trim();
+          const unit = document.createElement("span");
+          unit.className = "sent-unit";
+          appendMarked(unit, sent.tokens, art.id, tr);
+          if (tr) appendInlineGloss(unit, tr);
+          p.appendChild(unit);
         });
         body.appendChild(p);
       });

@@ -349,6 +349,35 @@ h1 {
   .book-list { grid-template-columns: repeat(4, 1fr); }
 }
 .orig-sent { display: inline; }
+.body.prose:not(.sentence) .sent-unit { display: inline; }
+.body.prose:not(.sentence) .sent-unit.gloss-open {
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.body.prose:not(.sentence) .sent-gloss { display: none; text-indent: 0; }
+.body.prose:not(.sentence) .sent-unit.gloss-open .sent-gloss {
+  display: block;
+  margin: 0.4em 0 0.75em;
+  padding: 0.2em 0 0.15em 0.7em;
+  border-left: 2px solid var(--accent);
+  background: var(--surface);
+  color: var(--ink-soft);
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  line-height: 1.75;
+  letter-spacing: 0.02em;
+  text-indent: 0;
+}
+.body.prose:not(.sentence) .sent-gloss i {
+  display: block;
+  margin: 0 0 0.12em;
+  font-style: normal;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  color: var(--accent);
+}
+.body.prose:not(.sentence) .sent-unit .punct.sent-tap { cursor: pointer; }
 .verse-text { position: relative; }
 .famous-phrase {
   display: inline;
