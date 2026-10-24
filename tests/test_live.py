@@ -26,6 +26,19 @@ class LiveVerificationTests(unittest.TestCase):
         self.assertIn("audio/pu4.ogg", requested)
         self.assertIn("version.json", requested)
 
+    def test_robots_and_sitemap_are_verified_when_present(self):
+        (self.site / "robots.txt").write_text("User-agent: *\n")
+        (self.site / "sitemap.xml").write_text("<urlset></urlset>\n")
+        requested = []
+
+        def read(relative):
+            requested.append(relative)
+            return (self.site / relative).read_bytes()
+
+        verify_live.verify(self.site, "https://example.test/site/", read)
+        self.assertIn("robots.txt", requested)
+        self.assertIn("sitemap.xml", requested)
+
     def test_detects_stale_or_corrupt_public_bytes(self):
         def read(relative):
             return b"stale" if relative == "index.html" else (self.site / relative).read_bytes()

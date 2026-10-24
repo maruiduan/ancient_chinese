@@ -1,27 +1,32 @@
-"""Upload a validated site, then publish its entry points. Never delete old hashes."""
+"""Upload a validated site, then publish its entry points. Never delete old hashes.
+
+HTML, robots.txt and sitemap.xml go through put_oss_object.py so the PUT
+re-attaches x-oss-persistent-headers. ossutil 2.4 cp cannot set that header
+and would clear the live security headers.
+"""
 from __future__ import annotations
 
 import argparse
-import mimetypes
 import re
 import subprocess
+import sys
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
+import oss_headers
 from stage_site import validate
 
 ENTRY_POINTS = ("index.html", "version.json")
+PUT_SCRIPT = Path(__file__).with_name("put_oss_object.py")
 
 
 def upload_command(site: Path, relative: str, destination: str) -> list[str]:
     path = site / relative
-    hashed = bool(re.search(r"\.[0-9a-f]{12}\.[A-Za-z0-9]+$", path.name))
-    cache = "public, max-age=31536000, immutable" if hashed else "no-cache, must-revalidate"
-    types = {".js": "application/javascript", ".json": "application/json", ".ogg": "audio/ogg"}
-    content_type = types.get(path.suffix) or mimetypes.guess_type(path.name)[0] or "application/octet-stream"
-    if content_type.startswith("text/") or content_type == "application/json":
-        content_type += "; charset=utf-8"
-    return ["ossutil", "cp", str(path), destination.rstrip("/") + "/" + relative,
+    target = destination.rstrip("/") + "/" + relative
+    if oss_headers.requires_persistent(relative):
+        return [sys.executable, str(PUT_SCRIPT), str(path), target]
+    content_type, cache = oss_headers.object_metadata(relative)
+    return ["ossutil", "cp", str(path), target,
             "--content-type", content_type, "--cache-control", cache, "--force", "--no-progress"]
 
 

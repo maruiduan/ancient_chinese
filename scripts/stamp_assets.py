@@ -29,6 +29,9 @@ CANONICAL_REFS = (
     ("favicon.svg", re.compile(r"favicon\.[0-9a-f]{12}\.svg")),
 )
 FONT_URL = re.compile(r"url\((fonts/[^)]+?)(?:\.[0-9a-f]{12})?(\.woff2?)\)")
+# First CJK slice. It covers most homepage title glyphs. Slice 00 is ASCII/punctuation.
+FIRST_SCREEN_FONT = "css/fonts/xcz/serif-400-01.woff2"
+PRELOAD_FONT = re.compile(r"css/fonts/xcz/serif-400-01(?:\.[0-9a-f]{12})?\.woff2")
 OPTIONAL_REFS = (
     ("js/account.js", re.compile(r"js/account\.[0-9a-f]{12}\.js")),
 )
@@ -81,8 +84,23 @@ def reset_tree(root: Path) -> None:
     index = index_path.read_text(encoding="utf-8")
     for canonical, pattern in CANONICAL_REFS + OPTIONAL_REFS:
         index = pattern.sub(canonical, index)
+    index = PRELOAD_FONT.sub(FIRST_SCREEN_FONT, index)
     index = re.sub(r'data-build="[0-9a-f]*"', 'data-build=""', index)
     index_path.write_text(index, encoding="utf-8")
+
+
+def apply_font_preload(index: str, url_map: dict[str, str]) -> str | None:
+    """Point the single first-screen preload at the same hashed woff2 the CSS requests."""
+    if FIRST_SCREEN_FONT not in index:
+        return index
+    if index.count(FIRST_SCREEN_FONT) != 1:
+        print(f"index.html 里 {FIRST_SCREEN_FONT} 出现 {index.count(FIRST_SCREEN_FONT)} 次", file=sys.stderr)
+        return None
+    hashed = url_map.get(FIRST_SCREEN_FONT)
+    if not hashed:
+        print(f"index.html 预加载了缺失的字体 {FIRST_SCREEN_FONT}", file=sys.stderr)
+        return None
+    return index.replace(FIRST_SCREEN_FONT, hashed, 1)
 
 
 def version_font_urls(root: Path) -> None:
@@ -163,6 +181,10 @@ def main(args: list[str] | None = None) -> int:
             print(f"index.html 里 {old} 出现 {count} 次", file=sys.stderr)
             return 1
         index = index.replace(old, new, 1)
+    preloaded = apply_font_preload(index, url_map)
+    if preloaded is None:
+        return 1
+    index = preloaded
     marker = 'data-build=""'
     if index.count(marker) != 1:
         print("index.html 缺少空的 data-build", file=sys.stderr)

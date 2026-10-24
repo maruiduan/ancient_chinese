@@ -155,6 +155,35 @@ test('guwen entry has viewport-fit, color-scheme, and share meta', () => {
   assert.match(html, /og:title/);
   assert.match(html, /canonical/);
   assert.equal(html.includes('已上线'), false);
+  assert.equal(html.includes('可以读了'), false);
+});
+
+test('guwen preloads only the first-screen CJK font slice', () => {
+  const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+  const css = fs.readFileSync(path.join(root, 'css/app.css'), 'utf8');
+  assert.match(css, /font-display:swap/);
+  const preloads = [...html.matchAll(/<link rel="preload"[^>]*>/g)].map(match => match[0]);
+  assert.deepEqual(preloads.length, 1);
+  assert.match(preloads[0], /href="css\/fonts\/xcz\/serif-400-01\.woff2"/);
+  assert.match(preloads[0], /as="font"/);
+  assert.match(preloads[0], /type="font\/woff2"/);
+  assert.match(preloads[0], /crossorigin/);
+  assert.equal(html.includes('serif-400-00.woff2'), false);
+  assert.equal(html.includes('preconnect'), false);
+});
+
+test('guwen and www publish real robots and sitemap documents', () => {
+  for (const [dir, origin] of [['', 'https://guwen.lucca.top'], ['www', 'https://www.lucca.top']]) {
+    const robots = fs.readFileSync(path.join(root, dir, 'robots.txt'), 'utf8');
+    const sitemap = fs.readFileSync(path.join(root, dir, 'sitemap.xml'), 'utf8');
+    assert.match(robots, new RegExp(`Sitemap: ${origin.replace(/\./g, '\\.')}/sitemap\\.xml`));
+    assert.equal(robots.includes('<html'), false);
+    assert.equal(sitemap.includes('<html'), false);
+    assert.match(sitemap, new RegExp(`<loc>${origin.replace(/\./g, '\\.')}/</loc>`));
+    assert.equal(sitemap.includes('#'), false);
+    assert.equal(sitemap.includes('已上线'), false);
+    assert.equal(sitemap.includes('可以读了'), false);
+  }
 });
 
 test('lucca homepage lists live modules without 已上线 badges', () => {
@@ -163,6 +192,7 @@ test('lucca homepage lists live modules without 已上线 badges', () => {
   assert.match(html, /en\.lucca\.top/);
   assert.match(html, /ai\.lucca\.top/);
   assert.equal(html.includes('已上线'), false);
+  assert.equal(html.includes('可以读了'), false);
   assert.match(html, /即将上线/);
   assert.match(html, /og:title/);
   assert.match(html, /canonical/);
