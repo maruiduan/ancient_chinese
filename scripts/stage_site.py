@@ -6,11 +6,46 @@ import json
 import re
 import shutil
 import tempfile
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 import stamp_assets
 
 ROOT = Path(__file__).resolve().parents[1]
+ROOT_FILES = ("index.html", "favicon.svg", ".nojekyll", "stats.html", "robots.txt", "sitemap.xml")
+CRAWL_FILES = ("robots.txt", "sitemap.xml")
+EXPECTED_ROBOTS = (
+    "User-agent: *\n"
+    "Allow: /\n"
+    "Sitemap: https://guwen.lucca.top/sitemap.xml\n"
+)
+SITEMAP_NS = "http://www.sitemaps.org/schemas/sitemap/0.9"
+HOMEPAGE = "https://guwen.lucca.top/"
+
+
+def check_crawl_files(root: Path) -> None:
+    """Require the public crawl files. Hash fragments are not sitemap locations."""
+    for name in CRAWL_FILES:
+        if not (root / name).is_file():
+            raise ValueError(f"Missing crawl file: {name}")
+    robots = (root / "robots.txt").read_text(encoding="utf-8")
+    if robots != EXPECTED_ROBOTS:
+        raise ValueError("robots.txt does not match the public crawl policy")
+    try:
+        sitemap = ET.fromstring((root / "sitemap.xml").read_text(encoding="utf-8"))
+    except ET.ParseError as exc:
+        raise ValueError("sitemap.xml is not valid XML") from exc
+    if sitemap.tag != f"{{{SITEMAP_NS}}}urlset":
+        raise ValueError("sitemap.xml is not a urlset")
+    locs = []
+    for url in sitemap.findall(f"{{{SITEMAP_NS}}}url"):
+        loc = url.find(f"{{{SITEMAP_NS}}}loc")
+        text = "" if loc is None or loc.text is None else loc.text.strip()
+        if not text or "#" in text or text != HOMEPAGE:
+            raise ValueError(f"sitemap.xml location is not the public homepage: {text}")
+        locs.append(text)
+    if locs != [HOMEPAGE]:
+        raise ValueError("sitemap.xml must list the public homepage")
 
 
 def validate(root: Path) -> None:
@@ -41,6 +76,7 @@ def validate(root: Path) -> None:
     for value in manifest.values():
         if not re.fullmatch(r"[a-z]+[1-5]", value) or not (root / "audio" / f"{value}.ogg").is_file():
             raise ValueError(f"Missing manifest recording: {value}")
+    check_crawl_files(root)
 
 
 def active_hashes(previous: Path) -> tuple[str | None, dict[str, bytes]]:
@@ -84,10 +120,12 @@ def stage(output: Path, previous_site: Path | None = None) -> None:
     with tempfile.TemporaryDirectory(prefix=".site-stage-", dir=output.parent) as temp:
         site = Path(temp) / "site"
         site.mkdir()
-        for name in ("index.html", "favicon.svg", ".nojekyll", "stats.html"):
+        for name in ROOT_FILES:
             source = ROOT / name
             if source.is_file():
                 shutil.copy2(source, site / name)
+            elif name in CRAWL_FILES:
+                raise ValueError(f"Missing crawl file: {name}")
         for name in ("css", "js", "data", "audio"):
             shutil.copytree(ROOT / name, site / name)
         if stamp_assets.main([str(site)]) != 0:

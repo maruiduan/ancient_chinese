@@ -40,7 +40,7 @@ python3 scripts/stage_site.py /tmp/site-new
 
 Python 依赖版本锁定在 `requirements-dev.txt`；CI 使用 Python 3.12 和 Node 22。前端回归运行实际 `js/app.js`，以最小 DOM/存储/网络桩验证竞态、跨标签页、断网、存储失败和音频反馈；它不替代真实浏览器布局检查。CI 明确检查 `tests/app.test.js` 存在，避免通配符未匹配时误报零测试通过。
 
-`stage_site.py` 只写新的输出目录，校验哈希、入口引用、文章目录和音频 manifest 中的真实录音。OSS 先完成全部资源上传，再依次上传首页和 `version.json`；任何资源失败都不会切换入口，旧远端哈希不删除。音频缺失时显示“暂无录音”，不生成虚构音频。
+`stage_site.py` 只写新的输出目录，校验哈希、入口引用、文章目录和音频 manifest 中的真实录音，并复制根目录的 `robots.txt` 与 `sitemap.xml`。OSS 先完成全部资源上传，再依次上传首页和 `version.json`；任何资源失败都不会切换入口，旧远端哈希不删除。音频缺失时显示“暂无录音”，不生成虚构音频。
 
 发布产物保留**上一版成功发布的活动哈希资源**，不递归积累更早版本。发布前从公开 OSS 入口读取当前版本、资源映射及真实资源，逐文件验证 SHA-256，并再次检查版本以防下载期间发生切换；不读取或扩展任何凭据权限。第一次迁移若没有公开版本文件，则使用 checkout 的活动哈希。仅在哈希一致时，才能从真实 canonical 文件恢复 checkout 中缺失的哈希副本。`compatibility.json` 记录兼容版本和文件列表，审核产物保留 90 天供追溯。
 
@@ -82,6 +82,7 @@ python3 scripts/stage_site.py /tmp/site-next --previous-site /tmp/site-previous
 ## 目录
 
 - `index.html`、`css/app.css`、`js/app.js`：阅读界面。
+- `robots.txt`、`sitemap.xml`：爬虫规则和站点地图。阅读页是 `#/` 哈希路由，地图只收录首页 `https://guwen.lucca.top/`。`stats.html` 已 `noindex`，不列入。
 - `data/books.json`：站点上的书。
 - `data/catalog.json`：古文观止十二卷目录。
 - `data/tang.json`、`data/songci.json`：唐诗、宋词这一批。
@@ -97,4 +98,4 @@ python3 scripts/stage_site.py /tmp/site-next --previous-site /tmp/site-previous
 
 这个仓库原来是一套古代汉语词典爬虫。它和现在的学习站点不是同一件事，所以整目录移到了 `legacy/`，没有在它上面继续改。词典改用 Apache-2.0 的《说文》开源数据。
 
-发布后 CI 会从公开 OSS 逐一读取入口、版本、哈希资源（含兼容窗口内旧资源）及录音样本，与通过审计的产物逐字节摘要比较。此检查不发送凭据，也不替代真实浏览器的视觉和交互验收。每次审计另产出 `repair-patches-*` 下载包，包含固定基准补丁、应用检查和 SHA256SUMS。
+发布后 CI 会从公开 OSS 逐一读取入口、版本、哈希资源（含兼容窗口内旧资源）、录音样本、`robots.txt` 和 `sitemap.xml`，与通过审计的产物逐字节摘要比较。此检查不发送凭据，也不替代真实浏览器的视觉和交互验收。每次审计另产出 `repair-patches-*` 下载包，包含固定基准补丁、应用检查和 SHA256SUMS。

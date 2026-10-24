@@ -25,6 +25,8 @@ class LiveVerificationTests(unittest.TestCase):
         self.assertGreater(result["verified_public_files"], 10)
         self.assertIn("audio/pu4.ogg", requested)
         self.assertIn("version.json", requested)
+        self.assertIn("robots.txt", requested)
+        self.assertIn("sitemap.xml", requested)
 
     def test_detects_stale_or_corrupt_public_bytes(self):
         def read(relative):

@@ -12,9 +12,12 @@ import stamp_assets
 
 
 def fixture(root):
+    repo = Path(__file__).resolve().parents[1]
     files = {"index.html": '<html data-build=""><link href="favicon.svg"><link href="css/app.css"><script src="js/asset-urls.js"></script><script src="js/app.js"></script></html>',
              "favicon.svg": '<svg xmlns="http://www.w3.org/2000/svg"/>', ".nojekyll": "", "css/app.css": "body{}", "js/app.js": "void 0;", "js/asset-urls.js": "",
-             "audio/manifest.json": '{"pù":"pu4"}', "audio/pu4.ogg": "fixture recording"}
+             "audio/manifest.json": '{"pù":"pu4"}', "audio/pu4.ogg": "fixture recording",
+             "robots.txt": (repo / "robots.txt").read_text(encoding="utf-8"),
+             "sitemap.xml": (repo / "sitemap.xml").read_text(encoding="utf-8")}
     for name in ("catalog", "renjian", "zztj", "shiji", "daode", "lunyu"):
         files[f"data/{name}.json"] = '{"volumes":[]}'
     for rel, text in files.items():
@@ -73,6 +76,35 @@ class ReleaseTests(unittest.TestCase):
                 stage_site.stage(output)
         self.assertEqual(before, {p.relative_to(source): p.read_bytes() for p in source.rglob("*") if p.is_file()})
         stage_site.validate(output)
+        for name in stage_site.CRAWL_FILES:
+            self.assertEqual((output / name).read_bytes(), (source / name).read_bytes())
+        self.assertEqual(list(output.glob("robots.*.txt")), [])
+        self.assertEqual(list(output.glob("sitemap.*.xml")), [])
+
+    def test_stage_rejects_missing_crawl_file(self):
+        source = fixture(Path(self.temp.name) / "no-crawl")
+        (source / "robots.txt").unlink()
+        output = Path(self.temp.name) / "no-crawl-out"
+        with patch.object(stage_site, "ROOT", source):
+            with self.assertRaisesRegex(ValueError, "Missing crawl file: robots.txt"):
+                stage_site.stage(output)
+        self.assertFalse(output.exists())
+
+    def test_repo_crawl_files_list_only_the_homepage(self):
+        repo = Path(__file__).resolve().parents[1]
+        stage_site.check_crawl_files(repo)
+        self.assertNotIn("#", (repo / "sitemap.xml").read_text(encoding="utf-8"))
+        self.assertNotIn("stats.html", (repo / "sitemap.xml").read_text(encoding="utf-8"))
+
+    def test_crawl_files_upload_as_revalidated_text(self):
+        robots = deploy_oss.upload_command(self.site, "robots.txt", "oss://example")
+        sitemap = deploy_oss.upload_command(self.site, "sitemap.xml", "oss://example")
+        self.assertIn("text/plain; charset=utf-8", robots)
+        self.assertIn("application/xml", sitemap)
+        self.assertIn("no-cache, must-revalidate", robots)
+        self.assertIn("no-cache, must-revalidate", sitemap)
+        self.assertNotIn("immutable", robots)
+        self.assertNotIn("immutable", sitemap)
 
     def test_cache_headers(self):
         hashed = deploy_oss.upload_command(self.site, "js/app.0123456789ab.js", "oss://example")
