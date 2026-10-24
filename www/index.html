@@ -6,7 +6,17 @@
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#f6f3ec" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#16150f" media="(prefers-color-scheme: dark)">
+<meta name="lucca-home-version" content="2026-10-24.1">
 <title>lucca</title>
+<meta name="description" content="lucca · 读书学习记录。古文典籍、英语演讲跟读、AI 原理小实验。">
+<link rel="canonical" href="https://www.lucca.top/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="lucca">
+<meta property="og:title" content="lucca">
+<meta property="og:description" content="读书 · 学习 · 记录。古文、英语演讲跟读、AI 是怎么回事。">
+<meta property="og:url" content="https://www.lucca.top/">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary">
 <script>
 var _hmt = _hmt || [];
 _hmt.push(["_setAutoPageview", false]);
@@ -39,9 +49,12 @@ h1{font-size:28px;font-weight:600;letter-spacing:.06em}
 .grid{display:grid;gap:14px;grid-template-columns:1fr}
 @media (min-width:720px){.grid{grid-template-columns:repeat(3,1fr)}.wrap{padding-top:110px}h1{font-size:32px}}
 .card{position:relative;display:flex;flex-direction:column;gap:10px;min-height:132px;padding:22px 22px 20px;border-radius:16px;
- background:var(--card);border:1px solid var(--line);color:inherit;text-decoration:none;transition:transform .2s,border-color .2s,box-shadow .2s}
-a.card:hover{transform:translateY(-2px);border-color:var(--accent);box-shadow:0 8px 24px rgba(0,0,0,.06)}
-a.card:active{transform:scale(.98)}
+ background:var(--card);border:1px solid var(--line);color:inherit;text-decoration:none;transition:transform .2s,border-color .2s,box-shadow .2s;
+ -webkit-tap-highlight-color:transparent;touch-action:manipulation}
+a.card *{pointer-events:none}
+/* 悬停效果只给鼠标设备：触屏上 :hover 会让 iOS/微信把第一次点按当成“悬停”，要点两次才进入 */
+@media (hover:hover) and (pointer:fine){a.card:hover{transform:translateY(-2px);border-color:var(--accent);box-shadow:0 8px 24px rgba(0,0,0,.06)}}
+a.card:active{transform:scale(.98);border-color:var(--accent)}
 .top{display:flex;align-items:center;justify-content:space-between}
 .name{font-size:24px;font-weight:600;letter-spacing:.1em}
 .desc{color:var(--sub);font-size:14px;line-height:1.7}
@@ -63,8 +76,8 @@ footer .stat:hover{color:var(--accent);opacity:1}
 // 模块配置：新增模块只需在此添加一项。status: "live" | "soon"
 const MODULES = [
   { name: "古文", desc: "古文观止 · 唐诗 · 宋词，逐句注译，拼音对照。", url: "https://guwen.lucca.top/", status: "live" },
-  { name: "英语", desc: "日常积累与精读练习。", url: "", status: "soon" },
-  { name: "AI",   desc: "工具、笔记与实验。", url: "", status: "soon" }
+  { name: "英语", desc: "演讲跟读：乔布斯、TED 等五篇，逐句点播、听写跟读。", url: "https://en.lucca.top/", status: "live" },
+  { name: "AI",   desc: "AI 是怎么回事：从零读懂大模型与智能体。", url: "https://ai.lucca.top/", status: "live" }
 ];
 </script>
 <div class="wrap">
@@ -90,12 +103,12 @@ MODULES.forEach(m=>{
   const el=document.createElement(live?'a':'div');
   el.className='card '+(live?'live':'off');
   if(live){el.href=m.url;}else{el.setAttribute('aria-disabled','true');}
-  el.innerHTML=`<div class="top"><span class="name"></span><span class="badge">${live?'已上线':'即将上线'}</span></div><p class="desc"></p>${live?'<span class="arrow">进入 →</span>':''}`;
+  el.innerHTML=`<div class="top"><span class="name"></span>${live?'':'<span class="badge">即将上线</span>'}</div><p class="desc"></p>${live?'<span class="arrow">进入 →</span>':''}`;
   el.querySelector('.name').textContent=m.name;el.querySelector('.desc').textContent=m.desc;
   g.appendChild(el);
 });
 document.getElementById('y').textContent=new Date().getFullYear();
 </script>
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </body>
 </html>
