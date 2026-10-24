@@ -17,15 +17,11 @@ class WorkflowSecurityTests(unittest.TestCase):
             for config in checkouts:
                 self.assertIn('persist-credentials: false', config, str(path))
 
-    def test_pages_retry_uses_a_unique_artifact_name_for_upload_and_deployment(self):
-        workflow = Path(__file__).resolve().parents[1] / '.github/workflows/deploy-pages.yml'
-        text = workflow.read_text()
-        name = 'github-pages-${{ github.run_id }}-${{ github.run_attempt }}'
-        self.assertIn('actions/configure-pages@', text)
-        self.assertIn('actions/upload-pages-artifact@', text)
-        self.assertIn('actions/deploy-pages@', text)
-        self.assertIn('name: github-pages\n', text)
-        self.assertIn('pages: write', text)
-        self.assertIn('id-token: write', text)
-        self.assertIn('name: ' + name, text)
-        self.assertIn('artifact_name: ' + name, text)
+    def test_github_pages_deploy_is_retired(self):
+        root = Path(__file__).resolve().parents[1]
+        self.assertFalse((root / '.github/workflows/deploy-pages.yml').exists())
+        audit = (root / '.github/workflows/audit-content.yml').read_text()
+        self.assertNotIn('deploy-pages.yml', audit)
+        self.assertNotIn('pages: write', audit)
+        self.assertNotIn('maruiduan.github.io', audit)
+        self.assertIn('https://guwen.lucca.top/', audit)
