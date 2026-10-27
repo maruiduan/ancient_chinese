@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 583,
-        "chars": 489957,
+        "pieces": 607,
+        "chars": 545721,
         "unexpected": "0"
       },
       {
@@ -52,47 +52,59 @@
     ],
     "unexpected": [],
     "reviewChars": 17,
-    "cacheSingle": 57,
-    "glosses": 19678,
-    "lessonFlags": 271,
-    "missingChars": 785,
-    "missingHits": 1481,
+    "cacheSingle": 58,
+    "glosses": 20243,
+    "lessonFlags": 273,
+    "missingChars": 794,
+    "missingHits": 1517,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 9249,
+        "count": 9649,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 3001,
+        "count": 3142,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 2500,
+        "count": 2623,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 416,
+        "count": 435,
         "note": "归并"
       },
       {
         "trad": "徵",
         "simp": "征",
-        "count": 250,
+        "count": 258,
         "note": "征召、征兆、征逐。不是乐律"
+      },
+      {
+        "trad": "幹",
+        "simp": "干",
+        "count": 51,
+        "note": "归并"
       },
       {
         "trad": "乾",
         "simp": "干",
-        "count": 37,
+        "count": 40,
         "note": "干燥作干"
+      },
+      {
+        "trad": "裏",
+        "simp": "里",
+        "count": 33,
+        "note": "归并"
       },
       {
         "trad": "裡",
@@ -101,21 +113,9 @@
         "note": "归并"
       },
       {
-        "trad": "裏",
-        "simp": "里",
-        "count": 28,
-        "note": "归并"
-      },
-      {
-        "trad": "幹",
-        "simp": "干",
-        "count": 24,
-        "note": "归并"
-      },
-      {
         "trad": "乾",
         "simp": "乾",
-        "count": 16,
+        "count": 17,
         "note": "乾坤、乾谿等读 qián，保留乾"
       },
       {
@@ -123,6 +123,12 @@
         "simp": "祇",
         "count": 14,
         "note": "神祇、地祇保留祇"
+      },
+      {
+        "trad": "禕",
+        "simp": "祎",
+        "count": 6,
+        "note": "费祎。不从 OpenCC 把褘收成袆"
       },
       {
         "trad": "祇",
@@ -141,12 +147,6 @@
         "simp": "於",
         "count": 4,
         "note": "樊於期保留於"
-      },
-      {
-        "trad": "禕",
-        "simp": "祎",
-        "count": 3,
-        "note": "费祎。不从 OpenCC 把褘收成袆"
       },
       {
         "trad": "徵",
@@ -173,7 +173,7 @@
     {
       "id": "zztj",
       "collection": "资治通鉴",
-      "change": "增补或移入标记 41 处",
+      "change": "增补或移入标记 42 处",
       "resolution": "这些字句不收进正文。阅读本与这条规则下的解析结果一致。"
     },
     {
@@ -553,6 +553,16 @@
       "han": "diè、yì",
       "ui": "review",
       "detail": "汉典有多个读音，说文音一个都不在里面。页面仍用说文音，弹层标为待复核。"
+    },
+    {
+      "kind": "reading",
+      "where": "字书默认音",
+      "id": "",
+      "word": "晟",
+      "reading": "chéng",
+      "han": "shèng",
+      "ui": "silent",
+      "detail": "汉典缓存只列了这一个不同的音。缓存常缺音，页面不改。"
     },
     {
       "kind": "reading",
@@ -3452,6 +3462,24 @@
       "reading": "jì'ér",
       "han": "",
       "detail": "读音音节数和字数不一致，无法逐字对照汉典。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z65-03",
+      "word": "禅",
+      "reading": "shàn",
+      "han": "禅→shàn（汉典 chàn、chán）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z68-02",
+      "word": "桑乾",
+      "reading": "sāng qián",
+      "han": "乾→qián（汉典 gàn）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     }
   ]
 }
