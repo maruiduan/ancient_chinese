@@ -260,6 +260,13 @@ def translation_ref(collection: str) -> dict:
     return {"edition": "未指定译注本", "status": "译文未核定"}
 
 
+def deity_qi(chars: list[tuple[str, str]], index: int) -> bool:
+    """神祇、地祇，以及「皇地之祇」这种中间隔着「之」的，简体仍作祇。"""
+    prev = chars[index - 1][0] if index else ""
+    prev2 = chars[index - 2][0] if index >= 2 else ""
+    return prev in ("神", "地") or (prev == "之" and prev2 in ("神", "地"))
+
+
 def audit_simplified() -> tuple[list[dict], list[dict]]:
     """简体按《简化字总表》的通行归并核，不把 OpenCC 整篇结果当定本。
 
@@ -314,7 +321,7 @@ def audit_simplified() -> tuple[list[dict], list[dict]]:
                 problems.append({"id": art["id"], "detail": "流徵被简成流征"})
             elif src == "祇" and dst == "只" and prev == "神":
                 problems.append({"id": art["id"], "detail": "神祇被简成神只"})
-            elif src == "祇" and dst == "祇" and prev not in ("神", "地"):
+            elif src == "祇" and dst == "祇" and not deity_qi(chars, i):
                 problems.append({"id": art["id"], "detail": "祇没有作只"})
             elif src == "乾" and dst not in ("乾", "干"):
                 problems.append({"id": art["id"], "detail": "乾简成了%s" % dst})

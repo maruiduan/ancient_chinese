@@ -127,8 +127,16 @@ def dump_json(path: Path, data, pretty: bool = False) -> None:
 
 def to_simplified(text: str) -> str:
     out = []
-    for ch in text:
+    for i, ch in enumerate(text):
         simp = CC.convert(ch)
+        # 「祇」作「只、仅」时简体作只。神祇、地祇，以及「皇地之祇」这种隔着「之」的，仍作祇。
+        if ch == "祇":
+            prev = text[i - 1] if i else ""
+            prev2 = text[i - 2] if i >= 2 else ""
+            if prev in ("神", "地") or (prev == "之" and prev2 in ("神", "地")):
+                simp = "祇"
+            else:
+                simp = "只"
         if len(simp) != 1:
             raise SystemExit(f"简繁不对齐：{ch} -> {simp}")
         out.append(simp)
