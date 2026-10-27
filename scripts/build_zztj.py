@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""从维基文库《资治通鉴》生成周纪、秦纪、汉纪篇目（卷一至卷六十八）。
+"""从维基文库《资治通鉴》生成周纪、秦纪、汉纪、魏纪篇目（卷一至卷七十八）。
 
 正文是司马光的纪事。标明「增补」或「据近人考证移入」的段落不收。
 课注在 sources/zztj/lessons/。底本说明见 sources/zztj/EDITION.md。
@@ -30,6 +30,8 @@ PUNCT = set("，。！？；、：·．…—～「」『』（）【】《》�
 CN_DIGIT = "〇一二三四五六七八九零○"
 YEAR_RE = re.compile(r"^(.+?)([元一二三四五六七八九十百]+)年(.*)$")
 RESTORE_MARK = ("章校", "十二行本")
+# 卷六十九起才把章钰校注、钱仪吉补出的缺文当作正文。卷一至六十八仍只认章校和十二行本。
+WEI_RESTORE_MARK = ("章校", "十二行本", "章注", "錢儀吉")
 SUPPLEMENT_MARK = ("增补", "增補", "移入", "移往", "近人")
 HEADING_RE = re.compile(r"^(=+)\s*(.+?)\s*\1\s*$")
 STOP_RE = re.compile(r"校刊|校記|校记|校改")
@@ -94,11 +96,12 @@ JUAN_ERA = {
     57: "han",
     58: "han", 59: "han", 60: "han", 61: "han",
     62: "han", 63: "han", 64: "han", 65: "han", 66: "han", 67: "han", 68: "han",
+    69: "wei", 70: "wei", 71: "wei", 72: "wei", 73: "wei",
+    74: "wei", 75: "wei", 76: "wei", 77: "wei", 78: "wei",
 }
 LAST_JUAN = max(JUAN_ERA)
 
 LATER_ERAS = [
-    {"id": "wei", "title": "魏纪", "juan": "卷六十九起", "note": "待添加"},
     {"id": "jin", "title": "晋纪", "juan": "卷七十九起", "note": "待添加"},
     {"id": "song", "title": "宋纪", "juan": "卷一百一十九起", "note": "待添加"},
     {"id": "qi", "title": "齐纪", "juan": "卷一百三十五起", "note": "待添加"},
@@ -148,16 +151,24 @@ def clean_inline(text: str) -> str:
     text = re.sub(r"<!--.*?-->", "", text, flags=re.S)
     text = re.sub(r"-\{([^}]+)\}-", r"\1", text)
     text = re.sub(r"\[\[(?:[^|\]]+\|)?([^\]]+)\]\]", r"\1", text)
-    # 卷六十六把年号写在 {{YL|}} 里，先展开，再丢掉其余模板。
+    # 卷六十六把年号写在 {{YL|}} 里；卷七十八用 {{僻字}} 拼孙吴太子的名字。先展开，再丢掉其余模板。
     text = re.sub(r"\{\{YL\|([^}]+)\}\}", r"\1", text)
+    text = re.sub(r"\{\{僻字\|([^|}]+)\|[^}]+\}\}", r"\1", text)
     text = re.sub(r"\{\{\*\|(.*?)\}\}", r"（\1）", text)
     text = re.sub(r"\{\{[^}]+\}\}", "", text)
     text = text.translate(VARIANTS)
     return text
 
 
-def classify_ref(ref: str) -> str:
-    if any(mark in ref for mark in RESTORE_MARK):
+def classify_ref(ref: str, juan: int = 0) -> str:
+    # 点读本把司马光未改的「蜀」逕改成「汉」。括号里留着的才是本文。
+    if juan >= 69 and "司馬光未改" in ref:
+        return "supplement"
+    # 胡注指出「取魏、宋」脱去「晋」。通鉴用晋的年号纪事，从注补回。
+    if juan >= 69 and "取魏" in ref and "胡注" in ref:
+        return "restore"
+    marks = WEI_RESTORE_MARK if juan >= 69 else RESTORE_MARK
+    if any(mark in ref for mark in marks):
         return "restore"
     if any(mark in ref for mark in SUPPLEMENT_MARK):
         return "supplement"
@@ -215,7 +226,7 @@ def tidy_text(text: str) -> str:
     return text
 
 
-def apply_emendations(text: str) -> str:
+def apply_emendations(text: str, juan: int = 0) -> str:
     parts = re.split(r"<ref>(.*?)</ref>", text, flags=re.S)
     chunks = []
     for i, part in enumerate(parts):
@@ -223,7 +234,7 @@ def apply_emendations(text: str) -> str:
             continue
         ref = parts[i + 1] if i + 1 < len(parts) else ""
         if ref:
-            part = transform_segment(part, classify_ref(ref))
+            part = transform_segment(part, classify_ref(ref, juan))
         chunks.append(part)
     text = "".join(chunks)
     text = transform_segment(text, "emend")
@@ -255,7 +266,7 @@ def split_sentences(text: str) -> list[str]:
     return cleaned
 
 
-def paragraph_from_line(raw: str) -> str:
+def paragraph_from_line(raw: str, juan: int = 0) -> str:
     line = raw.strip()
     if (
         not line
@@ -267,7 +278,7 @@ def paragraph_from_line(raw: str) -> str:
     line = re.sub(r"^:+", "", line).strip()
     line = re.sub(r"^'''\d+'''", "", line).strip()
     line = clean_inline(line)
-    line = apply_emendations(line)
+    line = apply_emendations(line, juan)
     line = line.strip("，、；： ")
     if not line or line in {"。", "，"}:
         return ""
@@ -293,11 +304,29 @@ def cn_int(text: str) -> int | None:
     return value
 
 
+# 卷四十四起把庙号帝号写进年份标题。卷六十起献帝纪按甲乙分卷。卷六十九起魏纪同样把帝号写在年号前。
+EMPEROR_PREFIX_RE = re.compile(
+    r"^(?:漢)?"
+    r"(?:"
+    r"(?:世祖光武|顯宗孝明|显宗孝明|肅宗孝章|肃宗孝章|孝和|孝殤|孝安|孝順|孝顺|孝質|孝质|孝桓|孝靈|孝灵|孝獻|孝献)皇帝"
+    r"(?:[上中下]之[上中下]|[上中下]|[甲乙丙丁戊己庚辛壬癸])?"
+    r"|世祖文皇帝"
+    r"|烈祖明皇帝(?:中之下|下)?"
+    r"|邵陵厲公[中下]"
+    r"|高貴鄉公下"
+    r"|元皇帝下"
+    r")"
+)
+
+
+def strip_emperor_prefix(heading: str) -> str:
+    return EMPEROR_PREFIX_RE.sub("", heading)
+
+
 def parse_heading(raw: str, last_king: str) -> tuple[str, dict | None]:
     heading = clean_inline(raw).strip()
     heading = re.sub(r"\s+", "", heading)
-    # 卷四十四起维基文库把庙号帝号写进年份标题，如「世祖光武皇帝下建武二十三年」；卷六十起献帝纪按甲乙丙丁分卷，如「孝獻皇帝乙初平二年」。
-    heading = re.sub(r"^(?:世祖光武|顯宗孝明|显宗孝明|肅宗孝章|肃宗孝章|孝和|孝殤|孝安|孝順|孝顺|孝質|孝质|孝桓|孝靈|孝灵|孝獻|孝献)皇帝(?:[上中下]之[上中下]|[上中下]|[甲乙丙丁戊己庚辛壬癸])?(?=.+年)", "", heading)
+    heading = strip_emperor_prefix(heading)
     if not heading or STOP_RE.search(heading):
         return last_king, None
     matched = YEAR_RE.match(heading)
@@ -312,6 +341,10 @@ def parse_heading(raw: str, last_king: str) -> tuple[str, dict | None]:
         king = last_king
         heading = king + num + "年" + rest
     elif king:
+        last_king = king
+    # 卷六十九把黄初二年、三年写成「文帝二年」「文帝三年」。
+    if king == "文帝" and num in {"二", "三"}:
+        king = "黃初"
         last_king = king
     title = f"{king}{num}年"
     date = ""
@@ -528,6 +561,179 @@ JUAN_SENSE_FIXES: dict[int, list[tuple[str, str, int]]] = {
         ("操登台見之", "操登臺見之", 1),
         ("必與穎川典農", "必與潁川典農", 1),
     ],
+    # 卷六十九至七十八：讹字、拆字从胡刻及《三国志》。章校、章注、钱仪吉在 classify_ref 里保留，不在这里重复。
+    69: [
+        ("或言宜諸城守", "或言宜易諸城守", 1),
+        ("臨菑臨國謁者", "臨菑監國謁者", 1),
+        ("毋丘", "毌丘", 2),
+        ("不得西度", "不得西渡", 1),
+        ("善惡就合", "善惡既合", 1),
+        ("替之哉！令大軍垂至", "替之哉！今大軍垂至", 1),
+        ("若有以道德者", "若以有道德者", 1),
+        ("拔亂世反諸正", "撥亂世反諸正", 1),
+        ("彼此鈞敵", "彼此均敵", 1),
+        ("社稷危也", "社稷危矣", 1),
+    ],
+    70: [
+        ("棄敝趫", "棄敝蹻", 1),
+        ("而復循之，此未易", "而復脩之，此未易", 1),
+        ("以成美化。如今王業", "以成美化。加今王業", 1),
+        ("職大事責重", "職大者責重", 1),
+        ("顧公在座", "顧公在坐", 1),
+        ("默默不言", "默然不言", 1),
+        ("若只如此", "若祇如此", 1),
+        ("七縱七擒", "七縱七禽", 1),
+        ("時大寒，冰", "時天寒，冰", 1),
+        ("亦欲與眾均等", "亦欲令與眾均等", 1),
+        ("雖今日破之，明日復反", "今日破之，明日復反", 1),
+        ("令黠虜玩威", "今黠虜玩威", 1),
+        ("強圖協洽", "強圉協洽", 1),
+    ],
+    71: [
+        ("為疑軍", "為疑兵", 1),
+        ("帝遺曹真都督關右諸軍亮身率大軍", "帝遣曹真都督關右諸軍軍郿。亮身率大軍", 1),
+        ("斂眾固守", "斂眾居守", 1),
+        ("諸有忠慮於國，但勤攻", "諸有忠慮於國者，但勤攻", 1),
+        ("功可蹺足", "功可蹻足", 1),
+        ("親人繼箋", "親人齎牋", 1),
+        ("不可失時！", "不可失也！", 1),
+        ("若入無強口，寵深為之備", "若入無彊口，宜深為之備", 1),
+        ("三道俱進", "三道並進", 2),
+        ("吳遺兵斷", "吳遣兵斷", 1),
+        ("況臣駑馭", "況臣駑下", 1),
+        ("梯燃", "梯然", 1),
+        ("自出建威", "自出至建威", 1),
+    ],
+    72: [
+        ("督諸軍五萬人", "督軍五萬人", 1),
+        ("利不在戰", "利在不戰", 1),
+        ("獲甲著三千", "獲甲首三千", 1),
+        ("下情得展示私室，親理之路通", "下情得展於私室，親姻之路通", 1),
+        ("匪他之誡，不思《伐木》", "匪他之誡，下思《伐木》", 1),
+        ("傾葉太陽", "傾太陽", 1),
+        ("參軍孤忠", "參軍狐忠", 1),
+        ("成籓", "成藩", 1),
+        ("至心震動", "至心感動", 1),
+        ("皆悉俱東", "皆悉居東", 1),
+        ("小害自己", "小害自已", 1),
+        ("自案中道", "自按中道", 1),
+    ],
+    73: [
+        ("不過一大郡", "不過漢一大郡", 1),
+        ("豈憚一臣", "豈憚一人", 1),
+        ("少凝聖德", "少凝聖聽", 1),
+        ("去病臣匈奴", "去病慮匈奴", 1),
+        ("北鍬", "北狄", 1),
+        ("使得就養", "使得就農", 1),
+        ("所傷不貲", "所傷不訾", 1),
+        ("民雖障離", "民雖障防", 1),
+        ("天下生生者", "天下生財者", 1),
+        ("帝嘗著衣冒，被", "帝嘗著帽，被", 1),
+        ("大意若曰", "天意若曰", 1),
+        ("令宜罷散", "今宜罷散", 1),
+        ("連繼以問巨鹿張□，□密謂綽曰", "連齎以問鉅鹿張臶，臶密謂綽曰", 1),
+        ("往往棋□寺", "往往棋跱", 1),
+        ("悲翠", "翡翠", 1),
+        ("恭王兗", "恭王袞", 1),
+        ("感寤", "感悟", 1),
+        ("復上書誹謗。，辭指", "復上書誹謗，辭指", 1),
+    ],
+    74: [
+        ("羊道", "羊衜", 3),
+        ("夙夜匪解", "夙夜匪懈", 1),
+        ("智調", "智謀", 2),
+        ("不須送任！」任午，襄平潰", "不須送任！」壬午，襄平潰", 1),
+        ("遣使繼金屑", "遣使齎金屑", 1),
+        ("皆怖畏", "皆畏怖", 1),
+        ("厄以聞知", "顧以聞知", 1),
+        ("謝肱", "謝厷", 1),
+        ("不能佳。」肱又問", "不能佳。」厷又問", 1),
+        ("壹未答。肱曰：「得無", "壹未答。厷曰：「得無", 1),
+        ("君語近之也。」肱曰：「潘", "君語近之也。」厷曰：「潘", 1),
+        ("懇惻", "懇側", 1),
+        ("更命秘書", "更名秘書", 1),
+        ("弄機敗官", "弄權敗官", 1),
+        ("遂繼出，大言", "遂齎出，大言", 1),
+        ("繼手詔", "齎手詔", 1),
+        ("無所復恨矣！」乃召齊", "無所復恨矣！」及召齊", 1),
+        ("感寤", "感悟", 2),
+        ("督農楊；敏", "督農楊敏", 1),
+    ],
+    75: [
+        ("踧□而已", "踧踖而已", 1),
+        ("德之薄厚", "德之厚薄", 1),
+        ("輿病繼棺", "輿病齎棺", 1),
+        ("穎川", "潁川", 1),
+        ("欲補衣定支黨", "欲補綴支黨", 1),
+        ("慶賞威刑", "慶賞刑威", 1),
+        ("陪陵夷反", "涪陵夷反", 1),
+        ("久之，復為并州刺史", "久而復為并州刺史", 1),
+        ("非禮不履", "非禮勿履", 1),
+        ("犬屯犢", "豚犢", 1),
+        ("未同凶其人", "未見其人", 1),
+        ("使還□脊土", "使還塉土", 1),
+        ("疆場", "疆埸", 1),
+        ("毋丘", "毌丘", 2),
+        ("於帝曰；「臣昔", "於帝曰：「臣昔", 1),
+    ],
+    76: [
+        ("書戒之日", "書戒之曰", 1),
+        ("求不得死乎", "求不死，得乎", 1),
+        ("觀隙耐勸", "觀隙而動", 1),
+        ("疆場", "疆埸", 1),
+        ("虐用其民，番國之眾", "虛用其民，悉國之眾", 1),
+        ("所繼酒", "所齎酒", 1),
+        ("不宜言乞情盡意", "不宜訖情盡意", 1),
+        ("毌丘儉等案兵", "毌丘儉等按兵", 1),
+        ("案兵養銳", "按兵養銳", 1),
+        ("案甲息師", "按甲息師", 1),
+    ],
+    77: [
+        ("士卒彫殘", "士卒凋殘", 1),
+        ("食羌谷", "食羌榖", 1),
+        ("呂擾", "呂據", 1),
+        ("巾韝", "巾褠", 1),
+        ("絲林", "綝", 3),
+        ("密使鴆", "密使酖", 1),
+        ("右洛中", "若洛中", 1),
+        ("聚谷", "聚榖", 2),
+        ("將小子靚", "將少子靚", 1),
+        ("綝大發卒", "綝大發兵", 1),
+        ("五人前解", "五入前解", 1),
+        ("就谷淮北", "就榖淮北", 1),
+        ("勾踐", "句踐", 1),
+        ("帶□建執弓", "帶鞬執弓", 1),
+        ("褚□", "褚䂮", 2),
+        ("復不城", "復還城", 1),
+        ("甲寅，覆命司馬昭", "甲寅，復命司馬昭", 1),
+        ("充曰；", "充曰：", 1),
+        ("甚哀，曰；", "甚哀，曰：", 1),
+    ],
+    78: [
+        ("力少於寇", "力小於寇", 1),
+        ("布惶恐", "布皇恐", 1),
+        ("沛人劉伶", "沛國劉伶", 1),
+        ("壽春已來", "壽春以來", 1),
+        ("春，二月，覆命", "春，正月，復命", 1),
+        ("孫言胥", "孫諝", 1),
+        ("殺言胥", "殺諝", 1),
+        ("遺人祭諸葛亮", "遣人祭諸葛亮", 1),
+        ("格鬥而死", "格鬬而死", 1),
+        ("庫藏積穀", "庫藏積榖", 1),
+        ("從橋頭還，緒趣截", "從橋頭過，緒趣截", 1),
+        ("事部郎", "吏部郎", 1),
+        ("山高谷深", "山谷高深", 1),
+        ("瞻退往綿竹", "瞻退住綿竹", 1),
+        ("唐亭候", "唐亭侯", 1),
+        ("迸山野", "迸山澤", 1),
+        ("令子□出拜", "令子𩅦出拜", 1),
+        ("把□以托之", "指𩅦以託之", 1),
+        ("太子□及其", "太子𩅦及其", 1),
+        ("人賜白□陷", "人賜白㡊", 1),
+        ("瘀逢涒灘", "閼逢涒灘", 2),
+        ("獻捷交至，覆命", "獻捷交至，復命", 1),
+        ("每歎曰；", "每歎曰：", 1),
+    ],
 }
 
 
@@ -554,11 +760,7 @@ def year_heading_line(raw: str) -> str | None:
         return None
     if "年" not in line:
         return None
-    trial = re.sub(
-        r"^(?:漢)?(?:世祖光武|顯宗孝明|显宗孝明|肅宗孝章|肃宗孝章|孝和|孝殤|孝安|孝順|孝顺|孝質|孝质|孝桓|孝靈|孝灵|孝獻|孝献)皇帝(?:[上中下]之[上中下]|[上中下]|[甲乙丙丁戊己庚辛壬癸])?",
-        "",
-        line,
-    )
+    trial = strip_emperor_prefix(line)
     if YEAR_RE.match(trial):
         return line
     return None
@@ -576,6 +778,12 @@ def parse_juan(juan: int, text: str) -> tuple[str, list[dict]]:
     text = text.replace("援立之功，\n\n冬，十月，戊子朔，", "援立之功，冬，十月，戊子朔，")
     if juan == 62:
         text = restore_sunce_kuaiji(text)
+    if juan == 72:
+        # 点读本把「庲降都督张翼」和「用法严峻」断成两行，逗号落在下一行。
+        text = text.replace(
+            "〔漢〕(蜀)庲降都督張翼<ref>〔漢〕(蜀)庲降都督張翼　此處司馬光未改「蜀」為「漢」，逕改。</ref>\n，用法嚴峻",
+            "〔漢〕(蜀)庲降都督張翼，用法嚴峻<ref>〔漢〕(蜀)庲降都督張翼　此處司馬光未改「蜀」為「漢」，逕改。</ref>",
+        )
     for old, new, count in JUAN_TRAD_FIXES.get(juan, []):
         assert text.count(old) == count, (juan, old, text.count(old))
         text = text.replace(old, new)
@@ -621,14 +829,14 @@ def parse_juan(juan: int, text: str) -> tuple[str, list[dict]]:
                 current = meta
             continue
         if stripped.startswith("'''起") and not span:
-            span = apply_emendations(clean_inline(stripped))
+            span = apply_emendations(clean_inline(stripped), juan)
             continue
         span_line = clean_inline(stripped)
         span_line = re.sub(r"\s+", "", span_line)
         if not span and re.fullmatch(r".{0,12}起.+凡[^。]{1,12}年。?", span_line):
             matched_span = re.search(r"起.+凡[^。]{1,12}年。?", span_line)
             if matched_span:
-                span = apply_emendations(matched_span.group(0))
+                span = apply_emendations(matched_span.group(0), juan)
                 continue
         if re.fullmatch(r"資治通鑑第?\d+卷", span_line):
             continue
@@ -637,10 +845,14 @@ def parse_juan(juan: int, text: str) -> tuple[str, list[dict]]:
         # 卷四十四正文中夹着一行帝号小标题「顯宗孝明皇帝上」，不是正文。
         if re.fullmatch(r"(?:漢)?(?:世祖光武|顯宗孝明|肅宗孝章|孝和|孝殤|孝安|孝順|孝顺|孝質|孝桓|孝靈|孝灵|孝獻|孝献)皇帝(?:[上中下]之[上中下]|[上中下]+|[甲乙丙丁戊己庚辛壬癸])", stripped):
             continue
+        # 卷六十九起卷首另起一行的帝号，不是正文。
+        title_line = re.sub(r"\s+", "", clean_inline(stripped)).strip("*＊")
+        if re.fullmatch(r"(?:世祖文皇帝|烈祖明皇帝|邵陵厲公|高貴鄉公|元皇帝).{0,8}", title_line):
+            continue
         # 卷三十三：维基文库在建平元年标题前多出一行帝号「孝哀皇帝上」，不是正文。
         if re.fullmatch(r"(?:孝.皇帝|王莽)[上中下]", stripped):
             continue
-        paragraph = paragraph_from_line(raw)
+        paragraph = paragraph_from_line(raw, juan)
         if paragraph:
             current["paragraphs_t"].append(paragraph)
     kept = []
@@ -791,6 +1003,8 @@ def volume_title(entry: dict) -> str:
         58: "汉纪五十", 59: "汉纪五十一", 60: "汉纪五十二", 61: "汉纪五十三",
         62: "汉纪五十四", 63: "汉纪五十五", 64: "汉纪五十六", 65: "汉纪五十七",
         66: "汉纪五十八", 67: "汉纪五十九", 68: "汉纪六十",
+        69: "魏纪一", 70: "魏纪二", 71: "魏纪三", 72: "魏纪四", 73: "魏纪五",
+        74: "魏纪六", 75: "魏纪七", 76: "魏纪八", 77: "魏纪九", 78: "魏纪十",
     }
     return names[entry["juan"]]
 
@@ -854,7 +1068,7 @@ def catalog_for(entries: list[dict]) -> dict:
         "title": "资治通鉴",
         "author": "司马光",
         "articleCount": len(entries),
-        "scope": "周纪、秦纪、汉纪（卷一至卷六十八）",
+        "scope": "周纪、秦纪、汉纪、魏纪（卷一至卷七十八）",
         "volumes": volumes,
         "later": LATER_ERAS,
     }
