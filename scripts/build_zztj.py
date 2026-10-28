@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""从维基文库《资治通鉴》生成周纪、秦纪、汉纪、魏纪篇目（卷一至卷七十八）。
+"""从维基文库《资治通鉴》生成周纪、秦纪、汉纪、魏纪、晋纪篇目（卷一至卷八十八）。
 
 正文是司马光的纪事。标明「增补」或「据近人考证移入」的段落不收。
 课注在 sources/zztj/lessons/。底本说明见 sources/zztj/EDITION.md。
@@ -98,11 +98,13 @@ JUAN_ERA = {
     62: "han", 63: "han", 64: "han", 65: "han", 66: "han", 67: "han", 68: "han",
     69: "wei", 70: "wei", 71: "wei", 72: "wei", 73: "wei",
     74: "wei", 75: "wei", 76: "wei", 77: "wei", 78: "wei",
+    79: "jin", 80: "jin", 81: "jin", 82: "jin", 83: "jin",
+    84: "jin", 85: "jin", 86: "jin", 87: "jin", 88: "jin",
 }
 LAST_JUAN = max(JUAN_ERA)
 
 LATER_ERAS = [
-    {"id": "jin", "title": "晋纪", "juan": "卷七十九起", "note": "待添加"},
+    {"id": "jin", "title": "晋纪", "juan": "卷八十九起", "note": "陆续添加"},
     {"id": "song", "title": "宋纪", "juan": "卷一百一十九起", "note": "待添加"},
     {"id": "qi", "title": "齐纪", "juan": "卷一百三十五起", "note": "待添加"},
     {"id": "liang", "title": "梁纪", "juan": "卷一百四十五起", "note": "待添加"},
@@ -137,6 +139,9 @@ def to_simplified(text: str) -> str:
                 simp = "祇"
             else:
                 simp = "只"
+        # 钱璯的璯，OpenCC 收成另一个字㻅。
+        if ch == "璯":
+            simp = "璯"
         if len(simp) != 1:
             raise SystemExit(f"简繁不对齐：{ch} -> {simp}")
         out.append(simp)
@@ -323,6 +328,10 @@ EMPEROR_PREFIX_RE = re.compile(
     r"|邵陵厲公[中下]"
     r"|高貴鄉公下"
     r"|元皇帝下"
+    r"|世祖武皇帝(?:上之上|上之下|中|下)?"
+    r"|孝惠皇帝(?:上之上|上之下|中之上|中之下|下)?"
+    r"|孝懷皇帝(?:上|中|下)?"
+    r"|孝愍皇帝上"
     r")"
 )
 
@@ -742,6 +751,56 @@ JUAN_SENSE_FIXES: dict[int, list[tuple[str, str, int]]] = {
         ("獻捷交至，覆命", "獻捷交至，復命", 1),
         ("每歎曰；", "每歎曰：", 1),
     ],
+    79: [
+        ("危險□脊確", "危險塉确", 1),
+        ("皆降爲候", "皆降爲侯", 1),
+        ("胄爲東莞王", "伷爲東莞王", 1),
+    ],
+    80: [
+        ("人由", "伷", 2),
+    ],
+    81: [
+        ("謗□沓", "謗𠴲", 1),
+        ("□-{台}-", "𥹋", 1),
+    ],
+    82: [
+        ("著雍郭牂", "著雍敦牂", 2),
+        ("穎川陳□□", "潁川陳眕", 1),
+        ("猗□", "猗㐌", 4),
+        ("猗戶", "猗盧", 2),
+        ("（丁巳、公元", "（丁巳，公元", 1),
+        ("人由", "伷", 1),
+    ],
+    83: [
+        ("目章涒灘", "上章涒灘", 2),
+    ],
+    84: [
+        ("賞不□俞時", "賞不踰時", 1),
+        ("尚書陵公漼", "尚書廣陵公漼", 1),
+        ("人由", "伷", 1),
+    ],
+    85: [
+        ("東贏公", "東嬴公", 1),
+        ("猗迤", "猗㐌", 2),
+    ],
+    86: [
+        ("周□", "周玘", 5),
+        ("□密使", "玘密使", 1),
+        ("與□、榮", "與玘、榮", 1),
+        ("陸玩爲手彖", "陸玩爲掾", 1),
+        ("猗迤", "猗㐌", 5),
+        ("東贏公", "東嬴公", 2),
+    ],
+    87: [
+        ("周□", "周玘", 1),
+        ("□三定江南", "玘三定江南", 1),
+        ("睿以□為", "睿以玘為", 1),
+    ],
+    88: [
+        ("自□交磽津", "自䂭磽津", 1),
+        ("皇□儀殿", "䳨儀殿", 1),
+        ("廷殿陳元達", "廷尉陳元達", 1),
+    ],
 }
 
 
@@ -825,7 +884,7 @@ def parse_juan(juan: int, text: str) -> tuple[str, list[dict]]:
         if stopped:
             continue
         stripped = raw.strip()
-        if stripped in {"__TOC__", "__NOTOC__"} or stripped.startswith(("{{", "[[", "|")):
+        if stripped in {"__TOC__", "__NOTOC__"} or stripped.startswith(("{{", "[[", "|", "}}")):
             continue
         plain_year = year_heading_line(raw)
         if plain_year and not heading_match:
@@ -856,6 +915,9 @@ def parse_juan(juan: int, text: str) -> tuple[str, list[dict]]:
         # 卷六十九起卷首另起一行的帝号，不是正文。
         title_line = re.sub(r"\s+", "", clean_inline(stripped)).strip("*＊")
         if re.fullmatch(r"(?:世祖文皇帝|烈祖明皇帝|邵陵厲公|高貴鄉公|元皇帝).{0,8}", title_line):
+            continue
+        # 卷七十九起晋纪卷首另起一行的帝号，不是正文。
+        if re.fullmatch(r"(?:世祖武皇帝|孝惠皇帝|孝懷皇帝|孝愍皇帝).{0,8}", title_line):
             continue
         # 卷三十三：维基文库在建平元年标题前多出一行帝号「孝哀皇帝上」，不是正文。
         if re.fullmatch(r"(?:孝.皇帝|王莽)[上中下]", stripped):
@@ -1013,6 +1075,8 @@ def volume_title(entry: dict) -> str:
         66: "汉纪五十八", 67: "汉纪五十九", 68: "汉纪六十",
         69: "魏纪一", 70: "魏纪二", 71: "魏纪三", 72: "魏纪四", 73: "魏纪五",
         74: "魏纪六", 75: "魏纪七", 76: "魏纪八", 77: "魏纪九", 78: "魏纪十",
+        79: "晋纪一", 80: "晋纪二", 81: "晋纪三", 82: "晋纪四", 83: "晋纪五",
+        84: "晋纪六", 85: "晋纪七", 86: "晋纪八", 87: "晋纪九", 88: "晋纪十",
     }
     return names[entry["juan"]]
 
@@ -1076,7 +1140,7 @@ def catalog_for(entries: list[dict]) -> dict:
         "title": "资治通鉴",
         "author": "司马光",
         "articleCount": len(entries),
-        "scope": "周纪、秦纪、汉纪、魏纪（卷一至卷七十八）",
+        "scope": "周纪、秦纪、汉纪、魏纪、晋纪（卷一至卷八十八）",
         "volumes": volumes,
         "later": LATER_ERAS,
     }
