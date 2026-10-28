@@ -4,7 +4,7 @@
 正文对照仓库里的底本缓存，不是现场去抓网页：
 
 - 古文观止：sources/wikisource/vol01–12.wikitext（维基文库）
-- 资治通鉴卷一至卷八十八：sources/zztj/juan01–88.wikitext（维基文库）
+- 资治通鉴已发布篇目：sources/zztj/juan01–88.wikitext（维基文库）。没有课注的年份不进目录，也不在这里核对。
 - 人间词话六十四则：sources/renjian/guocui-juan-shang.wikitext（维基文库）
 - 唐诗、宋词：sources/poetry/canonical.json
   （chinese-poetry 指定 commit 的选篇缓存）
@@ -37,7 +37,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from build_renjian import CORRECTIONS, WIKI as RENJIAN_WIKI, parse_entries, split_sentences  # noqa: E402
-from build_zztj import LAST_JUAN, load_years  # noqa: E402
+from build_zztj import LAST_JUAN, lesson_ready, load_years  # noqa: E402
 import build_shiji  # noqa: E402
 from hanzi import only_han  # noqa: E402
 from parse_wikisource import parse_volume  # noqa: E402
@@ -363,6 +363,8 @@ def check_zztj() -> tuple[list[dict], list[dict], list[dict]]:
     pieces = []
     unexpected = []
     for entry in load_years():
+        if not lesson_ready(entry):
+            continue
         art = load_article(ARTICLES / f"{entry['id']}.json")
         expect = only_han("".join(sent for para in entry["paragraphs_t"] for sent in para))
         got = published_han(art)

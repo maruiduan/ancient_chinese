@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""从维基文库《资治通鉴》生成周纪、秦纪、汉纪、魏纪、晋纪篇目（卷一至卷八十八）。
+"""从维基文库《资治通鉴》生成已有课注的篇目。底本收到卷八十八，目录只收课注已入库的年。
 
 正文是司马光的纪事。标明「增补」或「据近人考证移入」的段落不收。
 课注在 sources/zztj/lessons/。底本说明见 sources/zztj/EDITION.md。
@@ -103,8 +103,20 @@ JUAN_ERA = {
 }
 LAST_JUAN = max(JUAN_ERA)
 
+# 课注还没入库的卷。晋纪卷七十九至八十八底本已有，篇目未收。
+UNPUBLISHED_VOLUMES = [
+    {"id": "jin79", "title": "晋纪一", "juan": "卷七十九", "note": "陆续添加"},
+    {"id": "jin80", "title": "晋纪二", "juan": "卷八十", "note": "陆续添加"},
+    {"id": "jin81", "title": "晋纪三", "juan": "卷八十一", "note": "陆续添加"},
+    {"id": "jin82", "title": "晋纪四", "juan": "卷八十二", "note": "陆续添加"},
+    {"id": "jin83", "title": "晋纪五", "juan": "卷八十三", "note": "陆续添加"},
+    {"id": "jin84", "title": "晋纪六", "juan": "卷八十四", "note": "陆续添加"},
+    {"id": "jin85", "title": "晋纪七", "juan": "卷八十五", "note": "陆续添加"},
+    {"id": "jin86", "title": "晋纪八", "juan": "卷八十六", "note": "陆续添加"},
+    {"id": "jin87", "title": "晋纪九", "juan": "卷八十七", "note": "陆续添加"},
+    {"id": "jin88", "title": "晋纪十", "juan": "卷八十八", "note": "陆续添加"},
+]
 LATER_ERAS = [
-    {"id": "jin", "title": "晋纪", "juan": "卷八十九起", "note": "陆续添加"},
     {"id": "song", "title": "宋纪", "juan": "卷一百一十九起", "note": "待添加"},
     {"id": "qi", "title": "齐纪", "juan": "卷一百三十五起", "note": "待添加"},
     {"id": "liang", "title": "梁纪", "juan": "卷一百四十五起", "note": "待添加"},
@@ -1112,7 +1124,49 @@ def to_traditional_head(text: str) -> str:
     return text.translate(table)
 
 
+def lesson_ready(entry: dict) -> bool:
+    """课注文件在仓库里，这一年才进入目录和已发布正文核对。"""
+    if (LESSONS / f"{entry['id']}.json").exists():
+        return True
+    if not (LESSONS / f"{entry['id']}.lesson.json").exists():
+        return False
+    return any((LESSONS / "parts").glob(f"{entry['id']}-*.json"))
+
+
+def published_entries(entries: list[dict]) -> list[dict]:
+    return [item for item in entries if lesson_ready(item)]
+
+
+def cn_num(number: int) -> str:
+    digits = "零一二三四五六七八九"
+    if number < 10:
+        return digits[number]
+    if number < 20:
+        return "十" if number == 10 else "十" + digits[number % 10]
+    tens, ones = divmod(number, 10)
+    return digits[tens] + "十" + (digits[ones] if ones else "")
+
+
+def scope_for(entries: list[dict]) -> str:
+    order = (("zhou", "周纪"), ("qin", "秦纪"), ("han", "汉纪"), ("wei", "魏纪"), ("jin", "晋纪"))
+    have = {JUAN_ERA[item["juan"]] for item in entries}
+    names = [label for key, label in order if key in have]
+    last = max(item["juan"] for item in entries)
+    return "、".join(names) + f"（卷一至卷{cn_num(last)}）"
+
+
+def later_for(entries: list[dict]) -> list[dict]:
+    published = {item["juan"] for item in entries}
+    pending = []
+    for juan in range(79, 89):
+        if juan in published:
+            continue
+        pending.extend(item for item in UNPUBLISHED_VOLUMES if item["juan"] == f"卷{cn_num(juan)}")
+    return pending + LATER_ERAS
+
+
 def catalog_for(entries: list[dict]) -> dict:
+    entries = published_entries(entries)
     volumes = []
     for juan in range(1, LAST_JUAN + 1):
         group = [item for item in entries if item["juan"] == juan]
@@ -1140,9 +1194,9 @@ def catalog_for(entries: list[dict]) -> dict:
         "title": "资治通鉴",
         "author": "司马光",
         "articleCount": len(entries),
-        "scope": "周纪、秦纪、汉纪、魏纪、晋纪（卷一至卷八十八）",
+        "scope": scope_for(entries),
         "volumes": volumes,
-        "later": LATER_ERAS,
+        "later": later_for(entries),
     }
 
 
@@ -1181,6 +1235,10 @@ def keep_glosses(old: dict, new: dict) -> None:
 
 
 def write_articles(entries: list[dict]) -> None:
+    skipped = [entry["id"] for entry in entries if not lesson_ready(entry)]
+    entries = published_entries(entries)
+    if skipped:
+        print(f"课注未入库，目录不收 {len(skipped)} 篇，例如 {', '.join(skipped[:8])}")
     missing = []
     for entry in entries:
         try:
