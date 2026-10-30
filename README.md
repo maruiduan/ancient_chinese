@@ -98,3 +98,9 @@ python3 scripts/stage_site.py /tmp/site-next --previous-site /tmp/site-previous
 这个仓库原来是一套古代汉语词典爬虫。它和现在的学习站点不是同一件事，所以整目录移到了 `legacy/`，没有在它上面继续改。词典改用 Apache-2.0 的《说文》开源数据。
 
 发布后 CI 会从公开 OSS 逐一读取入口、版本、哈希资源（含兼容窗口内旧资源）及录音样本，与通过审计的产物逐字节摘要比较。此检查不发送凭据，也不替代真实浏览器的视觉和交互验收。每次审计另产出 `repair-patches-*` 下载包，包含固定基准补丁、应用检查和 SHA256SUMS。
+
+### Homepage publication checks
+
+`www/index.html` keeps the three module links in HTML, so navigation does not depend on JavaScript. The cross-origin statistics widget is a normal link: the existing CSP and frame restrictions remain unchanged.
+
+Both OSS workflows use `python3 scripts/publish_homepage.py www`: it validates all homepage inputs before uploading, writes `robots.txt` and `sitemap.xml` before the entry page, then compares the public OSS bytes to the local files. Upload denial or verification failure now fails the workflow instead of reporting success. A homepage failure does not mean the earlier, separately verified guwen deployment failed; inspect each step before retrying. Do not expand bucket permissions automatically.

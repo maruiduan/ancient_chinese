@@ -3182,6 +3182,7 @@
   }
 
   let syllableAudio = null;
+  let syllableRequest = 0;
   let audioManifestPromise = null;
 
   function audioPath(syl) {
@@ -3206,9 +3207,11 @@
 
   async function playSyllable(syl) {
     if (!syl) return false;
+    const request = ++syllableRequest;
     let audio;
     try {
       await loadAudioManifest();
+      if (request !== syllableRequest) return false;
       const url = audioPath(syl);
       if (!url) {
         showNotice("这个读音暂无录音。");
@@ -3218,8 +3221,11 @@
       audio = new Audio(url);
       syllableAudio = audio;
       await audio.play();
-      return true;
+      return request === syllableRequest;
     } catch (_) {
+      // A later tap pauses the previous audio, rejecting its pending play().
+      // That cancellation is not a playback failure for the current syllable.
+      if (request !== syllableRequest) return false;
       if (syllableAudio === audio) syllableAudio = null;
       showNotice("录音暂时无法播放，请稍后重试。");
       return false;

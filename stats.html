@@ -32,12 +32,13 @@
       width: 100%;
       text-align: center;
       line-height: 16px;
-      display: none;
+      display: block;
     }
   </style>
 </head>
 <body>
-  <p id="line"></p>
+  <p id="line" role="status">正在读取古文访问量…</p>
+  <noscript>请启用 JavaScript 查看访问量。<a href="/">返回古文</a></noscript>
   <script>
     (function () {
       var key = "gwgz-stats-v1";
@@ -54,10 +55,23 @@
           return;
         }
       } catch (err) {}
+      var settled = false;
+      function unavailable() {
+        if (settled) return;
+        settled = true;
+        line.textContent = "访问量暂时无法读取，请稍后刷新。";
+      }
+      var timeout = setTimeout(unavailable, 10000);
       var cb = "BusuanziCallback_" + Math.floor(Math.random() * 1e12);
       window[cb] = function (data) {
         try { delete window[cb]; } catch (err) {}
-        if (!data || typeof data.site_pv !== "number" || typeof data.site_uv !== "number") return;
+        if (settled) return;
+        clearTimeout(timeout);
+        if (!data || !Number.isFinite(data.site_pv) || !Number.isFinite(data.site_uv) || data.site_pv < 0 || data.site_uv < 0) {
+          unavailable();
+          return;
+        }
+        settled = true;
         var page = typeof data.page_pv === "number" ? data.page_pv : 0;
         var pv = data.site_pv - page;
         if (pv < 0) pv = 0;
@@ -68,7 +82,7 @@
       s.async = true;
       s.referrerPolicy = "no-referrer-when-downgrade";
       s.src = "https://busuanzi.ibruce.info/busuanzi?jsonpCallback=" + cb;
-      s.onerror = function () {};
+      s.onerror = function () { clearTimeout(timeout); unavailable(); };
       document.head.appendChild(s);
     })();
   </script>

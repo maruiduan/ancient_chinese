@@ -173,9 +173,7 @@ class ReleaseTests(unittest.TestCase):
         self.assertIn("artifact-ids: ${{ inputs.artifact-id }}", text)
         www = (root / ".github/workflows/publish-www.yml").read_text()
         for workflow in (www, text):
-            self.assertIn("scripts/put_oss_object.py", workflow)
+            self.assertIn("scripts/publish_homepage.py www", workflow)
             self.assertNotIn("ossutil cp ", workflow)
-            self.assertIn("! grep -q '可以读了'", workflow)
-            self.assertIn("www/robots.txt", workflow)
-            self.assertIn("www/sitemap.xml", workflow)
+            self.assertNotIn("exit 0", workflow)
         self.assertNotIn("ossutil", www)

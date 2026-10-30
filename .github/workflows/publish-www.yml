@@ -10,6 +10,8 @@ on:
       - www/sitemap.xml
       - scripts/oss_headers.py
       - scripts/put_oss_object.py
+      - scripts/publish_homepage.py
+      - .github/workflows/publish-www.yml
 
 permissions:
   contents: read
@@ -27,26 +29,4 @@ jobs:
           OSS_ACCESS_KEY_SECRET: ${{ secrets.OSS_ACCESS_KEY_SECRET }}
           OSS_ENDPOINT: https://oss-cn-hongkong.aliyuncs.com
           OSS_REGION: cn-hongkong
-        run: |
-          set -euo pipefail
-          test -f www/index.html
-          test -f www/robots.txt
-          test -f www/sitemap.xml
-          grep -q 'hm.js?b5b9eb7e229dc60c4ebcd43c57100446' www/index.html
-          grep -q 'busuanzi.pure.mini.js' www/index.html
-          grep -q 'https://guwen.lucca.top/stats.html' www/index.html
-          ! grep -q '已上线' www/index.html
-          ! grep -q '可以读了' www/index.html
-          grep -q '即将上线' www/index.html
-          grep -q 'en.lucca.top' www/index.html
-          grep -q 'ai.lucca.top' www/index.html
-          grep -q 'Sitemap: https://www.lucca.top/sitemap.xml' www/robots.txt
-          grep -q 'https://www.lucca.top/' www/sitemap.xml
-          if python3 scripts/put_oss_object.py www/index.html oss://lucca-www/index.html \
-            && python3 scripts/put_oss_object.py www/robots.txt oss://lucca-www/robots.txt \
-            && python3 scripts/put_oss_object.py www/sitemap.xml oss://lucca-www/sitemap.xml; then
-            echo "Published lucca homepage"
-          else
-            echo "::warning::lucca-www upload denied for this key; homepage must be uploaded with a key that can write lucca-www."
-            exit 0
-          fi
+        run: python3 scripts/publish_homepage.py www

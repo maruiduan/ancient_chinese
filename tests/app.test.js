@@ -110,3 +110,41 @@ test('upstream poem header toggles retain per-field progress and redraw the poem
   assert.equal(t.app.state.progress.pinyin, false);
   assert.equal(JSON.parse(t.localStorage.data.get('gwgz-progress-v2:pinyin')), false);
 });
+
+test('switching syllables does not report a cancelled older playback as a failure', async () => {
+  const t = reader();
+  t.app.state.audioManifest = { 'pù': 'pu4', 'shān': 'shan1' };
+  let rejectFirst, firstStarted;
+  const started = new Promise(resolve => { firstStarted = resolve; });
+  t.context.Audio = function (url) {
+    if (url === 'audio/pu4.ogg') {
+      this.play = () => { firstStarted(); return new Promise((resolve, reject) => { rejectFirst = reject; }); };
+      this.pause = () => rejectFirst(new Error('AbortError: play interrupted by pause'));
+    } else {
+      this.play = async () => {};
+      this.pause = () => {};
+    }
+  };
+  const first = t.app.playSyllable('pù');
+  await started;
+  assert.equal(await t.app.playSyllable('shān'), true);
+  assert.equal(await first, false);
+  assert.equal(t.get('app-notice').textContent, undefined);
+});
+
+test('only the latest requested syllable plays after a delayed manifest load', async () => {
+  const t = reader();
+  let finishManifest;
+  t.context.fetch = () => new Promise(resolve => { finishManifest = resolve; });
+  const played = [];
+  t.context.Audio = function (url) {
+    this.play = async () => { played.push(url); };
+    this.pause = () => {};
+  };
+  const first = t.app.playSyllable('pù');
+  const latest = t.app.playSyllable('shān');
+  finishManifest({ ok: true, json: async () => ({ 'pù': 'pu4', 'shān': 'shan1' }) });
+  assert.equal(await first, false);
+  assert.equal(await latest, true);
+  assert.deepEqual(played, ['audio/shan1.ogg']);
+});

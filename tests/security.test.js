@@ -228,7 +228,13 @@ test('lucca homepage lists live modules without 已上线 badges', () => {
   assert.match(html, /ai\.lucca\.top/);
   assert.equal(html.includes('已上线'), false);
   assert.equal(html.includes('可以读了'), false);
-  assert.match(html, /即将上线/);
+  // All modules are live; primary navigation must work without script execution.
+  const withoutScripts = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
+  for (const domain of ['guwen', 'en', 'ai']) {
+    assert.ok(withoutScripts.includes(`href="https://${domain}.lucca.top/"`));
+  }
+  assert.doesNotMatch(html, /<iframe/);
+  assert.ok(withoutScripts.includes('href="https://guwen.lucca.top/stats.html"'));
   assert.match(html, /og:title/);
   assert.match(html, /canonical/);
 });
