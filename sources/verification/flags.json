@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 667,
-        "chars": 650814,
+        "pieces": 676,
+        "chars": 659618,
         "unexpected": "0"
       },
       {
@@ -53,33 +53,33 @@
     "unexpected": [],
     "reviewChars": 17,
     "cacheSingle": 58,
-    "glosses": 21509,
-    "lessonFlags": 284,
-    "missingChars": 820,
-    "missingHits": 1586,
+    "glosses": 21688,
+    "lessonFlags": 285,
+    "missingChars": 822,
+    "missingHits": 1606,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 10474,
+        "count": 10533,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 3456,
+        "count": 3487,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 2768,
+        "count": 2786,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 476,
+        "count": 478,
         "note": "归并"
       },
       {
@@ -103,7 +103,7 @@
       {
         "trad": "裡",
         "simp": "里",
-        "count": 51,
+        "count": 53,
         "note": "归并"
       },
       {
@@ -3578,6 +3578,15 @@
       "word": "九石",
       "reading": "jiǔ dàn",
       "han": "石→dàn（汉典 shí）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z81-06",
+      "word": "沃沮",
+      "reading": "wò jū",
+      "han": "沮→jū（汉典 jǔ）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     }
   ]
