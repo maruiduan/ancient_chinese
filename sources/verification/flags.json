@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 688,
-        "chars": 675043,
+        "pieces": 690,
+        "chars": 682339,
         "unexpected": "0"
       },
       {
@@ -53,33 +53,33 @@
     "unexpected": [],
     "reviewChars": 17,
     "cacheSingle": 58,
-    "glosses": 21922,
-    "lessonFlags": 292,
-    "missingChars": 826,
-    "missingHits": 1626,
+    "glosses": 21968,
+    "lessonFlags": 293,
+    "missingChars": 829,
+    "missingHits": 1637,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 10672,
+        "count": 10723,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 3513,
+        "count": 3518,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 2804,
+        "count": 2818,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 481,
+        "count": 485,
         "note": "归并"
       },
       {
@@ -103,7 +103,7 @@
       {
         "trad": "裡",
         "simp": "里",
-        "count": 53,
+        "count": 55,
         "note": "归并"
       },
       {
@@ -3651,6 +3651,15 @@
       "reading": "斜",
       "han": "http://wyw.hwxnet.com/view/hwxe9hwx82hwxaa.html",
       "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z84-02",
+      "word": "朱提",
+      "reading": "shū shí",
+      "han": "朱→shū（汉典 zhū）；提→shí（汉典 tí、dǐ）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     }
   ]
 }
