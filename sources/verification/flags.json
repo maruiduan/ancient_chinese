@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 660,
-        "chars": 642406,
+        "pieces": 667,
+        "chars": 650814,
         "unexpected": "0"
       },
       {
@@ -53,33 +53,33 @@
     "unexpected": [],
     "reviewChars": 17,
     "cacheSingle": 58,
-    "glosses": 21376,
-    "lessonFlags": 280,
-    "missingChars": 812,
-    "missingHits": 1570,
+    "glosses": 21509,
+    "lessonFlags": 284,
+    "missingChars": 820,
+    "missingHits": 1586,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 10416,
+        "count": 10474,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 3422,
+        "count": 3456,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 2755,
+        "count": 2768,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 468,
+        "count": 476,
         "note": "归并"
       },
       {
@@ -103,7 +103,7 @@
       {
         "trad": "裡",
         "simp": "里",
-        "count": 50,
+        "count": 51,
         "note": "归并"
       },
       {
@@ -3542,6 +3542,42 @@
       "word": "式乾殿",
       "reading": "shì qián diàn",
       "han": "乾→qián（汉典 gàn）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z80-02",
+      "word": "谅暗",
+      "reading": "liàng ān",
+      "han": "暗→ān（汉典 àn）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "loan",
+      "where": "通假",
+      "id": "z80-02",
+      "word": "阳",
+      "reading": "佯",
+      "han": "http://wyw.hwxnet.com/view/hwxe9hwx98hwxb3.html",
+      "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "loan",
+      "where": "通假",
+      "id": "z80-06",
+      "word": "阳",
+      "reading": "佯",
+      "han": "http://wyw.hwxnet.com/view/hwxe9hwx98hwxb3.html",
+      "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z80-07",
+      "word": "九石",
+      "reading": "jiǔ dàn",
+      "han": "石→dàn（汉典 shí）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     }
   ]
