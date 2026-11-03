@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 676,
-        "chars": 659618,
+        "pieces": 686,
+        "chars": 667817,
         "unexpected": "0"
       },
       {
@@ -53,33 +53,33 @@
     "unexpected": [],
     "reviewChars": 17,
     "cacheSingle": 58,
-    "glosses": 21688,
-    "lessonFlags": 285,
-    "missingChars": 822,
-    "missingHits": 1606,
+    "glosses": 21876,
+    "lessonFlags": 290,
+    "missingChars": 825,
+    "missingHits": 1623,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 10533,
+        "count": 10599,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 3487,
+        "count": 3500,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 2786,
+        "count": 2793,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
         "trad": "雲",
         "simp": "云",
-        "count": 478,
+        "count": 481,
         "note": "归并"
       },
       {
@@ -3587,6 +3587,51 @@
       "word": "沃沮",
       "reading": "wò jū",
       "han": "沮→jū（汉典 jǔ）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z82-02",
+      "word": "谅暗",
+      "reading": "liàng ān",
+      "han": "暗→ān（汉典 àn）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "loan",
+      "where": "通假",
+      "id": "z82-02",
+      "word": "返",
+      "reading": "反",
+      "han": "http://wyw.hwxnet.com/view/hwxe8hwxbfhwx94.html",
+      "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "loan",
+      "where": "通假",
+      "id": "z82-03",
+      "word": "返",
+      "reading": "反",
+      "han": "http://wyw.hwxnet.com/view/hwxe8hwxbfhwx94.html",
+      "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z82-04",
+      "word": "厌劾",
+      "reading": "yā hé",
+      "han": "厌→yā（汉典 yàn）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z82-05",
+      "word": "雨雹",
+      "reading": "yù báo",
+      "han": "雨→yù（汉典 yǔ）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     }
   ]
