@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 652,
-        "chars": 632682,
+        "pieces": 660,
+        "chars": 642406,
         "unexpected": "0"
       },
       {
@@ -53,27 +53,27 @@
     "unexpected": [],
     "reviewChars": 17,
     "cacheSingle": 58,
-    "glosses": 21222,
-    "lessonFlags": 277,
-    "missingChars": 805,
-    "missingHits": 1556,
+    "glosses": 21376,
+    "lessonFlags": 280,
+    "missingChars": 812,
+    "missingHits": 1570,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 10340,
+        "count": 10416,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 3410,
+        "count": 3422,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 2746,
+        "count": 2755,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
@@ -85,7 +85,7 @@
       {
         "trad": "徵",
         "simp": "征",
-        "count": 259,
+        "count": 261,
         "note": "征召、征兆、征逐。不是乐律"
       },
       {
@@ -103,7 +103,7 @@
       {
         "trad": "裡",
         "simp": "里",
-        "count": 49,
+        "count": 50,
         "note": "归并"
       },
       {
@@ -121,7 +121,7 @@
       {
         "trad": "乾",
         "simp": "乾",
-        "count": 18,
+        "count": 19,
         "note": "乾坤、乾谿等读 qián，保留乾"
       },
       {
@@ -3515,6 +3515,33 @@
       "word": "禅代",
       "reading": "shàn dài",
       "han": "禅→shàn（汉典 chàn、chán）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z79-01",
+      "word": "禅位",
+      "reading": "shàn wèi",
+      "han": "禅→shàn（汉典 chàn、chán）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z79-03",
+      "word": "甔石",
+      "reading": "dān dàn",
+      "han": "石→dàn（汉典 shí）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z79-08",
+      "word": "式乾殿",
+      "reading": "shì qián diàn",
+      "han": "乾→qián（汉典 gàn）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
     }
   ]
