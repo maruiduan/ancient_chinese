@@ -9,8 +9,8 @@
       },
       {
         "collection": "资治通鉴",
-        "pieces": 686,
-        "chars": 667817,
+        "pieces": 688,
+        "chars": 675043,
         "unexpected": "0"
       },
       {
@@ -53,27 +53,27 @@
     "unexpected": [],
     "reviewChars": 17,
     "cacheSingle": 58,
-    "glosses": 21876,
-    "lessonFlags": 290,
-    "missingChars": 825,
-    "missingHits": 1623,
+    "glosses": 21922,
+    "lessonFlags": 292,
+    "missingChars": 826,
+    "missingHits": 1626,
     "simp": [
       {
         "trad": "於",
         "simp": "于",
-        "count": 10599,
+        "count": 10672,
         "note": "介词作于"
       },
       {
         "trad": "後",
         "simp": "后",
-        "count": 3500,
+        "count": 3513,
         "note": "归并"
       },
       {
         "trad": "餘",
         "simp": "余",
-        "count": 2793,
+        "count": 2804,
         "note": "总表正条作余。附注说可能混淆时可用馀。没有中华书局该书，不改成馀"
       },
       {
@@ -109,7 +109,7 @@
       {
         "trad": "乾",
         "simp": "干",
-        "count": 41,
+        "count": 42,
         "note": "干燥作干"
       },
       {
@@ -121,7 +121,7 @@
       {
         "trad": "乾",
         "simp": "乾",
-        "count": 19,
+        "count": 22,
         "note": "乾坤、乾谿等读 qián，保留乾"
       },
       {
@@ -3633,6 +3633,24 @@
       "reading": "yù báo",
       "han": "雨→yù（汉典 yǔ）",
       "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "reading",
+      "where": "实词",
+      "id": "z83-01",
+      "word": "式乾",
+      "reading": "shì qián",
+      "han": "乾→qián（汉典 gàn）",
+      "detail": "课注这一读音不在汉典缓存里，也不是说文默认音。未改课注。"
+    },
+    {
+      "kind": "loan",
+      "where": "通假",
+      "id": "z83-01",
+      "word": "邪",
+      "reading": "斜",
+      "han": "http://wyw.hwxnet.com/view/hwxe9hwx82hwxaa.html",
+      "detail": "汉典这一字头的释文里没有写明通这些字。通假保持原注，标为未核定。"
     }
   ]
 }
