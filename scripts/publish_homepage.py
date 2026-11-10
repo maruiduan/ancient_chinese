@@ -11,7 +11,7 @@ import xml.etree.ElementTree as ET
 
 from put_oss_object import put_object
 
-FILES = ('robots.txt', 'sitemap.xml', 'index.html')  # Entry point last.
+FILES = ('robots.txt', 'sitemap.xml', 'favicon.ico', 'og.png', 'index.html')  # Entry point last.
 ORIGIN = 'https://lucca-www.oss-cn-hongkong.aliyuncs.com/'
 MODULE_URLS = {'https://guwen.lucca.top/', 'https://en.lucca.top/', 'https://ai.lucca.top/'}
 
@@ -44,6 +44,12 @@ def validate(root: Path):
     locations = [el.text for el in sitemap.iter('{http://www.sitemaps.org/schemas/sitemap/0.9}loc')]
     if 'https://www.lucca.top/' not in locations:
         raise ValueError('Homepage sitemap is missing the canonical URL')
+    page = bodies['index.html'].decode('utf-8')
+    for banned in ('busuanzi', '详细统计', '古文访问量', '首页 · 访问量', 'tongji.baidu.com/web5', '电影跟读'):
+        if banned in page:
+            raise ValueError('Homepage must not publish removed counter or copy: ' + banned)
+    if 'hm.baidu.com/hm.js' not in page:
+        raise ValueError('Homepage must keep the Baidu analytics script')
     return bodies
 
 

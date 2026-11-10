@@ -32,14 +32,14 @@ GUWEN_CSP = (
     "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; "
     "img-src 'self' data: blob: https:; font-src 'self' data:; media-src 'self' blob:; "
     "style-src 'self' 'unsafe-inline'; "
-    "script-src 'self' 'unsafe-inline' https://hm.baidu.com https://busuanzi.ibruce.info; "
+    "script-src 'self' 'unsafe-inline' https://hm.baidu.com; "
     "connect-src 'self' https://hm.baidu.com https://api.lucca.top; form-action 'self'"
 )
 WWW_CSP = (
     "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; "
     "img-src 'self' data: https:; font-src 'self' data:; "
     "style-src 'self' 'unsafe-inline'; "
-    "script-src 'self' 'unsafe-inline' https://hm.baidu.com https://busuanzi.ibruce.info; "
+    "script-src 'self' 'unsafe-inline' https://hm.baidu.com; "
     "connect-src 'self' https://hm.baidu.com; form-action 'self'"
 )
 

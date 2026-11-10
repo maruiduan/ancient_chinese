@@ -46,8 +46,8 @@ function buildSingleSendMail(env, message, nonce, date) {
     AddressType: "1",
     ReplyToAddress: "false",
     ToAddress: message.to,
-    Subject: "典籍登录验证码",
-    FromAlias: env.DIRECTMAIL_FROM_ALIAS || "典籍",
+    Subject: "古文登录验证码",
+    FromAlias: env.DIRECTMAIL_FROM_ALIAS || "古文",
     ClickTrace: "0",
     TextBody: "你的验证码是 " + message.code + "，10 分钟内有效。如果这不是你本人的操作，忽略这封邮件即可。",
   };
