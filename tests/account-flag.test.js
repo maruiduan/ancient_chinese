@@ -72,7 +72,7 @@ test("the page points at the API and still lazy-loads account code", () => {
   assert.doesNotMatch(html, /<script src="js\/sync-merge(?:\.[0-9a-f]{12})?\.js"><\/script>/);
 });
 
-test("logged-out boot does nothing until health succeeds, then only shows 登录", async () => {
+test("logged-out boot does nothing until health succeeds, then only shows 同步进度", async () => {
   const off = runBoot({ apiBase: "" });
   assert.equal(off.fetches.length, 0);
   assert.equal(off.created.length, 0);
@@ -88,7 +88,7 @@ test("logged-out boot does nothing until health succeeds, then only shows 登录
   await new Promise(function (resolve) { setTimeout(resolve, 0); });
   assert.deepEqual(up.fetches, ["https://api.example/health"]);
   assert.equal(up.header.children.length, 1);
-  assert.equal(up.header.children[0].textContent, "登录");
+  assert.equal(up.header.children[0].textContent, "同步进度");
   assert.equal(up.created.some(function (node) { return node.src; }), false);
 
   up.window.gwgzAccount = { ready: true, route() { up.routed = true; } };

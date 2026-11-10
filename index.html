@@ -6,15 +6,23 @@
   <meta name="color-scheme" content="light dark" />
   <meta name="theme-color" content="#f6f3ec" media="(prefers-color-scheme: light)" />
   <meta name="theme-color" content="#16150f" media="(prefers-color-scheme: dark)" />
-  <title>典籍</title>
+  <title>古文 · 逐句注译 · lucca</title>
   <meta name="description" content="按原书读经典。古文观止、资治通鉴、史记、道德经、论语、唐诗、宋词、人间词话、课文。点开字，看读音和本义。" />
   <link rel="canonical" href="https://guwen.lucca.top/">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="典籍 · lucca">
-  <meta property="og:title" content="典籍">
+  <meta property="og:site_name" content="古文 · lucca">
+  <meta property="og:title" content="古文 · 逐句注译 · lucca">
   <meta property="og:description" content="按原书读经典。点开字，看读音和本义。">
   <meta property="og:url" content="https://guwen.lucca.top/">
+  <meta property="og:image" content="https://guwen.lucca.top/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="古文 · 逐句注译">
   <meta property="og:locale" content="zh_CN">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="古文 · 逐句注译 · lucca">
+  <meta name="twitter:description" content="按原书读经典。点开字，看读音和本义。">
+  <meta name="twitter:image" content="https://guwen.lucca.top/og.png">
   <link rel="preload" href="css/fonts/xcz/serif-400-01.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="css/app.52faa0e4d886.css" />
   <script>
@@ -36,7 +44,8 @@
       });
     })();
   </script>
-  <link rel="icon" href="favicon.d1fff3b26c56.svg" type="image/svg+xml" />
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <script src="js/asset-urls.41f95fdd3408.js"></script>
   <script>
     (function () {
@@ -76,21 +85,14 @@
       else document.head.appendChild(hm);
     })();
   </script>
-  <script>
-    (function () {
-      var s = document.createElement("script");
-      s.async = true;
-      s.src = "https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js";
-      s.onerror = function () {};
-      document.head.appendChild(s);
-    })();
-  </script>
 </head>
 <body>
   <header class="top">
-    <a class="lucca-home" href="https://www.lucca.top/" aria-label="回 lucca 首页" title="lucca 首页"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7M5 10v10h5v-6h4v6h5V10"/></svg></a>
-    <a class="brand" href="#/">典籍</a>
-    <nav class="crumb" id="crumb" aria-label="当前位置"></nav>
+    <nav class="crumb" aria-label="当前位置">
+      <a class="crumb-home" href="https://www.lucca.top/" aria-label="回 lucca 首页"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7M5 10v10h5v-6h4v6h5V10"/></svg><span>lucca</span></a>
+      <a class="brand" href="#/">古文</a>
+      <span id="crumb" class="crumb-more"></span>
+    </nav>
     <div class="read-tools" id="read-tools" hidden>
       <button type="button" class="tool-py tool-font" id="tool-font" aria-pressed="false">繁体</button>
       <button type="button" class="tool-py" id="tool-py" aria-pressed="true">拼音</button>
@@ -106,8 +108,8 @@
     <aside class="catalog" id="catalog" aria-label="本卷篇目"></aside>
     <main class="main" id="main"></main>
   </div>
-  <nav class="tabbar" id="tabbar" aria-label="典籍">
-    <a href="#/" data-tab="home">典籍</a>
+  <nav class="tabbar" id="tabbar" aria-label="古文">
+    <a href="#/" data-tab="home">古文</a>
     <a href="#/gwgz" data-tab="gwgz">观止</a>
     <a href="#/zztj" data-tab="zztj">通鉴</a>
     <a href="#/shiji" data-tab="shiji">史记</a>
@@ -165,7 +167,7 @@
         var link = document.createElement("a");
         link.className = "account-entry";
         link.href = "#/login";
-        link.textContent = "登录";
+        link.textContent = "同步进度";
         link.addEventListener("click", function (event) {
           event.preventDefault();
           loadAccount(function () {

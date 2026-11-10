@@ -1,4 +1,4 @@
-# 典籍账号接口
+# 古文账号接口
 
 可选登录。不登录时，阅读和进度都只在浏览器本地，和现在一样。这一版的登录只保存邮箱和会话，并开始记录打开篇目、查字这两类行为。书签和跨设备进度以后可以加，不用改现有的用户表。
 
@@ -130,7 +130,7 @@ s deploy
 | `ALIBABA_CLOUD_ACCESS_KEY_ID` | 是 | 发信用。可以和表格存储是同一个用户 |
 | `ALIBABA_CLOUD_ACCESS_KEY_SECRET` | 是 | 对应 Secret |
 | `DIRECTMAIL_ACCOUNT_NAME` | 是 | `noreply@mail.lucca.top` |
-| `DIRECTMAIL_FROM_ALIAS` | 否 | 默认 `典籍` |
+| `DIRECTMAIL_FROM_ALIAS` | 否 | 默认 `古文` |
 | `APP_ORIGINS` | 否 | 默认已是 `https://guwen.lucca.top,https://lucca.top,https://www.lucca.top,https://maruiduan.github.io` |
 
 部署完成后，先用函数自己的公网地址试：

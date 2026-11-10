@@ -166,7 +166,10 @@ test('Baidu automatic pageview is disabled before its script loads; statistics s
   } });
   vm.runInContext(script, ctx);
   assert.equal(inserted, 1);
-  assert.match(html, /busuanzi\.pure\.mini\.js/);
+  assert.match(html, /hm\.baidu\.com\/hm\.js/);
+  assert.equal(html.includes('busuanzi'), false);
+  assert.equal(html.includes('详细统计'), false);
+  assert.equal(html.includes('古文访问量'), false);
 });
 
 test('the static homepage reports only its canonical path without reading visitor URL data', () => {
@@ -178,8 +181,12 @@ test('the static homepage reports only its canonical path without reading visito
   });
   vm.runInContext(script, ctx);
   assert.deepEqual(JSON.parse(JSON.stringify(ctx._hmt)), [['_setAutoPageview', false], ['_trackPageview', '/']]);
-  assert.match(html, /busuanzi\.pure\.mini\.js/);
-  assert.match(html, /https:\/\/guwen\.lucca\.top\/stats\.html/);
+  assert.match(html, /hm\.baidu\.com\/hm\.js/);
+  assert.equal(html.includes('busuanzi'), false);
+  assert.equal(html.includes('详细统计'), false);
+  assert.equal(html.includes('古文访问量'), false);
+  assert.equal(html.includes('首页 · 访问量'), false);
+  assert.equal(html.includes('stats.html'), false);
 });
 
 
@@ -187,6 +194,11 @@ test('guwen entry has viewport-fit, color-scheme, and share meta', () => {
   const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
   assert.match(html, /viewport-fit=cover/);
   assert.match(html, /color-scheme/);
+  assert.match(html, /<title>古文 · 逐句注译 · lucca<\/title>/);
+  assert.match(html, /summary_large_image/);
+  assert.match(html, /og:image/);
+  assert.match(html, /favicon\.ico/);
+  assert.match(html, /https:\/\/www\.lucca\.top\//);
   assert.match(html, /og:title/);
   assert.match(html, /canonical/);
   assert.equal(html.includes('已上线'), false);
@@ -234,7 +246,11 @@ test('lucca homepage lists live modules without 已上线 badges', () => {
     assert.ok(withoutScripts.includes(`href="https://${domain}.lucca.top/"`));
   }
   assert.doesNotMatch(html, /<iframe/);
-  assert.ok(withoutScripts.includes('href="https://guwen.lucca.top/stats.html"'));
+  assert.equal(withoutScripts.includes('stats.html'), false);
+  assert.equal(withoutScripts.includes('详细统计'), false);
+  assert.match(html, /summary_large_image/);
+  assert.match(html, /og:image/);
+  assert.match(html, /favicon\.ico/);
   assert.match(html, /og:title/);
   assert.match(html, /canonical/);
 });

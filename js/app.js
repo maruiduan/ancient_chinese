@@ -391,6 +391,39 @@
     parent.appendChild(mark);
   }
 
+  const SYNC_TIP_KEY = "gwgz-sync-tip-v1";
+
+  function hasLocalHistory() {
+    return historyState.recent.length > 0 || Object.keys(historyState.read).length > 0;
+  }
+
+  function prependSyncTip(parent) {
+    let dismissed = false;
+    let signedIn = false;
+    try {
+      dismissed = localStorage.getItem(SYNC_TIP_KEY) === "1";
+      signedIn = !!localStorage.getItem("gwgz-session-v1");
+    } catch (_) {
+      return;
+    }
+    if (dismissed || signedIn || !hasLocalHistory()) return;
+    const tip = document.createElement("p");
+    tip.className = "sync-tip";
+    const text = document.createElement("span");
+    text.textContent = "登录后可多设备同步";
+    const close = document.createElement("button");
+    close.type = "button";
+    close.setAttribute("aria-label", "关闭");
+    close.textContent = "关闭";
+    close.addEventListener("click", function () {
+      try { localStorage.setItem(SYNC_TIP_KEY, "1"); } catch (_) {}
+      tip.remove();
+    });
+    tip.appendChild(text);
+    tip.appendChild(close);
+    parent.appendChild(tip);
+  }
+
   function appendRecent(parent, prefix) {
     const items = historyState.recent.filter(function (item) {
       if (!prefix) return true;
@@ -790,7 +823,13 @@
     else if (authorPage) return showAuthor(authorPage[1], decodeURIComponent(authorPage[2]));
     else if (piece) return showPiece(piece[1], piece[2]);
     else if (hash === "#/tang" || hash === "#/ci" || hash === "#/ke") return showCollection(hash.slice(2));
-    else if (window.gwgzAccount && window.gwgzAccount.route(hash)) return;
+    else if (window.gwgzAccount && window.gwgzAccount.route(hash)) {
+      const extra = document.getElementById("crumb");
+      if (extra) extra.replaceChildren();
+      const top = document.querySelector(".top");
+      if (top) top.classList.remove("has-back");
+      return;
+    }
     else showHub();
   }
 
@@ -798,7 +837,7 @@
     if (state.books && state.books.books) return state.books.books;
     return [
       { id: "gwgz", title: "古文观止", href: "#/gwgz", meta: "十二卷 · 二百二十二篇", detail: "先读这一本。" },
-      { id: "zztj", title: "资治通鉴", href: "#/zztj", meta: "司马光 · 周纪、秦纪、汉纪、魏纪、晋纪至卷八十四已收", detail: "卷八十五起陆续添加。" },
+      { id: "zztj", title: "资治通鉴", href: "#/zztj", meta: "至卷八十四", detail: "卷八十五起陆续添加。" },
       { id: "shiji", title: "史记", href: "#/shiji", meta: "司马迁 · 一百三十篇", detail: "先收项羽本纪。" },
       { id: "daode", title: "道德经", href: "#/daode", meta: "王弼本 · 八十一章", detail: "道经、德经。" },
       { id: "lunyu", title: "论语", href: "#/lunyu", meta: "二十篇", detail: "从《学而》读起。" },
@@ -821,12 +860,13 @@
     const wrap = document.createElement("article");
     wrap.className = "home";
     const h1 = document.createElement("h1");
-    h1.textContent = (state.books && state.books.title) || "典籍";
+    h1.textContent = (state.books && state.books.title) || "古文";
     const lead = document.createElement("p");
     lead.className = "lead";
     lead.textContent = (state.books && state.books.lead) || "按原书次序读。点开字，看读音和本义。";
     wrap.appendChild(h1);
     wrap.appendChild(lead);
+    prependSyncTip(wrap);
 
     if (last) {
       const resume = document.createElement("a");
@@ -874,7 +914,7 @@
     });
     wrap.appendChild(list);
     main.replaceChildren(wrap);
-    document.title = "典籍";
+    document.title = "古文 · 逐句注译 · lucca";
     syncChrome();
   }
 
@@ -897,10 +937,11 @@
       : "目录还没有载入。";
     wrap.appendChild(h1);
     wrap.appendChild(lead);
+    prependSyncTip(wrap);
     appendCatalogTools(wrap, which);
     if (!data) {
       main.replaceChildren(wrap);
-      document.title = title + " · 典籍";
+      document.title = title + " · 古文";
       syncChrome();
       return;
     }
@@ -927,7 +968,7 @@
       wrap.appendChild(block);
     });
     main.replaceChildren(wrap);
-    document.title = title + " · 典籍";
+    document.title = title + " · 古文";
     syncChrome();
   }
 
@@ -973,17 +1014,18 @@
       : "目录还没有载入。";
     wrap.appendChild(h1);
     wrap.appendChild(lead);
+    prependSyncTip(wrap);
     appendCatalogTools(wrap, "zztj");
     if (state.gradeFilter || state.famousOnly) {
       appendGradeHits(wrap, articles, function (art) { return pieceLink(art, false); });
       main.replaceChildren(wrap);
-      document.title = "资治通鉴 · 典籍";
+      document.title = "资治通鉴 · 古文";
       syncChrome();
       return;
     }
     if (!data) {
       main.replaceChildren(wrap);
-      document.title = "资治通鉴 · 典籍";
+      document.title = "资治通鉴 · 古文";
       syncChrome();
       return;
     }
@@ -1040,7 +1082,7 @@
     });
     wrap.appendChild(chips);
     main.replaceChildren(wrap);
-    document.title = "资治通鉴 · 典籍";
+    document.title = "资治通鉴 · 古文";
     syncChrome();
   }
 
@@ -1062,11 +1104,12 @@
       : "目录还没有载入。";
     wrap.appendChild(h1);
     wrap.appendChild(lead);
+    prependSyncTip(wrap);
     appendCatalogTools(wrap, "shiji");
     if (state.gradeFilter || state.famousOnly) {
       appendGradeHits(wrap, articles, function (art) { return pieceLink(art, false); });
       main.replaceChildren(wrap);
-      document.title = "史记 · 典籍";
+      document.title = "史记 · 古文";
       syncChrome();
       return;
     }
@@ -1106,7 +1149,7 @@
       wrap.appendChild(block);
     });
     main.replaceChildren(wrap);
-    document.title = "史记 · 典籍";
+    document.title = "史记 · 古文";
     syncChrome();
   }
 
@@ -1125,7 +1168,7 @@
       p.textContent = "没有这一卷。";
       wrap.appendChild(p);
       main.replaceChildren(wrap);
-      document.title = "资治通鉴 · 典籍";
+      document.title = "资治通鉴 · 古文";
       syncChrome();
       return;
     }
@@ -1137,6 +1180,7 @@
     lead.textContent = vol.subtitle + " · " + vol.articles.length + " 年 · 已读 " + done;
     wrap.appendChild(h1);
     wrap.appendChild(lead);
+    prependSyncTip(wrap);
     const list = document.createElement("div");
     list.className = "piece-list";
     vol.articles.forEach(function (art) { list.appendChild(zztjPiece(art)); });
@@ -1205,6 +1249,7 @@
     lead.textContent = "十二卷，二百二十二篇。选一卷，再选篇目。已读 " + n + " / " + total + "。";
     wrap.appendChild(h1);
     wrap.appendChild(lead);
+    prependSyncTip(wrap);
 
     const resume = document.createElement("a");
     resume.className = "resume";
@@ -1247,7 +1292,7 @@
         return pieceLink(art, true);
       });
       main.replaceChildren(wrap);
-      document.title = "古文观止 · 典籍";
+      document.title = "古文观止 · 古文";
       syncChrome();
       return;
     }
@@ -1295,7 +1340,7 @@
       wrap.appendChild(rows);
     }
     main.replaceChildren(wrap);
-    document.title = "古文观止 · 典籍";
+    document.title = "古文观止 · 古文";
     syncChrome();
   }
 
@@ -1354,6 +1399,7 @@
     lead.textContent = vol.articles.length + " 篇 · 已读 " + done;
     wrap.appendChild(h1);
     wrap.appendChild(lead);
+    prependSyncTip(wrap);
     const list = document.createElement("div");
     list.className = "piece-list";
     vol.articles.forEach(function (art) {
@@ -1390,17 +1436,18 @@
       : "目录还没有载入。";
     wrap.appendChild(h1);
     wrap.appendChild(lead);
+    prependSyncTip(wrap);
     appendCatalogTools(wrap, "rjch");
     if (state.gradeFilter || state.famousOnly) {
       appendGradeHits(wrap, articles, function (art) { return pieceLink(art, false); });
       main.replaceChildren(wrap);
-      document.title = "人间词话 · 典籍";
+      document.title = "人间词话 · 古文";
       syncChrome();
       return;
     }
     if (!articles.length) {
       main.replaceChildren(wrap);
-      document.title = "人间词话 · 典籍";
+      document.title = "人间词话 · 古文";
       syncChrome();
       return;
     }
@@ -1453,7 +1500,7 @@
     shown.forEach(function (art) { list.appendChild(pieceLink(art, false)); });
     wrap.appendChild(list);
     main.replaceChildren(wrap);
-    document.title = "人间词话 · 典籍";
+    document.title = "人间词话 · 古文";
     syncChrome();
   }
 
@@ -1628,6 +1675,7 @@
     lead.textContent = data.pieces.length + " " + unit + "。点开一篇，字上是今读，底下有译文和赏析。";
     wrap.appendChild(h1);
     wrap.appendChild(lead);
+    prependSyncTip(wrap);
     const lastId = state.progress.collections && state.progress.collections[kind];
     const last = lastId ? data.pieces.find(function (item) { return item.id === lastId; }) : null;
     if (last) {
@@ -1665,7 +1713,7 @@
         : "没有标上「" + (state.gradeFilter || "名篇") + "」的篇目。";
       wrap.appendChild(empty);
       main.replaceChildren(wrap);
-      document.title = meta.label + " · 典籍";
+      document.title = meta.label + " · 古文";
       syncChrome();
       return;
     }
@@ -1673,7 +1721,7 @@
       renderAuthorIndex(list, kind, visible);
       wrap.appendChild(list);
       main.replaceChildren(wrap);
-      document.title = meta.label + " · 典籍";
+      document.title = meta.label + " · 古文";
       syncChrome();
       return;
     }
@@ -1698,7 +1746,7 @@
     });
     wrap.appendChild(list);
     main.replaceChildren(wrap);
-    document.title = meta.label + " · 典籍";
+    document.title = meta.label + " · 古文";
     syncChrome();
   }
 
@@ -1757,7 +1805,7 @@
     });
     wrap.appendChild(list);
     main.replaceChildren(wrap);
-    document.title = name + " · 典籍";
+    document.title = name + " · 古文";
     syncChrome();
   }
 
@@ -2451,7 +2499,7 @@
         if (body.isConnected) fitVerse(body);
       });
     }
-    document.title = title + " · 典籍";
+    document.title = title + " · 古文";
     syncChrome();
     window.scrollTo(0, y);
     if (!keepScroll) trackAccount({ type: "page_view", pieceId: kind + ":" + piece.id });
@@ -2558,7 +2606,7 @@
     pager.appendChild(pagerLink(nav.next, "下一篇"));
     wrap.appendChild(pager);
     main.replaceChildren(wrap);
-    document.title = title + " · 典籍";
+    document.title = title + " · 古文";
     syncChrome();
     window.scrollTo(0, y);
     scheduleBalance();
@@ -3818,34 +3866,25 @@
     const poetry = POETRY[state.kind];
     if ((state.view === "collection" || onPiece) && poetry) {
       tab = state.kind;
-      crumbs.push({ href: "#/", label: "典籍" });
       if (onPiece) crumbs.push({ href: "#/" + state.kind, label: poetry.label });
     } else if (state.view === "renjian" || hash === "#/rjch") {
       tab = "rjch";
-      crumbs.push({ href: "#/", label: "典籍" });
     } else if (state.view === "zztj" || hash === "#/zztj") {
       tab = "zztj";
-      crumbs.push({ href: "#/", label: "典籍" });
     } else if (state.view === "shiji" || hash === "#/shiji") {
       tab = "shiji";
-      crumbs.push({ href: "#/", label: "典籍" });
     } else if (state.view === "daode" || hash === "#/daode") {
       tab = "daode";
-      crumbs.push({ href: "#/", label: "典籍" });
     } else if (state.view === "lunyu" || hash === "#/lunyu") {
       tab = "lunyu";
-      crumbs.push({ href: "#/", label: "典籍" });
     } else if (state.view === "zjuan") {
       tab = "zztj";
-      crumbs.push({ href: "#/", label: "典籍" });
       crumbs.push({ href: "#/zztj", label: "资治通鉴" });
       rail = "z";
     } else if (state.view === "book" || hash === "#/gwgz") {
       tab = "gwgz";
-      crumbs.push({ href: "#/", label: "典籍" });
     } else if (state.view === "volume") {
       tab = "gwgz";
-      crumbs.push({ href: "#/", label: "典籍" });
       crumbs.push({ href: "#/gwgz", label: "古文观止" });
       rail = state.openVol;
     } else if (onArticle && state.article) {
@@ -3855,7 +3894,6 @@
       const lunyu = isLunyuId(state.article.id);
       const shiji = isShijiId(state.article.id);
       tab = shiji ? "shiji" : tongjian ? "zztj" : renjian ? "rjch" : daode ? "daode" : lunyu ? "lunyu" : "gwgz";
-      crumbs.push({ href: "#/", label: "典籍" });
       if (shiji) {
         crumbs.push({ href: "#/shiji", label: "史记" });
       } else if (daode) {
