@@ -1,0 +1,12 @@
+拼音闯关 · 读音出处 / Audio credits
+
+1. 绝大多数音节：audio-cmn 音节录音（syllabs v.2），朗读者 Chen Wang，CC BY-SA。
+   项目：https://github.com/hugolpz/audio-cmn （Hugo Lopez, PLIDAM, INALCO；录音软件 Nicolas Vion）
+2. jù、gāng：Wikimedia Commons，Shtooka 项目，朗读者 Wei Gao（北京），CC BY 2.0 FR
+   https://commons.wikimedia.org/wiki/File:Zh-j%C3%B9.ogg
+   https://commons.wikimedia.org/wiki/File:Zh-g%C4%81ng.ogg
+3. rèn：Wikimedia Commons，朗读者 Yue Tan，CC BY-SA 3.0 US
+   https://commons.wikimedia.org/wiki/File:Zh-r%C3%A8n.ogg
+
+改动：裁掉首尾静音、统一音量、转成单声道 MP3。改动后的音频按 CC BY-SA 提供。
+音节表：Unicode Unihan 数据库 kTGHZ2013 字段（《通用规范汉字字典》2013）。

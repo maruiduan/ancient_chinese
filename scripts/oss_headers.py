@@ -98,6 +98,8 @@ def object_metadata(name: str) -> tuple[str, str]:
         ".js": "application/javascript",
         ".json": "application/json",
         ".ogg": "audio/ogg",
+        ".mp3": "audio/mpeg",
+        ".woff2": "font/woff2",
         ".txt": "text/plain",
         ".xml": "application/xml",
         ".html": "text/html",
