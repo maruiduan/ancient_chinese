@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#79d2ff">
+<title>拼音矿工</title>
+<meta name="description" content="给小朋友的拼音小游戏。点声母和韵母，把小方块放进背包。">
+<link rel="canonical" href="https://www.lucca.top/pinyin/">
+<script>
+var _hmt = _hmt || [];
+_hmt.push(["_setAutoPageview", false]);
+_hmt.push(["_trackPageview", "/pinyin/"]);
+(function () {
+  var hm = document.createElement("script");
+  hm.async = true;
+  hm.src = "https://hm.baidu.com/hm.js?b5b9eb7e229dc60c4ebcd43c57100446";
+  hm.onerror = function () {};
+  var s = document.getElementsByTagName("script")[0];
+  if (s && s.parentNode) s.parentNode.insertBefore(hm, s);
+  else document.head.appendChild(hm);
+})();
+</script>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23a33a2b'/%3E%3Ctext x='32' y='44' font-size='34' text-anchor='middle' fill='%23f6f3ec' font-family='serif'%3EL%3C/text%3E%3C/svg%3E">
+<style>
+:root { color-scheme: light; }
+* { box-sizing: border-box; }
+html, body { margin: 0; background: #79d2ff; }
+body {
+  min-height: 100dvh;
+  color: #3a2a1a;
+  font-family: "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+body[data-scene="sky"] { background: #9ad8ff; }
+body[data-scene="snow"] { background: #e7f6ff; }
+body[data-scene="water"] { background: #5ec8ea; }
+body[data-scene="night"] { background: #2a3f86; }
+html:has(body[data-scene="sky"]) { background: #9ad8ff; }
+html:has(body[data-scene="snow"]) { background: #e7f6ff; }
+html:has(body[data-scene="water"]) { background: #5ec8ea; }
+html:has(body[data-scene="night"]) { background: #2a3f86; }
+button, a { touch-action: manipulation; }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, a:focus-visible { outline: 3px solid #3a2a1a; outline-offset: 3px; }
+.sun {
+  display: none;
+  position: fixed;
+  z-index: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #ffe56a;
+  box-shadow: 0 0 0 10px rgba(255, 229, 106, .28);
+  pointer-events: none;
+}
+body[data-scene="night"] .sun { background: #efe8c8; box-shadow: 0 0 0 10px rgba(239, 232, 200, .18); }
+@media (min-width: 900px) {
+  .sun { display: block; left: calc(50% + 360px); top: 84px; }
+}
+header, main, .world, .ask { position: relative; z-index: 1; }
+header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 8px;
+  max-width: 880px;
+  margin: 0 auto;
+  padding: calc(8px + env(safe-area-inset-top)) 14px 4px;
+}
+h1 {
+  margin: 0;
+  text-align: center;
+  font-size: clamp(22px, 6vw, 34px);
+  letter-spacing: .12em;
+}
+body[data-scene="night"] h1 { color: #fff8e6; }
+.home, .count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: #fff8e6;
+  color: #3a2a1a;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 16px;
+}
+.count { margin: 0; }
+main {
+  width: min(640px, 100%);
+  margin: 0 auto;
+  padding: 8px 14px calc(142px + env(safe-area-inset-bottom));
+}
+.card {
+  position: relative;
+  background: #fff8e6;
+  border-radius: 28px;
+  padding: 16px 14px 14px;
+  box-shadow: 0 8px 0 rgba(90, 55, 10, .12);
+}
+.stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  min-height: 112px;
+}
+.hanzi {
+  font-size: clamp(76px, 20vw, 120px);
+  font-weight: 800;
+  line-height: 1;
+}
+.coach {
+  margin: 0;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 800;
+  color: #8a6430;
+}
+.spell {
+  margin: 4px 0 0;
+  text-align: center;
+  font-size: clamp(40px, 12vw, 64px);
+  font-weight: 800;
+  letter-spacing: .08em;
+  line-height: 1.1;
+  font-family: "Avenir Next", Verdana, "PingFang SC", sans-serif;
+}
+.spell.idle { color: #e0d3b8; }
+.parts { display: flex; justify-content: center; gap: 10px; margin-top: 6px; }
+.part {
+  min-width: 108px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 800;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #fff;
+}
+.part.bad { background: #ffe3a3; }
+.msg {
+  min-height: 32px;
+  margin: 8px 0;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 800;
+}
+.msg.retry { color: #8a5a12; }
+.msg.ok { color: #1e7a34; }
+.prize {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 0 8px;
+  font-size: 26px;
+  font-weight: 800;
+  color: #1e7a34;
+}
+.prize[hidden] { display: none; }
+.lab {
+  margin: 8px 0 6px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: .24em;
+  color: #8a6430;
+}
+.keys, .actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.key {
+  flex: 1 1 64px;
+  min-width: 64px;
+  max-width: 180px;
+  min-height: 64px;
+  border: 0;
+  border-radius: 18px;
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1;
+  font-family: "Avenir Next", Verdana, "PingFang SC", sans-serif;
+}
+.key.none { font-size: 26px; font-family: "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", sans-serif; }
+.key.ini { background: #ffd45a; box-shadow: 0 5px 0 #e0a820; }
+.key.final { background: #b7ecff; box-shadow: 0 5px 0 #5eb8e0; }
+.key.tool { background: #fff; box-shadow: 0 5px 0 #e0d3b4; font-size: 22px; font-family: "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", sans-serif; }
+.key.yu { background: #e4c6ff; box-shadow: 0 5px 0 #b48adf; font-size: 40px; }
+.key.on { outline: 4px solid #3a2a1a; outline-offset: 1px; }
+.key.glow { box-shadow: 0 0 0 4px #ffb703, 0 5px 0 #e0a820; }
+.key:active { transform: translateY(3px); }
+.actions { margin-top: 10px; }
+.actions .tool, .actions .yu, .actions .go { flex: 1 1 64px; max-width: none; min-height: 64px; }
+.actions .go { flex-grow: 1.45; }
+.actions .go {
+  background: #6dce63;
+  box-shadow: 0 5px 0 #3e9a3a;
+  font-size: 18px;
+  white-space: nowrap;
+  font-family: "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", sans-serif;
+}
+@media (max-width: 380px) {
+  main { padding-left: 8px; padding-right: 8px; }
+  .card { padding: 8px 10px; }
+  .stage { min-height: 84px; }
+  .hanzi { font-size: 64px; }
+  .spell { font-size: 36px; }
+  .msg { margin: 2px 0; min-height: 24px; }
+  .coach { font-size: 16px; }
+}
+@media (max-height: 740px) {
+  .world {
+    height: calc(96px + env(safe-area-inset-bottom));
+    background-position: 0 34px, 0 60px;
+  }
+  main { padding-bottom: calc(112px + env(safe-area-inset-bottom)); }
+}
+@media (max-height: 700px) {
+  .stage { min-height: 72px; }
+  .hanzi { font-size: 60px; }
+  .spell { margin: 0; font-size: 32px; }
+  .parts { margin-top: 2px; }
+  .lab { margin: 4px 0; }
+  .world { height: calc(88px + env(safe-area-inset-bottom)); background-position: 0 28px, 0 52px; }
+  main { padding-bottom: calc(104px + env(safe-area-inset-bottom)); }
+}
+@media (min-width: 720px) {
+  .keys, .actions { gap: 12px; }
+  .key { min-width: 72px; min-height: 68px; }
+  .lab { margin: 12px 0 8px; }
+  .actions { margin-top: 14px; }
+  .actions .go { flex: 2 1 200px; max-width: 320px; min-height: 76px; font-size: 30px; }
+}
+.world {
+  position: fixed;
+  z-index: 2;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  height: calc(118px + env(safe-area-inset-bottom));
+  padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
+  background-color: #79d2ff;
+  background-image:
+    linear-gradient(#7dce55, #7dce55),
+    linear-gradient(#d39a55, #c4843e);
+  background-repeat: no-repeat;
+  background-size: 100% 28px, 100% 36px;
+  background-position: 0 52px, 0 80px;
+}
+body[data-scene="sky"] .world { background-color: #9ad8ff; }
+body[data-scene="snow"] .world { background-color: #e7f6ff; }
+body[data-scene="water"] .world { background-color: #5ec8ea; }
+body[data-scene="night"] .world { background-color: #2a3f86; }
+.bag-label, .reset {
+  flex: 0 0 auto;
+  align-self: center;
+  border: 0;
+  background: #fff8e6;
+  color: #5a4630;
+  border-radius: 12px;
+  font-weight: 800;
+}
+.bag-label { padding: 8px 6px; font-size: 16px; }
+.reset { min-height: 44px; padding: 6px 8px; font-size: 14px; }
+.bag {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 18px;
+}
+.slot { position: relative; width: 64px; flex: 0 0 auto; text-align: center; }
+.nm {
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.2;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, .7);
+}
+.times {
+  position: absolute;
+  top: -4px;
+  right: 0;
+  min-width: 18px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: #fff;
+  font-size: 13px;
+  font-weight: 800;
+}
+.empty {
+  margin: auto;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255, 248, 230, .92);
+  font-weight: 800;
+}
+.ask {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  background: rgba(40, 30, 10, .35);
+  padding: 16px;
+}
+.ask[hidden] { display: none; }
+.ask-box {
+  width: min(420px, 100%);
+  padding: 22px 18px;
+  border-radius: 24px;
+  background: #fff8e6;
+  text-align: center;
+  box-shadow: 0 8px 0 rgba(90, 55, 10, .12);
+}
+.ask-box p { margin: 0 0 14px; font-size: 28px; font-weight: 800; }
+.ask-row { display: flex; gap: 12px; }
+.ask-row button {
+  flex: 1;
+  min-height: 68px;
+  border: 0;
+  border-radius: 18px;
+  font-size: 24px;
+  font-weight: 800;
+}
+#keep { background: #fff; box-shadow: 0 5px 0 #e0d3b4; }
+#wipe { background: #ffd45a; box-shadow: 0 5px 0 #e0a820; }
+.bit {
+  position: absolute;
+  top: 18%;
+  width: 10px;
+  height: 10px;
+  animation: fall .8s ease-in forwards;
+}
+.wiggle { animation: wiggle .35s ease; }
+@keyframes fall {
+  to { transform: translateY(90px) rotate(30deg); opacity: 0; }
+}
+@keyframes wiggle {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .key.glow { animation: glow 1.2s ease-in-out infinite; }
+}
+@keyframes glow {
+  50% { filter: brightness(1.08); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wiggle, .bit, .key.glow { animation: none; }
+}
+</style>
+</head>
+<body>
+<div class="sun" aria-hidden="true"></div>
+<header>
+  <a class="home" href="https://www.lucca.top/" aria-label="回 lucca 首页">← 首页</a>
+  <h1>拼音矿工</h1>
+  <p class="count" id="count" aria-label="已经收集了 0 个">0 个</p>
+</header>
+<main>
+  <section class="card" id="card">
+    <div class="stage" id="stage">
+      <div id="pic" class="pic"></div>
+      <div id="hanzi" class="hanzi">爱</div>
+    </div>
+    <p id="coach" class="coach">点声母，再点韵母</p>
+    <div id="spell" class="spell idle" translate="no">·</div>
+    <div class="parts" translate="no">
+      <span id="part-i" class="part">声母 ·</span>
+      <span id="part-f" class="part">韵母 ·</span>
+    </div>
+    <p id="msg" class="msg" aria-live="polite"></p>
+    <div id="prize" class="prize" hidden></div>
+    <div id="board">
+      <p class="lab">声母</p>
+      <div id="initials" class="keys"></div>
+      <p class="lab">韵母</p>
+      <div id="finals" class="keys"></div>
+      <div class="actions">
+        <button type="button" id="back" class="key tool">退格</button>
+        <button type="button" id="yu" class="key yu" aria-label="ü">ü</button>
+        <button type="button" id="clear" class="key tool">清空</button>
+        <button type="button" id="go" class="key go">拼好了</button>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="world" aria-label="背包">
+  <div class="bag-label">背包</div>
+  <div id="bag" class="bag"></div>
+  <button type="button" id="reset" class="reset">重新开始</button>
+</footer>
+<div id="ask" class="ask" hidden>
+  <div class="ask-box">
+    <p>清空背包？</p>
+    <div class="ask-row">
+      <button type="button" id="keep">留下</button>
+      <button type="button" id="wipe">清空</button>
+    </div>
+  </div>
+</div>
+<noscript><p class="coach">打开 JavaScript 就能玩。</p></noscript>
+<script src="game.js"></script>
+</body>
+</html>

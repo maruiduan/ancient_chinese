@@ -5,13 +5,23 @@ from __future__ import annotations
 from html.parser import HTMLParser
 from pathlib import Path
 import hashlib
+import re
 import sys
 import urllib.request
 import xml.etree.ElementTree as ET
 
 from put_oss_object import put_object
 
-FILES = ('robots.txt', 'sitemap.xml', 'favicon.ico', 'og.png', 'index.html')  # Entry point last.
+# Homepage entry stays last. The pinyin game script is published before its page.
+FILES = (
+    'robots.txt',
+    'sitemap.xml',
+    'favicon.ico',
+    'og.png',
+    'pinyin/game.js',
+    'pinyin/index.html',
+    'index.html',
+)
 ORIGIN = 'https://lucca-www.oss-cn-hongkong.aliyuncs.com/'
 MODULE_URLS = {'https://guwen.lucca.top/', 'https://en.lucca.top/', 'https://ai.lucca.top/'}
 
@@ -50,6 +60,32 @@ def validate(root: Path):
             raise ValueError('Homepage must not publish removed counter or copy: ' + banned)
     if 'hm.baidu.com/hm.js' not in page:
         raise ValueError('Homepage must keep the Baidu analytics script')
+    if '/pinyin/' not in page or '拼音矿工' not in page:
+        raise ValueError('Homepage must link to the pinyin game')
+    if '已上线' in page:
+        raise ValueError('Homepage must not say 已上线')
+    pinyin = bodies['pinyin/index.html'].decode('utf-8')
+    script = bodies['pinyin/game.js'].decode('utf-8')
+    if 'https://www.lucca.top/' not in pinyin:
+        raise ValueError('Pinyin game must link back to the homepage')
+    if 'src="game.js"' not in pinyin:
+        raise ValueError('Pinyin game must load its script')
+    if 'https://hm.baidu.com/hm.js?b5b9eb7e229dc60c4ebcd43c57100446' not in pinyin:
+        raise ValueError('Pinyin game must keep the Baidu analytics id')
+    blob = (pinyin + '\n' + script).lower()
+    if 'minecraft' in blob or '已上线' in pinyin or '已上线' in script:
+        raise ValueError('Pinyin game must not publish banned copy')
+    urls = set(re.findall(r'https://[^"\')\s>]+', pinyin))
+    allowed = {
+        'https://www.lucca.top/',
+        'https://www.lucca.top/pinyin/',
+        'https://hm.baidu.com/hm.js?b5b9eb7e229dc60c4ebcd43c57100446',
+    }
+    extra = sorted(urls - allowed)
+    if extra:
+        raise ValueError('Pinyin page has unexpected URLs: ' + ', '.join(extra))
+    if 'https://www.lucca.top/pinyin/' not in bodies['sitemap.xml'].decode('utf-8'):
+        raise ValueError('Homepage sitemap must list the pinyin game')
     return bodies
 
 

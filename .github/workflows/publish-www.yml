@@ -8,6 +8,7 @@ on:
       - www/index.html
       - www/robots.txt
       - www/sitemap.xml
+      - 'www/pinyin/**'
       - scripts/oss_headers.py
       - scripts/put_oss_object.py
       - scripts/publish_homepage.py
