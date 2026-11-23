@@ -1,4 +1,4 @@
-# 拼音闯关（www.lucca.top/pinyin/）
+# 拼音闯关（www.lucca.top/pinyin/index.html）
 
 源文件在 `src/`，生成的静态页在 `www/pinyin/`，由 `.github/workflows/publish-pinyin.yml` 上传到 `lucca-www/pinyin/`。
 

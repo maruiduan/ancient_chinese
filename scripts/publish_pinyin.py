@@ -66,10 +66,14 @@ def publish(root: Path, uploader=put_object, etag=public_etag) -> int:
         return True
 
     assets, entry = paths[:-1], paths[-1]
-    with ThreadPoolExecutor(8) as pool:
+    with ThreadPoolExecutor(16) as pool:
         changed = sum(pool.map(one, assets))
     changed += one(entry)
-    bad = [p for p in paths if etag(PREFIX + p.relative_to(root).as_posix()) != hashlib.md5(p.read_bytes()).hexdigest()]
+    def stale(path: Path) -> bool:
+        return etag(PREFIX + path.relative_to(root).as_posix()) != hashlib.md5(path.read_bytes()).hexdigest()
+
+    with ThreadPoolExecutor(16) as pool:
+        bad = [p for p, s in zip(paths, pool.map(stale, paths)) if s]
     if bad:
         raise RuntimeError('Public bytes differ after publish: ' + ', '.join(p.name for p in bad[:5]))
     print(f'Published pinyin: {changed} changed, {len(paths)} verified')
