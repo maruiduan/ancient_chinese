@@ -3,6 +3,7 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+import urllib.parse
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -31,11 +32,25 @@ class HomepageTests(unittest.TestCase):
     def test_entry_last_and_all_public_bytes_verified(self):
         calls = []
         def read(request, **kwargs):
-            name = request.full_url.split('/')[-1].split('?')[0]
-            calls.append('GET ' + name)
-            return io.BytesIO((ROOT / 'www' / name).read_bytes())
-        home.publish(ROOT / 'www', uploader=lambda path, dest: calls.append('PUT ' + path.name), opener=read)
+            path = urllib.parse.urlparse(request.full_url).path.lstrip('/')
+            calls.append('GET ' + path)
+            return io.BytesIO((ROOT / 'www' / path).read_bytes())
+        def put(path, dest):
+            self.assertTrue(dest.startswith('oss://lucca-www/'))
+            calls.append('PUT ' + dest[len('oss://lucca-www/'):])
+            self.assertEqual(Path(dest[len('oss://lucca-www/'):]), Path(path).relative_to(ROOT / 'www'))
+        home.publish(ROOT / 'www', uploader=put, opener=read)
         self.assertEqual(calls, ['PUT ' + n for n in home.FILES] + ['GET ' + n for n in home.FILES])
+
+    def test_pinyin_game_is_published_before_the_homepage_entry(self):
+        self.assertLess(home.FILES.index('pinyin/game.js'), home.FILES.index('pinyin/index.html'))
+        self.assertLess(home.FILES.index('pinyin/index.html'), home.FILES.index('index.html'))
+        workflow = (ROOT / '.github/workflows' / 'publish-www.yml').read_text()
+        self.assertIn('www/pinyin/**', workflow)
+        page = (ROOT / 'www' / 'index.html').read_text()
+        self.assertIn('href="/pinyin/"', page)
+        self.assertIn('拼音矿工', page)
+        self.assertNotIn('已上线', page)
 
     def test_stale_public_bytes_fail(self):
         with self.assertRaisesRegex(RuntimeError, 'public bytes differ'):
