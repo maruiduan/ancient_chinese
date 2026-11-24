@@ -447,7 +447,7 @@ function startRound(mode, only) {
     if (!S.place || S.place.done) S.place = { list: buildPlacement(), idx: 0, done: false, res: [] };
     q = S.place.list.slice(S.place.idx, S.place.idx + PLACE_SEG); // 每段 10 题，做完就休息
   } else q = buildRound(only === 'p' ? function (k) { return !!chInfo(k).z; } : null);
-  G = { only: only || null, startIdx: mode === 'place' ? S.place.idx : 0, mode: mode, queue: q, pos: 0, total: q.length, ups: [], extra: 0, marks: [], ok: 0, learned: [], lastT: null };
+  G = { only: only || null, seenW: {}, startIdx: mode === 'place' ? S.place.idx : 0, mode: mode, queue: q, pos: 0, total: q.length, ups: [], extra: 0, marks: [], ok: 0, learned: [], lastT: null };
   lastGame = only === 'p' ? 'pick' : 'practice'; show('play');
   renderProgress(); nextQ();
 }
@@ -466,8 +466,13 @@ function renderProgress() {
 }
 function segDots(seg, segs) { var h = '<span class="seg-dots" title="摸底第 ' + (seg + 1) + ' / ' + segs + ' 段">'; for (var i = 0; i < segs; i++) h += '<i class="' + (i < seg ? 'done' : i === seg ? 'now' : '') + '"></i>'; return h + '</span>'; }
 function taskFor(k) {
-  if (G.only === 'p') { var p0 = pickTask(k); if (p0) return { t: 'p', c: p0.c, opts: p0.opts }; var f0 = findTask(k); return f0 ? { t: 'f', opts: f0 } : { t: 'w' }; }
+  var wt = function (pr) { var ws = WBYK[k]; if (G.mode === 'place' || !ws || Math.random() >= pr) return null; var w = pick(ws); return wordTask(w); };
+  if (G.only === 'p') {
+    var w0 = wt(.6) || (Math.random() < .3 ? wordTask(pickWord(null, G.seenW)) : null); // 看图选拼音：我的世界词语
+    if (w0) { G.seenW[w0.word.w] = 1; return { t: 'i', word: w0.word, opts: w0.opts }; }
+    var p0 = pickTask(k); if (p0) return { t: 'p', c: p0.c, opts: p0.opts }; var f0 = findTask(k); return f0 ? { t: 'f', opts: f0 } : { t: 'w' }; }
   if (G.mode === 'srs' && G.pos < 2 && G.pos < G.total - 4) return { t: 'w' }; // 热身：只读拼音
+  var w1 = wt(.35) || (G.mode !== 'place' && Math.random() < .12 ? wordTask(pickWord(null, G.seenW)) : null); if (w1) { G.seenW[w1.word.w] = 1; return { t: 'i', word: w1.word, opts: w1.opts }; }
   var f = findTask(k), c = newChar(k), pk = Math.random() < .4 ? pickTask(k) : null;
   if (pk) return { t: 'p', c: pk.c, opts: pk.opts }; // 看字选拼音
   if (f && isFw(k)) return { t: 'f', opts: f }; // 虚词：用按音找字练
@@ -479,9 +484,9 @@ function taskFor(k) {
 function nextQ() {
   if (G.pos >= G.queue.length) return endRound();
   var k = G.queue[G.pos], T = taskFor(k); G.lastT = T.t;
-  var q = G.q = { k: k, t: T.t, c: T.c || null, opts: T.opts || null, t0: null, first: null, heard: false, done: false, wrong: false, shown: performance.now() };
-  var st = $('#stage'); st.className = 'stage task-' + (T.t === 'f' ? 'find' : T.t === 'p' ? 'find pickpy' : 'read');
-  if (T.t === 'f' || T.t === 'p') renderFind(q, st); else renderRead(q, st);
+  var q = G.q = { k: k, t: T.t, c: T.c || (T.word ? T.word.w : null), word: T.word || null, opts: T.opts || null, t0: null, first: null, heard: false, done: false, wrong: false, shown: performance.now() };
+  var st = $('#stage'); st.className = 'stage task-' + (T.t === 'f' ? 'find' : T.t === 'p' || T.t === 'i' ? 'find pickpy' + (T.t === 'i' ? ' pickword' : '') : 'read');
+  if (T.t === 'f' || T.t === 'p' || T.t === 'i') renderFind(q, st); else renderRead(q, st);
   drawSprites(st); drawIcons(st);
   if (G.queue[G.pos + 1]) loadBuf(G.queue[G.pos + 1]).catch(function () {});
   loadBuf(k).catch(function () {});
@@ -513,7 +518,7 @@ function fitCard() { var p = $('#card .py'); if (!p) return; p.style.fontSize = 
 function hear() {
   var q = G && G.q; if (!q) return;
   if (q.t === 'f') { speak(q.k).catch(audioErr); return; }
-  if (q.t === 'p') return;
+  if (q.t === 'p' || q.t === 'i') return;
   if (q.t0 == null) return mine();
   if (q.first == null) q.first = performance.now();
   q.heard = true; speak(q.k).catch(audioErr);
@@ -542,7 +547,7 @@ function finishQ(mark, fromEl, wait, listen) {
   flyItem(fromEl, MARK_TEX[mark](), slot, function () { if (!G) return; G.marks.push(mark); renderProgress(); });
   if (listen) {
     var go = false, nx = function () { if (!go) { go = true; advance(); } };
-    speak(G.q.k).then(function (r) { setTimeout(nx, r.dur + 900); }).catch(function () { setTimeout(nx, 1200); });
+    speakQ(G.q).then(function (r) { setTimeout(nx, r.dur + 900); }).catch(function () { setTimeout(nx, 1200); });
     setTimeout(nx, 4500);
   } else setTimeout(advance, wait);
 }
@@ -555,8 +560,8 @@ function flyItem(fromEl, tex, slot, cb) {
   a.onfinish = function () { g.remove(); cb(); };
 }
 function renderFind(q, st) {
-  var P = q.t === 'p';
-  st.innerHTML = '<div class="find-prompt">' + (P ? '<span class="hz-plate hz">' + q.c + '</span>' : speakerHTML('btnSpeak') + '<span class="py-plate">' + label(q.k) + '</span>') + '</div><div id="ores" class="ores"></div><div class="ledge" aria-hidden="true"></div>';
+  var P = q.t === 'p' || q.t === 'i';
+  st.innerHTML = '<div class="find-prompt">' + (q.t === 'i' ? '<span class="pic-plate"><img src="' + WART[q.word.pic]() + '" alt=""><span class="pic-word hz">' + q.word.w + '</span></span>' : P ? '<span class="hz-plate hz">' + q.c + '</span>' : speakerHTML('btnSpeak') + '<span class="py-plate">' + label(q.k) + '</span>') + '</div><div id="ores" class="ores"></div><div class="ledge" aria-hidden="true"></div>';
   var box = $('#ores'), seed = rnd(1e6), names = shuffle(ORE_NAMES.slice());
   q.opts.forEach(function (o, i) {
     var b = el('button', 'ore'); b.type = 'button'; b.style.setProperty('--d', (i * .37) + 's');
@@ -569,31 +574,33 @@ function renderFind(q, st) {
   if (P) fitPy();
   setTimeout(function () { if (G && G.q === q) { q.t0 = performance.now(); if (!P) speak(q.k).catch(audioErr); } }, 450);
 }
-function fitPy() { $$('#ores .lab.pyo').forEach(function (l) { var w = l.parentNode.clientWidth * .86; l.style.fontSize = ''; if (l.offsetWidth > w) l.style.fontSize = Math.floor(parseFloat(getComputedStyle(l).fontSize) * w / l.offsetWidth) + 'px'; }); }
+function fitPy() { fitAll($$('#ores .lab.pyo')); }
 function pickChar(i, btn) {
   var q = G && G.q; if (!q || q.done) return;
   if (q.t0 == null) q.t0 = performance.now();
   var o = q.opts[i], rt = performance.now() - q.t0;
   if (o.right) {
     q.done = true; var first = !q.wrong, fast = first && rt <= FAST_MS, res = null;
-    if (first) { res = record(q.k, true, rt, fast); G.ok++; if (res.after > res.before) G.ups.push([q.k, res.after]); if (q.t === 'p') G.learned.push([q.c, q.k]); if (G.mode === 'place') S.place.res.push([q.k, 1, Math.round(rt)]); }
+    if (first && q.word) { recordWord(q, true, o, rt); G.ok++; G.learned.push([q.word.w, q.k, q.word.ks]); $('.pic-plate') && $('.pic-plate').classList.add('said'); }
+    else if (first) { res = record(q.k, true, rt, fast); G.ok++; if (res.after > res.before) G.ups.push([q.k, res.after]); if (q.t === 'p') G.learned.push([q.c, q.k]); if (G.mode === 'place') S.place.res.push([q.k, 1, Math.round(rt)]); }
     logTime();
     breakOre(btn, function () {
       if (res && res.after > res.before && res.after >= 2) SFX.up();
-      finishQ(first ? (fast ? 'done' : 'ok') : 'miss', $('.face', btn), 900);
+      finishQ(first ? (fast ? 'done' : 'ok') : 'miss', $('.face', btn), q.word ? 1500 : 900);
     });
-    speak(q.k).catch(function () {});
+    if (q.word) $('.pic-plate').classList.add('said');
+    speakQ(q).catch(function () {});
   } else {
     SFX.bonk(); btn.classList.remove('wrong'); void btn.offsetWidth; btn.classList.add('wrong');
-    var ck = q.k + '>' + (o.k || '*' + o.l); S.conf[ck] = (S.conf[ck] || 0) + 1;
+    var ck = (q.word ? q.word.w : q.k) + '>' + (o.k || '*' + o.l); S.conf[ck] = (S.conf[ck] || 0) + 1;
     if (!q.wrong) {
-      q.wrong = true; record(q.k, false, rt, false);
+      q.wrong = true; if (q.word) recordWord(q, false, o, rt); else record(q.k, false, rt, false);
       if (G.mode === 'place') S.place.res.push([q.k, 0, Math.round(rt)]); else requeue(q.k);
       logTime(); save();
     }
     setTimeout(function () {
       $$('#ores .ore').forEach(function (b, j) { if (q.opts[j].right) b.classList.add('hintme'); else b.classList.add('dim'); });
-      speak(q.k).catch(function () {});
+      speakQ(q).catch(function () {});
     }, 380);
   }
 }
@@ -640,9 +647,9 @@ function marksRow(marks) { return '<div class="up-slots">' + marks.map(function 
 function learnedHTML(list, max) {
   if (!list.length) return '';
   var seen = {}, cards = list.filter(function (x) { if (seen[x[0]]) return false; seen[x[0]] = 1; return true; }).slice(0, max || 12);
-  return '<div class="learned">' + cards.map(function (x) { return '<button class="hz-card" type="button" data-k="' + x[1] + '"><span class="hz">' + x[0] + '</span><span class="py">' + label(x[1]) + '</span></button>'; }).join('') + '</div>';
+  return '<div class="learned">' + cards.map(function (x) { return '<button class="hz-card' + (x[2] ? ' word' : '') + '" type="button" data-k="' + x[1] + '"' + (x[2] ? ' data-ks="' + x[2].join(' ') + '"' : '') + '><span class="hz">' + x[0] + '</span><span class="py">' + (x[2] ? wordLabel(x[2]) : label(x[1])) + '</span></button>'; }).join('') + '</div>';
 }
-function bindLearned(root) { $$('.hz-card', root).forEach(function (b) { b.onclick = function () { speak(b.dataset.k).catch(audioErr); }; }); }
+function bindLearned(root) { $$('.hz-card', root).forEach(function (b) { b.onclick = function () { (b.dataset.ks ? speakWord(b.dataset.ks.split(' ')) : speak(b.dataset.k)).catch(audioErr); }; }); }
 function endRound() {
   save();
   var m = G.mode; show('result'); $('#btnAgain .lbl').textContent = '再来一局';
@@ -762,12 +769,122 @@ function pickTask(k) {
   var opts = pyOptions(k, c); return opts ? { c: c, opts: opts } : null;
 }
 
+/* ========== 我的世界词语：原创像素图（程序绘制，不用任何官方贴图） ========== */
+function px16(key, w, h, fn) { return pxArt('w_' + key, w, h, fn); }
+function noisy(seed, cols, p) { var r = seeded(seed); return function () { var x = r(); return x < (p || .25) ? cols[1] : x < (p || .25) * 1.6 && cols[2] ? cols[2] : cols[0]; }; }
+var WART = {
+  enderman: function () { return px16('enderman', 12, 26, function (a) { a.R(2, 0, 8, 8, '#1c1622'); a.R(3, 4, 2, 1, '#d76bff'); a.R(7, 4, 2, 1, '#d76bff'); a.R(2, 4, 1, 1, '#f3c6ff'); a.R(9, 4, 1, 1, '#f3c6ff'); a.R(3, 8, 6, 7, '#231b2b'); a.R(1, 8, 1, 12, '#1c1622'); a.R(10, 8, 1, 12, '#1c1622'); a.R(4, 15, 1, 11, '#1c1622'); a.R(7, 15, 1, 11, '#1c1622'); }); },
+  slime: function () { return px16('slime', 16, 15, function (a) { a.R(1, 1, 14, 13, noisy(21, ['#79d35a', '#93e36f', '#5fb544'])); a.R(3, 4, 3, 3, '#2f6b22'); a.R(10, 4, 3, 3, '#2f6b22'); a.R(3, 4, 1, 1, '#c8f7b0'); a.R(10, 4, 1, 1, '#c8f7b0'); a.R(6, 10, 4, 1, '#2f6b22'); }); },
+  bat: function () { return px16('bat', 20, 12, function (a) { a.R(8, 3, 4, 6, '#5a4232'); a.R(8, 1, 1, 2, '#5a4232'); a.R(11, 1, 1, 2, '#5a4232'); a.R(9, 4, 1, 1, '#1d1d1d'); a.R(10, 4, 1, 1, '#1d1d1d'); [[1, 3], [3, 2], [5, 3]].forEach(function (p) { a.R(p[0], p[1], 3, 5, '#3c2c22'); a.R(18 - p[0] - 2, p[1], 3, 5, '#3c2c22'); }); a.R(0, 7, 2, 2, '#3c2c22'); a.R(18, 7, 2, 2, '#3c2c22'); }); },
+  cow: function () { return px16('cow', 22, 16, function (a) { a.R(3, 4, 14, 7, '#5a3a22'); a.R(6, 4, 4, 3, '#f2f2f2'); a.R(12, 7, 4, 3, '#f2f2f2'); a.R(4, 9, 3, 2, '#f2f2f2'); a.R(15, 2, 6, 7, '#5a3a22'); a.R(16, 6, 5, 3, '#f0c9b0'); a.R(17, 7, 1, 1, '#1d1d1d'); a.R(19, 7, 1, 1, '#1d1d1d'); a.R(16, 3, 1, 1, '#1d1d1d'); a.R(19, 3, 1, 1, '#1d1d1d'); a.R(15, 1, 1, 1, '#e8e2c8'); a.R(20, 1, 1, 1, '#e8e2c8'); [3, 6, 12, 15].forEach(function (x) { a.R(x, 11, 2, 4, '#3a2616'); }); a.R(9, 11, 3, 1, '#f0a8b8'); }); },
+  pig: function () { return px16('pig', 22, 15, function (a) { a.R(3, 4, 14, 7, '#f2a7a7'); a.R(15, 2, 6, 7, '#f2a7a7'); a.R(19, 5, 3, 3, '#e58a90'); a.R(20, 6, 1, 1, '#9a4a50'); a.R(16, 4, 1, 1, '#1d1d1d'); a.R(18, 4, 1, 1, '#ffffff'); a.R(5, 5, 3, 2, '#f8c4c4'); [3, 6, 12, 15].forEach(function (x) { a.R(x, 11, 2, 3, '#e58a90'); }); }); },
+  sheep: function () { return px16('sheep', 22, 16, function (a) { a.R(2, 3, 15, 9, noisy(31, ['#f4f4f0', '#ffffff', '#dcdcd6'])); a.R(15, 4, 6, 6, '#bfb3a6'); a.R(16, 6, 1, 1, '#1d1d1d'); a.R(19, 6, 1, 1, '#1d1d1d'); a.R(17, 8, 2, 1, '#f0a8b8'); a.R(15, 3, 6, 1, '#f4f4f0'); [3, 6, 12, 15].forEach(function (x) { a.R(x, 12, 2, 3, '#bfb3a6'); }); }); },
+  chicken: function () { return px16('chicken', 14, 16, function (a) { a.R(2, 6, 9, 6, '#f6f6f2'); a.R(7, 1, 5, 7, '#f6f6f2'); a.R(12, 3, 2, 2, '#f2b233'); a.R(11, 5, 1, 2, '#e04a3a'); a.R(9, 3, 1, 1, '#1d1d1d'); a.R(1, 6, 2, 3, '#e8e8e0'); a.R(4, 8, 4, 3, '#dcdcd2'); a.R(5, 12, 1, 3, '#f2b233'); a.R(8, 12, 1, 3, '#f2b233'); }); },
+  horse: function () { return px16('horse', 22, 18, function (a) { a.R(2, 6, 14, 6, '#a86a3a'); a.R(14, 1, 4, 8, '#a86a3a'); a.R(17, 2, 4, 4, '#a86a3a'); a.R(19, 5, 2, 2, '#7a4a26'); a.R(17, 3, 1, 1, '#1d1d1d'); a.R(13, 0, 2, 7, '#3a2616'); a.R(0, 6, 2, 5, '#3a2616'); [2, 5, 11, 14].forEach(function (x) { a.R(x, 12, 2, 5, '#8a5430'); a.R(x, 16, 2, 1, '#3a2616'); }); }); },
+  wolf: function () { return px16('wolf', 22, 15, function (a) { a.R(3, 4, 12, 6, '#d8d8d4'); a.R(14, 2, 6, 6, '#d8d8d4'); a.R(19, 5, 3, 2, '#bdbdb8'); a.R(21, 5, 1, 1, '#1d1d1d'); a.R(16, 4, 1, 1, '#1d1d1d'); a.R(14, 1, 1, 1, '#bdbdb8'); a.R(18, 1, 1, 1, '#bdbdb8'); a.R(0, 3, 3, 2, '#d8d8d4'); a.R(8, 4, 5, 2, '#bdbdb8'); [4, 7, 11, 13].forEach(function (x) { a.R(x, 10, 1, 4, '#bdbdb8'); }); a.R(14, 8, 3, 1, '#e04a3a'); }); },
+  cat: function () { return px16('cat', 20, 14, function (a) { a.R(3, 5, 11, 5, '#f2a23a'); a.R(5, 5, 1, 5, '#c97a1e'); a.R(8, 5, 1, 5, '#c97a1e'); a.R(11, 5, 1, 5, '#c97a1e'); a.R(13, 2, 6, 6, '#f2a23a'); a.R(13, 1, 1, 1, '#f2a23a'); a.R(18, 1, 1, 1, '#f2a23a'); a.R(14, 4, 1, 1, '#2f8a3a'); a.R(17, 4, 1, 1, '#2f8a3a'); a.R(15, 6, 2, 1, '#f0a8b8'); a.R(0, 2, 1, 4, '#f2a23a'); a.R(1, 5, 2, 1, '#f2a23a'); [4, 6, 10, 12].forEach(function (x) { a.R(x, 10, 1, 3, '#c97a1e'); }); }); },
+  bee: function () { return px16('bee', 18, 14, function (a) { a.R(6, 1, 4, 3, '#dff4ff'); a.R(10, 1, 4, 3, '#c7e9ff'); a.R(3, 4, 12, 7, '#f6c932'); a.R(6, 4, 2, 7, '#3a2a1a'); a.R(10, 4, 2, 7, '#3a2a1a'); a.R(13, 6, 1, 1, '#1d1d1d'); a.R(1, 7, 2, 1, '#3a2a1a'); }); },
+  panda: function () { return px16('panda', 22, 16, function (a) { a.R(2, 5, 13, 7, '#f4f4f0'); a.R(5, 5, 6, 7, '#2a2a2a'); a.R(13, 2, 8, 8, '#f4f4f0'); a.R(13, 1, 2, 2, '#2a2a2a'); a.R(19, 1, 2, 2, '#2a2a2a'); a.R(14, 4, 2, 2, '#2a2a2a'); a.R(18, 4, 2, 2, '#2a2a2a'); a.R(16, 7, 2, 1, '#2a2a2a'); [2, 5, 10, 13].forEach(function (x) { a.R(x, 12, 3, 3, '#2a2a2a'); }); }); },
+  gem: function () { return px16('gem', 16, 14, function (a) { a.R(3, 1, 10, 3, '#a8fff4'); a.R(1, 4, 14, 2, '#5ee8d8'); a.R(3, 6, 10, 2, '#3cc8bc'); a.R(5, 8, 6, 2, '#2aa89e'); a.R(7, 10, 2, 2, '#1f8a82'); a.R(5, 2, 2, 1, '#ffffff'); }); },
+  emerald: function () { return px16('emerald', 12, 16, function (a) { a.R(4, 0, 4, 2, '#8ff0a0'); a.R(2, 2, 8, 2, '#4fd36a'); a.R(1, 4, 10, 8, '#2fb24c'); a.R(2, 12, 8, 2, '#1f8a3a'); a.R(4, 14, 4, 2, '#17702e'); a.R(3, 4, 2, 6, '#7ae890'); }); },
+  redstone: function () { return px16('redstone', 16, 12, function (a) { [[2, 6], [5, 3], [8, 7], [11, 4], [6, 9], [12, 8], [3, 9]].forEach(function (p, i) { a.R(p[0], p[1], 2 + (i % 2), 2, i % 3 ? '#d1281e' : '#ff5a4a'); }); }); },
+  sword: function () { return px16('sword', 16, 16, function (a) { for (var i = 0; i < 9; i++) { a.R(5 + i, 9 - i, 2, 2, i < 8 ? '#e6e6ea' : '#ffffff'); a.R(6 + i, 10 - i, 1, 1, '#a8a8b0'); } a.R(2, 9, 6, 2, '#6b4a26'); a.R(4, 7, 2, 6, '#6b4a26'); a.R(1, 12, 3, 3, '#8a6236'); }); },
+  pickaxe: function () { return spriteURL('pickaxe'); },
+  axe: function () { return px16('axe', 16, 16, function (a) { for (var i = 0; i < 11; i++) a.R(3 + i, 14 - i, 1, 1, '#8a6236'); a.R(9, 1, 5, 6, '#d8d8de'); a.R(8, 2, 1, 4, '#d8d8de'); a.R(13, 2, 2, 3, '#a8a8b0'); }); },
+  bow: function () { return px16('bow2', 14, 18, function (a) { for (var t = 0; t <= 32; t++) { var u = t / 32, x = 2 + Math.round(9 * Math.sin(Math.PI * u)), y = 1 + Math.round(15 * u); a.R(x, y, 2, 1, u < .15 || u > .85 ? '#6b4a26' : '#9a6a36'); } a.R(2, 1, 1, 16, '#e6e6e6'); a.R(9, 7, 3, 3, '#5a3c1e'); }); },
+  arrowi: function () { return px16('arrowi', 16, 16, function (a) { for (var i = 0; i < 10; i++) a.R(3 + i, 12 - i, 1, 1, '#8a5a2b'); a.R(11, 1, 4, 2, '#bdbdbd'); a.R(13, 1, 2, 4, '#bdbdbd'); a.R(1, 12, 2, 3, '#f2f2f2'); a.R(2, 14, 3, 1, '#f2f2f2'); }); },
+  ingot: function () { return px16('ingot', 18, 10, function (a) { a.R(3, 1, 12, 2, '#f4f4f4'); a.R(2, 3, 14, 4, '#d8d8d8'); a.R(1, 7, 16, 2, '#a8a8a8'); }); },
+  goldi: function () { return px16('goldi', 18, 10, function (a) { a.R(3, 1, 12, 2, '#fff3a0'); a.R(2, 3, 14, 4, '#f6cf3a'); a.R(1, 7, 16, 2, '#c99a12'); }); },
+  coal: function () { return px16('coal', 14, 12, function (a) { a.R(3, 1, 7, 2, '#4a4a4a'); a.R(1, 3, 12, 6, '#2a2a2a'); a.R(3, 9, 8, 2, '#1d1d1d'); a.R(4, 3, 2, 2, '#666'); a.R(9, 6, 1, 1, '#555'); }); },
+  mapi: function () { return spriteURL('map'); },
+  clock: function () { return px16('clock', 16, 16, function (a) { a.C(8, 8, 6, '#e0b030'); a.C(8, 8, 4, '#bfe8ff'); a.R(4, 9, 9, 3, '#62b23a'); a.R(7, 4, 2, 2, '#fff3a0'); a.R(8, 6, 1, 3, '#3a2a1a'); }); },
+  minecart: function () { return px16('minecart', 20, 14, function (a) { a.R(1, 2, 18, 2, '#9a9aa0'); a.R(2, 4, 16, 6, '#6e6e76'); a.R(4, 5, 12, 2, '#55555c'); a.R(3, 10, 4, 3, '#3a3a3a'); a.R(13, 10, 4, 3, '#3a3a3a'); a.R(4, 11, 2, 1, '#777'); a.R(14, 11, 2, 1, '#777'); }); },
+  cobble: function () { return blockTex(0); },
+  log: function () { return px16('log', 16, 16, function (a) { var r = seeded(41); a.R(0, 0, 16, 16, function (i) { return i % 3 === 0 ? '#5a3c1e' : r() < .2 ? '#7a5430' : '#6b4a26'; }); a.R(3, 3, 10, 10, '#c9a066'); a.R(5, 5, 6, 6, '#b88a52'); a.R(7, 7, 2, 2, '#9c7444'); }); },
+  grassb: function () { return grassTex(); },
+  cactus: function () { return px16('cactus', 16, 18, function (a) { a.R(5, 0, 6, 18, function (i, j) { return i === 0 || i === 5 ? '#2f7d1b' : j % 4 === 1 && i % 2 ? '#1f5a12' : '#4fa82f'; }); a.R(1, 6, 4, 2, '#4fa82f'); a.R(1, 3, 2, 3, '#4fa82f'); a.R(11, 8, 4, 2, '#4fa82f'); a.R(13, 5, 2, 3, '#4fa82f'); }); },
+  tree: function () { return px16('tree2', 18, 22, function (a) { var r = seeded(81); a.R(2, 1, 14, 11, function () { var x = r(); return x < .25 ? '#62b23a' : x < .45 ? '#3f8424' : '#4f9a2c'; }); a.R(0, 4, 18, 6, function () { var x = r(); return x < .25 ? '#62b23a' : x < .45 ? '#3f8424' : '#4f9a2c'; }); a.R(7, 12, 4, 10, function (i, j) { return i === 1 || (j % 3 === 0 && i === 2) ? '#5a3c1e' : '#7a5430'; }); }); },
+  flower: function () { return ART.flower(); },
+  lava: function () { return px16('lava', 16, 16, function (a) { var r = seeded(51); a.R(0, 0, 16, 16, function (i, j) { var x = r(); return x < .18 ? '#ffd23f' : x < .5 ? '#ff7a1a' : '#e8501a'; }); a.R(3, 4, 4, 1, '#fff6c8'); a.R(9, 10, 3, 1, '#fff6c8'); }); },
+  torch: function () { return px16('torch', 8, 18, function (a) { a.R(3, 6, 2, 12, '#8a6236'); a.R(2, 2, 4, 4, '#ffd23f'); a.R(3, 3, 2, 2, '#fff6c8'); a.R(3, 0, 2, 2, '#ff7a1a'); }); },
+  bed: function () { return px16('bed', 22, 12, function (a) { a.R(1, 4, 20, 4, '#d33a2f'); a.R(1, 2, 6, 3, '#f4f4f0'); a.R(1, 8, 20, 2, '#b88a52'); a.R(1, 10, 2, 2, '#8a6236'); a.R(19, 10, 2, 2, '#8a6236'); a.R(8, 4, 13, 1, '#e85a4c'); }); },
+  door: function () { return px16('door', 12, 22, function (a) { a.R(1, 1, 10, 20, '#a8784a'); a.R(2, 2, 3, 5, '#d8eef8'); a.R(7, 2, 3, 5, '#d8eef8'); a.R(1, 9, 10, 1, '#7a5430'); a.R(1, 15, 10, 1, '#7a5430'); a.R(8, 11, 2, 1, '#3a2a1a'); }); },
+  chest: function () { return px16('chest', 18, 15, function (a) { a.R(1, 1, 16, 5, '#b8823a'); a.R(1, 6, 16, 1, '#5a3c1e'); a.R(1, 7, 16, 7, '#a8722e'); a.R(7, 4, 4, 5, '#d8d8de'); a.R(8, 5, 2, 2, '#3a3a3a'); a.R(1, 1, 16, 1, '#d8a050'); }); },
+  table: function () { return px16('table', 16, 16, function (a) { a.R(0, 0, 16, 4, function (i) { return i % 4 === 0 ? '#5a3c1e' : '#b88a52'; }); a.R(0, 4, 16, 12, '#9c7444'); a.R(2, 6, 3, 6, '#5a3c1e'); a.R(6, 6, 4, 3, '#c8c8c8'); a.R(11, 6, 3, 6, '#5a3c1e'); a.R(7, 9, 2, 5, '#6b4a26'); a.R(2, 1, 3, 2, '#7a5430'); a.R(10, 1, 4, 2, '#7a5430'); }); },
+  furnace: function () { return px16('furnace', 16, 16, function (a) { a.R(0, 0, 16, 16, noisy(61, ['#8a8a8a', '#a0a0a0', '#6e6e6e'])); a.R(3, 3, 10, 2, '#4a4a4a'); a.R(4, 8, 8, 5, '#2a2a2a'); a.R(5, 10, 6, 3, '#ff7a1a'); a.R(6, 11, 4, 1, '#ffd23f'); }); },
+  tnt: function () { return px16('tnt', 16, 16, function (a) { a.R(0, 0, 16, 16, function (i) { return i % 4 === 3 ? '#b02a20' : '#d8392c'; }); a.R(0, 5, 16, 6, '#f4f4f0'); a.R(3, 7, 10, 2, '#2a2a2a'); a.R(0, 0, 16, 1, '#8a8a8a'); a.R(0, 15, 16, 1, '#8a8a8a'); }); },
+  portal: function () { return px16('portal', 16, 20, function (a) { var r = seeded(71); a.R(0, 0, 16, 20, '#22182e'); a.R(2, 2, 12, 16, function () { var x = r(); return x < .3 ? '#c86bff' : x < .6 ? '#9a3ae0' : '#7a26c0'; }); a.R(1, 0, 1, 20, '#3a2a4e'); a.R(14, 0, 1, 20, '#3a2a4e'); }); },
+  house: function () { return ART.house(); },
+  apple: function () { return px16('apple', 14, 15, function (a) { a.C(7, 9, 5, '#e0392c'); a.R(3, 8, 2, 2, '#ff8a7a'); a.R(6, 1, 1, 4, '#6b4a26'); a.R(7, 2, 3, 2, '#4fa82f'); }); },
+  bread: function () { return px16('bread', 20, 10, function (a) { a.R(2, 2, 16, 6, '#c98a3a'); a.R(4, 1, 12, 1, '#c98a3a'); a.R(1, 4, 18, 3, '#b8782e'); [5, 9, 13].forEach(function (x) { a.R(x, 3, 2, 1, '#f2d08a'); }); }); },
+  cake: function () { return px16('cake', 18, 14, function (a) { a.R(1, 3, 16, 4, '#f8f6f0'); a.R(1, 7, 16, 6, '#c98a5a'); a.R(1, 8, 16, 1, '#f8f6f0'); [3, 8, 13].forEach(function (x) { a.R(x, 4, 2, 2, '#e0392c'); }); a.R(8, 0, 2, 3, '#f6c932'); a.R(2, 6, 2, 2, '#f8f6f0'); a.R(11, 6, 2, 3, '#f8f6f0'); }); },
+  melon: function () { return px16('melon', 18, 12, function (a) { for (var j = 0; j < 9; j++) a.R(1 + j, 1 + j, 16 - 2 * j, 1, j < 7 ? '#e8463a' : '#f2f2e8'); a.R(1, 0, 16, 1, '#3f9a2c'); [[5, 3], [9, 2], [12, 3], [8, 5]].forEach(function (p) { a.R(p[0], p[1], 1, 1, '#1d1d1d'); }); }); },
+  pumpkin: function () { return px16('pumpkin', 16, 15, function (a) { a.R(1, 3, 14, 11, function (i) { return i % 4 === 0 ? '#c86a12' : '#f28a1e'; }); a.R(7, 0, 2, 3, '#4f7a2a'); a.R(4, 6, 2, 2, '#3a2010'); a.R(10, 6, 2, 2, '#3a2010'); a.R(4, 10, 8, 1, '#3a2010'); }); },
+  eggw: function () { return px16('eggw', 12, 15, function (a) { a.C(6, 9, 5, '#f6ecd8'); a.R(4, 2, 4, 3, '#f6ecd8'); a.R(3, 5, 6, 2, '#f6ecd8'); a.R(3, 6, 2, 2, '#ffffff'); }); },
+  milk: function () { return px16('milk', 16, 16, function (a) { a.R(2, 4, 12, 10, '#c8c8cc'); a.R(3, 5, 10, 3, '#ffffff'); a.R(1, 3, 14, 2, '#9a9aa0'); a.R(4, 0, 8, 1, '#9a9aa0'); a.R(3, 1, 1, 2, '#9a9aa0'); a.R(12, 1, 1, 2, '#9a9aa0'); }); },
+  villager: function () { return ART.villager(); }, dragon: function () { return ART.dragon(); }, creeper: function () { return ART.creeper(); },
+  zombie: function () { return ART.zombie(); }, skeleton: function () { return ART.skeleton(); }, spider: function () { return ART.spider(); }, fish: function () { return ART.fish(); }
+};
+// 词表来自 build_chars.py（每个字的读音都核对过）：[词, 带调音节, 图, 类别, 每个字的全部读音]
+var WORDS = (PYC.W || []).map(function (w) { return { w: w[0], ks: w[1].split(' '), pic: w[2], cat: w[3], rs: w[4].map(function (r) { return r.split(','); }) }; })
+  .filter(function (w) { return WART[w.pic] && w.ks.every(function (k) { return SYL[k]; }); });
+var WBYK = {}; WORDS.forEach(function (w) { w.ks.forEach(function (k) { (WBYK[k] = WBYK[k] || []).push(w); }); });
+function wordLabel(ks) { return ks.map(label).join(' '); }
+// 整词拼音的 4 个选项：每个错的只改一个音节（改成这个音节常见的拼错），而且改出来的不能是这个字的任何读音
+function wordOptions(w) {
+  var right = wordLabel(w.ks), cand = [];
+  w.ks.forEach(function (k, i) {
+    var bad = {}; w.rs[i].forEach(function (r) { bad[r] = 1; }); bad[k] = 1;
+    pyVariants(k).forEach(function (v) {
+      var k2 = v.b + v.t; if (bad[k2]) return;
+      var ks2 = w.ks.slice(); var lab = w.ks.map(function (kk, j) { return j === i ? mark(v.b, v.t) : label(kk); }).join(' ');
+      cand.push({ l: lab, pos: i, w: v.w + Math.random() * 1.4, tone: v.kind === 'tone' });
+    });
+  });
+  cand.sort(function (a, b) { return b.w - a.w; });
+  var out = [], used = {}, posN = {}, tones = 0; used[right] = 1;
+  var take = function (c, strict) {
+    if (out.length >= 3 || used[c.l]) return;
+    if (strict && (c.tone && tones >= 1 || (posN[c.pos] || 0) >= (w.ks.length > 1 ? 1 : 3))) return;
+    used[c.l] = 1; out.push(c); posN[c.pos] = (posN[c.pos] || 0) + 1; if (c.tone) tones++;
+  };
+  cand.forEach(function (c) { take(c, true); }); cand.forEach(function (c) { take(c, false); });
+  if (out.length < 3) return null;
+  return shuffle([{ l: right, right: true }].concat(out.map(function (c) { return { l: c.l, pos: c.pos }; })));
+}
+function wordTask(w) { var o = wordOptions(w); return o ? { word: w, opts: o } : null; }
+// 连着播一个词的每个音节（每个音节都是核对过的录音）
+function speakWord(ks) {
+  return Promise.all(ks.map(loadBuf)).then(function (bs) {
+    var a = ctx(); if (speaking) { try { speaking.stop(); } catch (e) {} }
+    var t = a.currentTime + .03, last = null, sp = $$('.speaker'); sp.forEach(function (e) { e.classList.add('playing'); });
+    bs.forEach(function (b) { var s = a.createBufferSource(); s.buffer = b; s.connect(a.destination); s.start(t); t += b.duration + .06; last = s; });
+    speaking = last; last.onended = function () { if (speaking === last) { speaking = null; sp.forEach(function (e) { e.classList.remove('playing'); }); } };
+    return { start: performance.now(), dur: (t - a.currentTime) * 1000 };
+  });
+}
+function speakQ(q) { return q.word ? speakWord(q.word.ks) : speak(q.k); }
+// 记掌握度：答对算这个词每个音节练对一次（不算「快」）；答错只记错在被改的那个音节
+function recordWord(q, ok, opt, rt) {
+  var w = q.word; S.words = S.words || {}; var x = S.words[w.w] || (S.words[w.w] = { n: 0, c: 0 }); x.n++; if (ok) x.c++;
+  if (ok) w.ks.forEach(function (k) { record(k, true, rt, false); });
+  else if (opt && opt.pos != null) record(w.ks[opt.pos], false, rt, false);
+}
+function pickWord(prefer, avoid) {
+  var pool = WORDS.filter(function (w) { return !avoid || !avoid[w.w]; }); if (!pool.length) pool = WORDS;
+  if (prefer && Math.random() < .65) { var p2 = pool.filter(function (w) { return prefer.indexOf(w.cat) >= 0; }); if (p2.length) pool = p2; }
+  // 没见过或常错的词优先
+  var sc = function (w) { var x = (S.words || {})[w.w]; return (x ? x.c / (x.n + 1) : -.5) + Math.random() * .8; };
+  pool.sort(function (a, b) { return sc(a) - sc(b); });
+  return pool[0];
+}
+
 /* ========== 冒险：矿洞下潜、守护村庄、末地决战 ========== */
 var A = null, lastGame = 'practice';
 var CHAPTERS = [
-  { id: 1, name: '矿洞下潜', sub: '答对一题挖下一块', n: 12, time: [13, 8], icon: function () { return oreTex('diamond', 5); }, reward: 'diamond' },
-  { id: 2, name: '守护村庄', sub: '答对就射箭赶走怪物', n: 10, time: [13, 8], icon: function () { return ART.house(); }, reward: 'orb' },
-  { id: 3, name: '末地决战', sub: '答对一题打末影龙一下', n: 10, time: [12, 7.5], icon: function () { return ART.egg(); }, reward: 'egg' }
+  { id: 1, name: '矿洞下潜', sub: '答对一题挖下一块', n: 12, time: [13, 8], icon: function () { return oreTex('diamond', 5); }, reward: 'diamond', pic: .34, cats: ['b', 'i'] },
+  { id: 2, name: '守护村庄', sub: '答对就射箭赶走怪物', n: 10, time: [13, 8], icon: function () { return ART.house(); }, reward: 'orb', pic: .4, cats: ['m', 'a'] },
+  { id: 3, name: '末地决战', sub: '答对一题打末影龙一下', n: 10, time: [12, 7.5], icon: function () { return ART.egg(); }, reward: 'egg', pic: .34, cats: ['m', 'i'] }
 ];
 var LAYERS = [['grass', 1], ['dirt', 2], ['stone', 3], ['iron', 2], ['gold', 2], ['diamond', 2]];
 function layerTex(name, seed) { return name === 'grass' ? grassTex() : name === 'dirt' ? dirtTex() : name === 'stone' ? blockTex(0) : oreTex(name, seed); }
@@ -785,11 +902,13 @@ function campQueue() {
 // 一道冒险题：看字选拼音 / 看图选拼音 / 按音找字
 function campQuestion() {
   var r = Math.random();
-  if (r < .18 && PICS.length) { var p = pick(PICS), o = pyOptions(p[2], p[1]); if (o) return { type: 'i', k: p[2], c: p[1], pic: p[0], opts: o }; }
+  A.usedW = A.usedW || {};
+  if (r < A.ch.pic && WORDS.length) { var wd = pickWord(A.ch.cats, A.usedW), wo = wd && wordOptions(wd); if (wo) { A.usedW[wd.w] = 1; return { type: 'i', k: wd.ks[0], c: wd.w, word: wd, pic: wd.pic, opts: wo }; } }
+  r = A.ch.pic + Math.random() * (1 - A.ch.pic);
   for (var tries = 0; tries < 6; tries++) {
     if (A.qi >= A.queue.length) { A.queue = campQueue(); A.qi = 0; }
     var k = A.queue[A.qi++];
-    if (r < .62) { var t = pickTask(k); if (t) return { type: 'p', k: k, c: t.c, opts: t.opts }; }
+    if (r < A.ch.pic + (1 - A.ch.pic) * .52) { var t = pickTask(k); if (t) return { type: 'p', k: k, c: t.c, opts: t.opts }; }
     var f = findTask(k); if (f) return { type: 'f', k: k, opts: f.map(function (o) { return { l: o.c, right: o.right, k: o.k }; }) };
   }
   return null;
@@ -811,7 +930,7 @@ function renderCampMap() {
 function startChapter(id) {
   ctx(); lastGame = 'camp';
   var ch = CHAPTERS[id - 1];
-  A = { ch: ch, i: 0, hearts: 3, ok: 0, n: 0, learned: [], queue: campQueue(), qi: 0, got: [], start: performance.now(), hp: ch.n };
+  A = { ch: ch, seed: rnd(6), i: 0, hearts: 3, ok: 0, n: 0, learned: [], queue: campQueue(), qi: 0, got: [], start: performance.now(), hp: ch.n };
   show('game'); $('#game').dataset.ch = id; $('#chName').textContent = ch.name;
   buildScene(); renderHud(); setTimeout(nextCampQ, 900);
 }
@@ -829,7 +948,7 @@ function nextCampQ() {
   var pr = $('#qPrompt'), sp = $('#qSpeak');
   if (q.type === 'f') { pr.className = 'q-prompt py'; pr.innerHTML = label(q.k); sp.hidden = false; }
   else if (q.type === 'p') { pr.className = 'q-prompt hz'; pr.innerHTML = q.c; sp.hidden = true; }
-  else { pr.className = 'q-prompt pic'; pr.innerHTML = '<img src="' + ART[q.pic]() + '" alt="">'; sp.hidden = true; }
+  else { pr.className = 'q-prompt pic'; pr.innerHTML = '<img src="' + WART[q.pic]() + '" alt=""><span class="pic-word hz">' + q.c + '</span>'; sp.hidden = true; }
   pr.classList.add('pop');
   $('#qType').style.backgroundImage = 'url(' + spriteURL(q.type === 'f' ? 'note' : q.type === 'p' ? 'book' : 'map') + ')';
   var box = $('#qOpts'); box.innerHTML = '';
@@ -844,9 +963,10 @@ function nextCampQ() {
   setTimeout(function () { if (A && A.q === q) { q.t0 = performance.now(); if (q.type === 'f') speak(q.k).catch(function () {}); } }, 300);
   q.timer = setTimeout(function () { campTimeout(q); }, q.T * 1000 + 300);
   sceneQ(q);
-  loadBuf(q.k).catch(function () {});
+  (q.word ? q.word.ks : [q.k]).forEach(function (k) { loadBuf(k).catch(function () {}); });
 }
-function fitOpts() { $$('#qOpts .ql').forEach(function (l) { l.style.fontSize = ''; var w = l.parentNode.clientWidth * .86; if (l.offsetWidth > w) l.style.fontSize = Math.floor(parseFloat(getComputedStyle(l).fontSize) * w / l.offsetWidth) + 'px'; }); }
+function fitAll(ls) { var f = 1e9; ls.forEach(function (l) { l.style.fontSize = ''; }); ls.forEach(function (l) { var w = l.parentNode.clientWidth * .86, cur = parseFloat(getComputedStyle(l).fontSize); f = Math.min(f, l.offsetWidth > w ? Math.floor(cur * w / l.offsetWidth) : cur); }); if (f < 1e9) ls.forEach(function (l) { l.style.fontSize = f + 'px'; }); }
+function fitOpts() { fitAll($$('#qOpts .ql')); }
 function stopTimer() { var bar = $('#qTimer'); bar.style.width = getComputedStyle(bar).width; bar.style.transition = 'none'; }
 function campAnswer(i, b) {
   var q = A && A.q; if (!q || q.done || b.classList.contains('no')) return;
@@ -854,23 +974,25 @@ function campAnswer(i, b) {
   var o = q.opts[i], rt = performance.now() - q.t0;
   if (o.right) {
     q.done = true; clearTimeout(q.timer); stopTimer(); b.classList.add('yes');
-    if (!q.wrong) { var res = record(q.k, true, rt, rt <= FAST_MS); A.ok++; if (res.after > res.before && res.after >= 2) setTimeout(SFX.up, 500); }
-    A.learned.push([q.c || o.l, q.k]); A.n++; logTime(); save();
-    speak(q.k).catch(function () {});
+    if (!q.wrong && q.word) A.ok++;
+    if (!q.wrong && !q.word) { var res = record(q.k, true, rt, rt <= FAST_MS); A.ok++; if (res.after > res.before && res.after >= 2) setTimeout(SFX.up, 500); }
+    if (q.word) { if (!q.wrong) recordWord(q, true, o, rt); A.learned.push([q.c, q.k, q.word.ks]); $('#qPrompt').classList.add('said'); } else A.learned.push([q.c || o.l, q.k]);
+    A.n++; logTime(); save();
+    speakQ(q).catch(function () {});
     A.i++; renderHud();
     sceneHit(q, function () { setTimeout(nextCampQ, 250); });
   } else {
     SFX.bonk(); b.classList.add('no');
-    if (q.type === 'f') { var ck = q.k + '>' + o.k; S.conf[ck] = (S.conf[ck] || 0) + 1; } else { var ck2 = q.k + '>*' + o.l; S.conf[ck2] = (S.conf[ck2] || 0) + 1; }
-    if (!q.wrong) { q.wrong = true; record(q.k, false, rt, false); logTime(); save(); sceneMiss(q, false); }
+    if (q.type === 'f') { var ck = q.k + '>' + o.k; S.conf[ck] = (S.conf[ck] || 0) + 1; } else { var ck2 = (q.word ? q.word.w : q.k) + '>*' + o.l; S.conf[ck2] = (S.conf[ck2] || 0) + 1; }
+    if (!q.wrong) { q.wrong = true; if (q.word) recordWord(q, false, o, rt); else record(q.k, false, rt, false); logTime(); save(); sceneMiss(q, false); }
   }
 }
 function campTimeout(q) {
   if (!A || A.q !== q || q.done) return; q.done = true;
-  if (!q.wrong) record(q.k, false, q.T * 1000, false);
-  A.n++; logTime(); save();
+  if (!q.wrong) { if (q.word) recordWord(q, false, null, q.T * 1000); else record(q.k, false, q.T * 1000, false); }
+  A.n++; logTime(); save(); if (q.word) $('#qPrompt').classList.add('said');
   $$('#qOpts .qopt').forEach(function (b, j) { if (q.opts[j].right) b.classList.add('show'); else b.classList.add('no'); });
-  speak(q.k).catch(function () {});
+  speakQ(q).catch(function () {});
   sceneMiss(q, true, function () { A.i++; renderHud(); setTimeout(nextCampQ, 600); });
 }
 function loseHeart() { A.hearts = Math.max(0, A.hearts - 1); renderHud(); var h = $$('#hearts .ic')[A.hearts]; if (h) h.classList.add('lose'); }
@@ -893,18 +1015,22 @@ function buildScene() {
     A.blocks = seq;
     seq.forEach(function (n, i) {
       var row = el('div', 'srow'); row.style.setProperty('--r', i);
-      for (var x = 0; x < 7; x++) { var mid = x === 3, side = i === 0 ? 'grass' : i < 3 ? 'dirt' : (seeded(i * 13 + x)() < .12 ? 'iron' : 'stone'); var bl = el('i', 'blk' + (mid ? ' mid' : ''), mid ? '<canvas class="crack" width="16" height="16"></canvas>' : ''); bl.style.backgroundImage = 'url(' + layerTex(mid ? n : side, i * 7 + x) + ')'; row.appendChild(bl); }
+      for (var x = 0; x < 7; x++) { var mid = x === 3, side = i === 0 ? 'grass' : i < 3 ? 'dirt' : (function (v) { return v < .07 ? 'iron' : v < .11 ? 'copper' : v < .14 && i > 6 ? 'redstone' : v < .16 && i > 8 ? 'lapis' : 'stone'; })(seeded(i * 13 + x)()); var bl = el('i', 'blk' + (mid ? ' mid' : ''), mid ? '<canvas class="crack" width="16" height="16"></canvas>' : ''); bl.style.backgroundImage = 'url(' + layerTex(mid ? n : side, i * 7 + x) + ')'; row.appendChild(bl); }
+      if (i > 1 && i % 3 === 1) { var tc = el('img', 'wtorch'); tc.src = WART.torch(); row.children[i % 2 ? 2 : 4].appendChild(tc); }
+      if (i === 5 || i === 9) { var bt = el('img', 'cbat'); bt.src = WART.bat(); row.children[i === 5 ? 5 : 1].appendChild(bt); }
       col.appendChild(row);
     });
+    var surf = el('div', 'surface'); [['tree', 'oak'], ['table', 'tbl'], ['chest', 'chs'], ['cow', 'cow'], ['pig', 'pig'], ['flower', 'flw'], ['sheep', 'shp']].forEach(function (d) { var im = el('img', 'sf ' + d[1]); im.src = WART[d[0]](); surf.appendChild(im); }); col.appendChild(surf);
     var bottom = el('div', 'srow bedrock'); for (var x = 0; x < 7; x++) bottom.appendChild(el('i', 'blk bed')); col.appendChild(bottom);
     var hero = el('img', 'miner'); hero.src = spriteURL('hero'); sc.appendChild(hero);
     var pk = el('img', 'pick'); pk.src = spriteURL('pickaxe', 2); sc.appendChild(pk);
     A.depth = 0; placeMiner(true);
     sc.appendChild(el('div', 'depth', '<b id="depthN">0</b> 米'));
   } else if (id === 2) {
-    sc.innerHTML = '<i class="moon"></i><i class="stars"></i><div class="hillsb"></div><div class="field"></div><img class="vhouse" src="' + ART.house() + '"><img class="villager" src="' + ART.villager() + '"><img class="archer" src="' + spriteURL('hero') + '"><i class="fence"></i><div id="mobs" class="mobs"></div>';
+    sc.innerHTML = '<i class="moon"></i><i class="stars"></i><div class="hillsb"></div><div class="field"></div><img class="vhouse" src="' + ART.house() + '"><img class="villager" src="' + ART.villager() + '"><img class="roofcat" src="' + WART.cat() + '"><img class="farm hen" src="' + WART.chicken() + '"><img class="farm cw" src="' + WART.cow() + '"><img class="farm shp" src="' + WART.sheep() + '"><img class="ftorch" src="' + WART.torch() + '"><img class="archer" src="' + spriteURL('hero') + '"><i class="fence"></i><div id="mobs" class="mobs"></div>';
   } else {
     sc.innerHTML = '<div class="endland"></div><img class="pillar p1" src="' + ART.pillar() + '"><img class="pillar p2" src="' + ART.pillar() + '"><img class="pillar p3" src="' + ART.pillar() + '">' +
+      '<img class="eman e1" src="' + WART.enderman() + '"><img class="eman e2" src="' + WART.enderman() + '"><img class="eportal" src="' + WART.portal() + '">' +
       '<div class="boss"><img id="dragon" class="dragon" src="' + ART.dragon() + '"></div><img class="archer end" src="' + spriteURL('hero') + '"><div class="boss-hp"><span>末影龙</span><div class="hpbar"><i id="hpFill"></i></div></div>';
   }
 }
@@ -923,8 +1049,8 @@ function placeMiner(instant) {
 function sceneQ(q) {
   var id = A.ch.id, sc = $('#scene');
   if (id === 2) {
-    var kinds = ['zombie', 'skeleton', 'spider', 'creeper'], k = kinds[A.i % 4];
-    var mob = el('img', 'mob ' + k); mob.src = ART[k](); $('#mobs').appendChild(mob); q.mob = mob; q.mobKind = k;
+    var kinds = ['zombie', 'skeleton', 'spider', 'creeper', 'enderman', 'slime'], k = kinds[(A.i + A.seed) % 6];
+    var mob = el('img', 'mob ' + k); mob.src = (ART[k] || WART[k])(); $('#mobs').appendChild(mob); q.mob = mob; q.mobKind = k;
     void mob.offsetWidth; mob.style.transition = 'left ' + q.T + 's linear'; mob.classList.add('walk');
   } else if (id === 3) {
     $('#dragon').classList.add('fly');
@@ -1108,6 +1234,7 @@ function renderParent() {
   var cs = Object.keys(S.chars || {}), cOk = cs.filter(function (ch) { return S.chars[ch].c > 0; });
   var pA = el('div', 'panel');
   pA.innerHTML = '<h3>认字和闯关</h3><p>拼音认字见过 ' + cs.length + ' 个新字，自己读对过 ' + cOk.length + ' 个。' + (cOk.length ? '<br><span class="hz-list">' + cOk.slice(-40).join(' ') + '</span>' : '') + '</p>' +
+    (function () { var ws = S.words || {}, seen = Object.keys(ws), n = 0, c = 0; seen.forEach(function (w) { n += ws[w].n; c += ws[w].c; }); return '<p>我的世界词语（看图选拼音）共 ' + WORDS.length + ' 个，见过 ' + seen.length + ' 个' + (n ? '，答对 ' + Math.round(100 * c / n) + '%' : '') + '。</p>'; })() +
     '<p>冒险玩过 ' + campState().runs + ' 次，通关：' + CHAPTERS.map(function (c) { return c.name + (campState().done[c.id] ? ' ✓' : ' -'); }).join('、') + '。</p><p class="small">认字只用最常用的 1000 个字里、他课本字表（一年级和二年级上册）以外的字，没有合适的字的音节只做纯拼音热身；按音找字的 4 个字全部是他认识的字（课本字表加常用虚词），干扰字按读音相近程度挑。</p>';
   body.appendChild(pA);
   // 14 天
@@ -1185,7 +1312,7 @@ function howHTML(kind) {
   var ic = function (n) { return '<i class="ic" data-ic="' + n + '"></i>'; }, ar = '<b class="arrow">→</b>';
   var pyRow = '<div class="how-row"><span class="how-ch big">双</span>' + ar + '<span class="how-pyo">shuān</span><span class="how-pyo ok">shuāng</span><span class="how-pyo">suāng</span>' + ar + ic('pick') + '</div>';
   if (kind === 'pick') return pyRow;
-  if (kind === 'camp') return pyRow + '<div class="how-row"><img class="how-bal" src="' + ART.sun() + '">' + ar + '<span class="how-pyo ok">rì</span><span class="how-pyo">rè</span>' + ar + '<span class="how-ore" style="background-image:url(' + oreTex('diamond', 5) + ')"></span><img class="how-bal" src="' + ART.zombie() + '"><img class="how-bal wide" src="' + ART.dragon() + '"></div>' +
+  if (kind === 'camp') return pyRow + '<div class="how-row"><img class="how-bal" src="' + ART.creeper() + '">' + ar + '<span class="how-pyo ok">kǔ lì pà</span><span class="how-pyo">kǔ lì bà</span>' + ar + '<span class="how-ore" style="background-image:url(' + oreTex('diamond', 5) + ')"></span><img class="how-bal" src="' + ART.zombie() + '"><img class="how-bal wide" src="' + ART.dragon() + '"></div>' +
     '<div class="how-row"><span class="how-py">mā ' + ic('note') + '</span>' + ar + '<span class="how-ch">马</span><span class="how-ch ok">妈</span><span class="how-ch">骂</span></div>';
   return '<div class="how-row"><span class="how-ore" style="background-image:url(' + oreTex('gold', 9) + ')"></span>' + ar + '<span class="how-card"><b class="hz">晴</b><b class="py">qíng</b></span>' + ar + ic('talk') + ic('note') + ar + '<span class="how-yes">' + ic('check') + '</span><span class="how-no">' + ic('cross') + '</span></div>' +
     '<div class="how-row"><span class="how-py">mā ' + ic('note') + '</span>' + ar + '<span class="how-ch">马</span><span class="how-ch ok">妈</span><span class="how-ch">骂</span>' + ar + ic('pick') + '</div>';
@@ -1201,7 +1328,7 @@ function howModal(kind, buttons) {
 function init() {
   load(); paintWorld(); drawSprites(document); drawIcons(document); pickCursor();
   $('#orePile').innerHTML = ['diamond', 'gold', 'iron', 'emerald', 'redstone'].map(function (n, i) { return '<i style="background-image:url(' + oreTex(n, 11 + i) + ')"></i>'; }).join('');
-  $('#homeKid').src = spriteURL('hero'); $('#homeZombie').src = ART.creeper(); $('#advIc').src = ART.egg(); $('#pickIc').src = spriteURL('book');
+  $('#homeKid').src = spriteURL('hero'); $$('.home-farm img').forEach(function (im) { im.src = WART[im.dataset.a](); }); $('#homeZombie').src = ART.creeper(); $('#advIc').src = ART.egg(); $('#pickIc').src = spriteURL('book');
   $('#btnPlay').onclick = function () {
     ctx();
     if (!S.place) {
@@ -1252,7 +1379,7 @@ function init() {
   });
   document.addEventListener('visibilitychange', function () { if (document.hidden) save(); });
   window.__pinyin = { S: function () { return S; }, SYL: SYL, KEYS: KEYS, label: label, distractors: distractors, buildRound: buildRound, buildPlacement: buildPlacement, record: record,
-    G: function () { return G; }, A: function () { return A; }, cat: cat, isFw: isFw, pyOptions: pyOptions, pickTask: pickTask, readLabels: readLabels, campQuestion: function () { return campQuestion(); }, startChapter: startChapter, PICS: PICS, findTask: findTask, newChar: newChar, chInfo: chInfo, hasReading: hasReading };
+    G: function () { return G; }, A: function () { return A; }, cat: cat, isFw: isFw, pyOptions: pyOptions, pickTask: pickTask, WORDS: WORDS, WBYK: WBYK, startRound: startRound, taskFor: taskFor, wordOptions: wordOptions, wordLabel: wordLabel, WART: WART, speakWord: speakWord, readLabels: readLabels, campQuestion: function () { return campQuestion(); }, startChapter: startChapter, PICS: PICS, findTask: findTask, newChar: newChar, chInfo: chInfo, hasReading: hasReading };
   show('home');
 }
 init();
