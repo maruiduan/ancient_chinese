@@ -513,8 +513,9 @@ select{font-family:var(--ui);font-size:16px;padding:6px 8px;border:3px solid var
 .mobs{position:absolute;inset:0;pointer-events:none}
 .mob{position:absolute;left:88%;bottom:19.5%;width:12%;image-rendering:pixelated;z-index:2}
 .mob.walk{left:49%;animation:step .5s steps(2) infinite}
-.mob.spider{width:15%}
-.mob.creeper{width:9%}
+.mob.spider{width:12%}
+.mob.zombie,.mob.skeleton{width:6.5%}
+.mob.creeper{width:4.6%}
 .scene.ch2 .stars{position:absolute;left:12%;top:10%;width:6px;height:6px;background:#fff;box-shadow:80px 40px #fff,180px 10px #fffbe6,300px 60px #fff,420px 20px #fff,520px 80px #fffbe6,620px 30px #fff,140px 120px #fff,380px 140px #fff;opacity:.95}
 .scene.ch2 .hillsb{position:absolute;left:0;right:0;bottom:19%;height:34%;background:linear-gradient(#d9cdf2,#d9cdf2);clip-path:polygon(0 60%,10% 40%,22% 55%,36% 20%,50% 45%,63% 30%,78% 55%,90% 35%,100% 50%,100% 100%,0 100%);opacity:.8}
 @keyframes step{50%{translate:0 -6px}}
@@ -525,11 +526,29 @@ select{font-family:var(--ui);font-size:16px;padding:6px 8px;border:3px solid var
 @keyframes boom{40%{transform:scale(1.5);filter:brightness(2.5)}to{transform:scale(1.8);opacity:0}}
 
 /* 第 3 章 末地（浅色末地石） */
-.scene.ch3{background:linear-gradient(#efe8ff,#f7f2ff 60%)}
+.scene.ch3{background:#2a2333 linear-gradient(#1c1724,#3a3046 70%)}
+.scene.ch3 .estars{position:absolute;inset:0;opacity:.55;background-image:radial-gradient(#5a4d66 1px,transparent 1.5px),radial-gradient(#4a4058 1.5px,transparent 2px);background-size:23px 19px,41px 37px;background-position:3px 5px,17px 11px;image-rendering:pixelated}
+.scene.ch3 .boss-hp span{color:#f2e9ff}
 .scene.ch3 .endland{position:absolute;left:0;right:0;bottom:0;height:19%;border-top:4px solid var(--line);background:#efeab8;
  background-image:radial-gradient(#d9d39a 20%,transparent 22%),radial-gradient(#f7f3cf 18%,transparent 20%);background-size:28px 28px,38px 38px;background-position:0 0,14px 10px}
-.pillar{position:absolute;bottom:18.5%;width:clamp(48px,6%,72px);image-rendering:pixelated}
-.pillar.p1{left:48%;height:46%}.pillar.p2{left:70%;height:58%}.pillar.p3{left:88%;height:38%}
+.pil{position:absolute;bottom:18.5%;width:clamp(40px,6%,64px)}
+.pil .obs{display:block;width:100%;height:100%;image-rendering:pixelated}
+.pil.p1{left:46%;height:40%}.pil.p2{left:66%;height:54%}.pil.p3{left:86%;height:34%}
+.ecrys{position:absolute;left:0;right:0;bottom:100%;aspect-ratio:1/1.9}
+.ecrys .ebase{position:absolute;left:0;bottom:0;width:100%;image-rendering:pixelated}
+.ecrys .ecage,.ecrys .ecore{position:absolute;left:50%;image-rendering:pixelated}
+.ecrys .ecage{width:80%;bottom:50%;margin-left:-40%;animation:ecage 2.4s linear infinite,ebob 2s ease-in-out infinite}
+.ecrys .ecage.c2{width:62%;margin-left:-31%;bottom:54.5%;animation:ecage 1.8s linear infinite reverse,ebob 2s ease-in-out infinite}
+.ecrys .ecore{width:34%;margin-left:-17%;bottom:62%;animation:ecage 1.2s linear infinite,ebob 2s ease-in-out infinite}
+@keyframes ecage{to{rotate:360deg}}
+@keyframes ebob{50%{translate:0 -8px}}
+.pil.gone .ecage,.pil.gone .ecore{display:none}
+.ebeam{position:absolute;height:5px;margin-top:-2px;transform-origin:0 50%;background:linear-gradient(#f6e0ff,#c78cff 50%,#f6e0ff);box-shadow:0 0 8px #d9a6ff;opacity:0;z-index:1;pointer-events:none;animation:ebeam .6s steps(2) infinite}
+@keyframes ebeam{50%{filter:brightness(1.4)}}
+.exitp{position:absolute;left:17%;bottom:18.5%;width:clamp(100px,19%,210px);margin-bottom:-1.5%}
+.exitp img{display:block;width:100%;image-rendering:pixelated}
+.exitp .degg{position:absolute;width:15%;left:42.5%;bottom:100%;opacity:0;transform:translateY(-40px);transition:opacity .4s,transform .6s cubic-bezier(.3,1.4,.6,1)}
+.exitp.won .degg{opacity:1;transform:none}
 .boss{position:absolute;left:38%;top:10%;width:46%;z-index:2}
 .dragon{width:100%;image-rendering:pixelated;display:block}
 .dragon.fly{animation:fly 3.2s ease-in-out infinite}
@@ -595,14 +614,12 @@ select{font-family:var(--ui);font-size:16px;padding:6px 8px;border:3px solid var
 .farm.shp{left:17%;bottom:31%;width:8%;opacity:.85}
 @keyframes peck{50%{transform:rotate(12deg) translateY(2px)}}
 .ftorch{position:absolute;left:calc(45% + 4px);bottom:calc(19.5% + 70px);width:12px;image-rendering:pixelated;filter:drop-shadow(0 0 6px rgba(255,210,63,.9))}
-.mob.enderman{width:7%}
+.mob.enderman{width:7.5%}
 .mob.slime{width:9%}
-.ecrys{position:absolute;width:clamp(28px,4.5%,48px);image-rendering:pixelated;animation:crys 2s ease-in-out infinite;z-index:1}
-.ecrys.c1{left:48%;bottom:calc(18.5% + 46%)}.ecrys.c2{left:70%;bottom:calc(18.5% + 58%);animation-delay:.6s}.ecrys.c3{left:88%;bottom:calc(18.5% + 38%);animation-delay:1.2s}
-@keyframes crys{50%{transform:translateY(-10px) rotate(45deg)}}
-.eman{position:absolute;bottom:18.5%;width:clamp(34px,5%,56px);image-rendering:pixelated}
-.eman.e1{left:36%}.eman.e2{left:78%;transform:scaleX(-1)}
-.eportal{position:absolute;left:20%;bottom:18.5%;width:clamp(48px,8%,84px);image-rendering:pixelated;opacity:.95}
+.eman{position:absolute;bottom:18.5%;width:clamp(30px,5.6%,64px);image-rendering:pixelated}
+.eman img{display:block;width:100%;image-rendering:pixelated}
+.eman.e1{left:37%}.eman.e2{left:75%}
+.eman .eblk{position:absolute;width:110%;left:-5%;top:40%}
 /* 首页的动物 */
 .home-farm{position:absolute;left:24%;bottom:0;display:flex;align-items:flex-end;gap:28px}
 .home-farm img{image-rendering:pixelated}
