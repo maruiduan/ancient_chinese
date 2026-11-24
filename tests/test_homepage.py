@@ -1,6 +1,7 @@
 import io
 from pathlib import Path
 import sys
+from urllib.parse import urlsplit
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -31,11 +32,21 @@ class HomepageTests(unittest.TestCase):
     def test_entry_last_and_all_public_bytes_verified(self):
         calls = []
         def read(request, **kwargs):
-            name = request.full_url.split('/')[-1].split('?')[0]
+            name = urlsplit(request.full_url).path.lstrip('/')
             calls.append('GET ' + name)
             return io.BytesIO((ROOT / 'www' / name).read_bytes())
-        home.publish(ROOT / 'www', uploader=lambda path, dest: calls.append('PUT ' + path.name), opener=read)
-        self.assertEqual(calls, ['PUT ' + n for n in home.FILES] + ['GET ' + n for n in home.FILES])
+        home.publish(ROOT / 'www', uploader=lambda path, dest: calls.append('PUT ' + dest.removeprefix('oss://lucca-www/')), opener=read)
+        order = list(home.FILES)
+        self.assertEqual(calls, ['PUT ' + n for n in order[:-1]] + ['GET ' + home.FLUENCY_PAGE, 'PUT index.html'] +
+                         ['GET ' + n for n in order if n != home.FLUENCY_PAGE])
+
+    def test_unverified_fluency_is_not_linked_from_live_homepage(self):
+        uploaded = []
+        with self.assertRaisesRegex(RuntimeError, home.FLUENCY_PAGE):
+            home.publish(ROOT / 'www', uploader=lambda _, dest: uploaded.append(dest),
+                         opener=lambda *a, **k: io.BytesIO(b'stale'))
+        self.assertEqual(uploaded[-1], 'oss://lucca-www/' + home.FLUENCY_PAGE)
+        self.assertNotIn('oss://lucca-www/index.html', uploaded)
 
     def test_stale_public_bytes_fail(self):
         with self.assertRaisesRegex(RuntimeError, 'public bytes differ'):

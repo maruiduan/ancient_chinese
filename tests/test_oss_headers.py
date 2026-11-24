@@ -57,6 +57,23 @@ class PersistentHeaderTests(unittest.TestCase):
         self.assertFalse(oss_headers.requires_persistent("css/app.css"))
         self.assertTrue(oss_headers.requires_persistent("stats.html"))
 
+    def test_fluency_dependencies_are_allowed_only_on_exact_route(self):
+        key = "pinyin-fluency/index.html"
+        def headers(bucket, name):
+            return oss_headers.decode_persistent_headers(oss_headers.persistent_header_value(bucket, name))
+        active = headers(oss_headers.WWW_BUCKET, key)
+        homepage = headers(oss_headers.WWW_BUCKET, "index.html")
+        self.assertEqual(homepage, headers(oss_headers.WWW_BUCKET, "pinyin/index.html"))
+        self.assertEqual(active["permissions-policy"], homepage["permissions-policy"])
+        policy = dict(part.strip().split(" ", 1) for part in active["content-security-policy"].split(";"))
+        self.assertIn("https://cdn.jsdelivr.net/npm/three@0.160.1/", policy["script-src"].split())
+        self.assertIn("https://upload.wikimedia.org/wikipedia/commons/", policy["media-src"].split())
+        self.assertNotIn("https:", policy["script-src"].split())
+        self.assertNotIn("https:", policy["media-src"].split())
+        self.assertNotIn("cdn.jsdelivr.net", homepage["content-security-policy"])
+        self.assertNotIn("cdn.jsdelivr.net", headers(oss_headers.GUWEN_BUCKET, key)["content-security-policy"])
+        self.assertEqual(oss_headers.object_metadata(key), ("text/html; charset=utf-8", "no-cache, must-revalidate"))
+
     def test_signature_v1_includes_persistent_headers_and_not_cache_control(self):
         headers = {
             "Content-Type": "text/plain",

@@ -11,9 +11,11 @@ import xml.etree.ElementTree as ET
 
 from put_oss_object import put_object
 
-FILES = ('robots.txt', 'sitemap.xml', 'favicon.ico', 'og.png', 'index.html')  # Entry point last.
+FLUENCY_PAGE = 'pinyin-fluency/index.html'
+FILES = ('robots.txt', 'sitemap.xml', 'favicon.ico', 'og.png', FLUENCY_PAGE, 'index.html')  # Homepage last.
 ORIGIN = 'https://lucca-www.oss-cn-hongkong.aliyuncs.com/'
-MODULE_URLS = {'https://guwen.lucca.top/', 'https://en.lucca.top/', 'https://ai.lucca.top/'}
+MODULE_URLS = {'https://guwen.lucca.top/', 'https://en.lucca.top/', 'https://ai.lucca.top/',
+               '/pinyin/index.html', '/' + FLUENCY_PAGE}
 
 
 class Links(HTMLParser):
@@ -55,9 +57,8 @@ def validate(root: Path):
 
 def publish(root: Path, uploader=put_object, opener=urllib.request.urlopen):
     bodies = validate(root)  # Validate all files before making any changes.
-    for name in FILES:
-        uploader(root / name, 'oss://lucca-www/' + name)
-    for name, expected in bodies.items():
+    def verify(name):
+        expected = bodies[name]
         digest = hashlib.sha256(expected).hexdigest()
         request = urllib.request.Request(ORIGIN + name + '?release=' + digest,
                                          headers={'Cache-Control': 'no-cache'})
@@ -66,6 +67,14 @@ def publish(root: Path, uploader=put_object, opener=urllib.request.urlopen):
         if actual != expected:
             raise RuntimeError('Homepage public bytes differ from published file: ' + name)
         print('Verified homepage ' + name)
+
+    for name in FILES:
+        uploader(root / name, 'oss://lucca-www/' + name)
+        if name == FLUENCY_PAGE:
+            verify(name)  # Do not expose a new navigation link until its destination is public.
+    for name in FILES:
+        if name != FLUENCY_PAGE:
+            verify(name)
 
 
 def main():

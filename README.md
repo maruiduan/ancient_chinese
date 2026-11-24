@@ -101,6 +101,6 @@ python3 scripts/stage_site.py /tmp/site-next --previous-site /tmp/site-previous
 
 ### Homepage publication checks
 
-`www/index.html` keeps the three module links in HTML, so navigation does not depend on JavaScript. The cross-origin statistics widget is a normal link: the existing CSP and frame restrictions remain unchanged.
+`www/index.html` keeps the module links in HTML, so navigation does not depend on JavaScript. 拼音闯关 (`/pinyin/index.html`) and 拼音快读 (`/pinyin-fluency/index.html`) are separate games. The homepage publisher checks the new game’s public bytes before uploading the homepage that links to it. The cross-origin statistics widget is a normal link: the existing CSP and frame restrictions remain unchanged.
 
 Both OSS workflows use `python3 scripts/publish_homepage.py www`: it validates all homepage inputs before uploading, writes `robots.txt` and `sitemap.xml` before the entry page, then compares the public OSS bytes to the local files. Upload denial or verification failure now fails the workflow instead of reporting success. A homepage failure does not mean the earlier, separately verified guwen deployment failed; inspect each step before retrying. Do not expand bucket permissions automatically.

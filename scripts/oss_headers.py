@@ -43,6 +43,20 @@ WWW_CSP = (
     "connect-src 'self' https://hm.baidu.com; form-action 'self'"
 )
 
+# Only this exact route runs the bilingual WebGL game and plays external recordings.
+# Do not broaden the homepage / original game policy.
+FLUENCY_CSP = (
+    "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; "
+    "img-src 'self' data: blob:; font-src 'self' data:; "
+    "style-src 'self' 'unsafe-inline'; "
+    "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net/npm/three@0.160.1/; "
+    "media-src 'self' "
+    "https://cdn.jsdelivr.net/gh/hugolpz/audio-cmn@ff9ed3d0c631195bd2c06f39450f3264c7124040/64k/syllabs/ "
+    "https://static1.squarespace.com/static/56a3a52dcbced637feaca73c/ "
+    "https://upload.wikimedia.org/wikipedia/commons/; "
+    "connect-src 'self' data: blob:; form-action 'self'"
+)
+
 HASHED_NAME = re.compile(r"\.[0-9a-f]{12}\.[A-Za-z0-9]+$")
 PROTECTED_NAMES = {"robots.txt", "sitemap.xml"}
 
@@ -78,7 +92,10 @@ def persistent_pairs(bucket: str, key: str) -> tuple[tuple[str, str], ...] | Non
         return None
     pairs = list(COMMON_HEADERS)
     if Path(key).suffix.lower() == ".html":
-        pairs.append(("content-security-policy", WWW_CSP if bucket == WWW_BUCKET else GUWEN_CSP))
+        csp = WWW_CSP if bucket == WWW_BUCKET else GUWEN_CSP
+        if bucket == WWW_BUCKET and key == "pinyin-fluency/index.html":
+            csp = FLUENCY_CSP
+        pairs.append(("content-security-policy", csp))
     return tuple(pairs)
 
 
