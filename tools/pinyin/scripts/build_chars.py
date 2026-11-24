@@ -34,6 +34,10 @@ for g, cs in phon.items():
 known = set()
 for f in ['pep_tongbian_g1_g2a.txt', 'everyday_g2a.txt']:
     known |= set(open('/workspace/child-literacy/game-tips/char_lists/' + f, encoding='utf8').read().strip())
+# 很常用的虚词和小词：他认识，找字题可以当答案和干扰项
+FUNC = set('啊呀呢吧吗嘛哦哇的地得了着过这那哪谁什么怎就都还也才又再把被给跟和从向对在不没很太最比因为所以但可如果')
+textbook = set(known)
+known |= FUNC
 def readings(c): return tg.get(c, set()) | set(pin.get(c, {})) | ({mand[c]} if c in mand else set())
 def dominant(c, share):
     """这个字的主要读音（多音字只取占比够高的常用读音），没有就返回 None"""
@@ -58,39 +62,59 @@ chars = [c for c in tgh]
 # 认字只用最常用的 1000 个字（按 kHanyuPinlu 总频次排序，只算《通用规范汉字表》里的字）
 TOP_N = 1000
 TOP = set(sorted((c for c in chars if pin.get(c)), key=lambda c: -sum(pin[c].values()))[:TOP_N])
-U = collections.defaultdict(list); Z = collections.defaultdict(list); D = collections.defaultdict(list)
+def func_reading(c):
+    """虚词：主要读音是轻声（没录音）时，用最常见的非轻声读音——它在非轻声里要占七成、在全部用法里至少占两成"""
+    p = {r: n for r, n in pin.get(c, {}).items() if r in tg.get(c, set())}
+    full = {r: n for r, n in p.items() if not r.endswith('5')}
+    if not full: return None
+    top = max(full, key=full.get); tot = sum(pin[c].values())
+    return top if full[top] / sum(full.values()) >= .7 and full[top] / tot >= .2 else None
+U = collections.defaultdict(list); Z = collections.defaultdict(list)
 for c in chars:
-    lvl = 1 if tgh[c] <= 3500 else 2 if tgh[c] <= 6500 else 3
     k1 = dominant(c, .8)
-    if k1 in bank and c not in known and c in TOP: U[k1].append((1, -fq(c, k1), tgh[c], c))
+    # 认字：最常用的 1000 个字里课本没学过的，加上课本外的常用虚词
+    if k1 in bank and c not in textbook and (c in TOP or c in FUNC): U[k1].append((-fq(c, k1), tgh[c], c))
     k2 = dominant(c, .9)
-    if k2 in bank:
-        if c in known: Z[k2].append((-fq(c, k2), c))
-        if c in known or (lvl == 1 and fq(c, k2) >= 100): D[k2].append((0 if c in known else 1, -fq(c, k2), c))
-import os
-LOCK = json.load(open('find_lock.json')) if os.path.exists('find_lock.json') else None
+    if k2 not in bank and c in FUNC: k2 = func_reading(c)
+    if k2 in bank and c in known: Z[k2].append((0 if c in FUNC else 1, -fq(c, k2), c))
+PAIRS = {frozenset(x) for x in [('z', 'zh'), ('c', 'ch'), ('s', 'sh'), ('b', 'd'), ('p', 'q'), ('n', 'l'), ('f', 'h'), ('l', 'r'), ('b', 'p'), ('d', 't'), ('g', 'k'), ('j', 'q'), ('j', 'zh'), ('q', 'ch'), ('x', 'sh')]}
+NASAL = lambda f: f[:-1] if f.endswith('ng') else f + 'g' if f.endswith('n') else None
+def score(k, r):
+    """读音 r 和目标 k 有多容易混：同音节不同调、前后鼻音、平翘舌和 b/d 之类、同声母或同韵母"""
+    (i1, f1), (i2, f2) = split(k), split(r[:-1] + '0'); t1, t2 = k[-1], r[-1]
+    f2 = split(r)[1]
+    if i1 == i2 and f1 == f2: return 6 if t1 != t2 else -99
+    if i1 == i2 and NASAL(f1) == f2: return 5 + (t1 == t2)
+    if f1 == f2 and frozenset((i1, i2)) in PAIRS: return 5 + (t1 == t2)
+    if f1 == f2: return 3 + (t1 == t2) * .5
+    if i1 == i2: return 2 + (t1 == t2) * .5
+    return 0
+pool = [c for c in known if c in tg]
+dom = {c: (dominant(c, .9) or (max(pin[c], key=pin[c].get) if pin.get(c) else sorted(tg[c])[0])) for c in pool}
+freq = {c: sum(pin.get(c, {}).values()) for c in pool}
 out = {}; R = {}
 for k in sorted(bank):
-    u = [x[3] for x in sorted(U[k])]
-    if u and min(x[0] for x in U[k]) == 1: u = [x[3] for x in sorted(U[k]) if x[0] == 1]
-    u = u[:5]; z = [x[1] for x in sorted(Z[k])][:4]; d = [x[2] for x in sorted(D[k]) if x[0] == 0][:4] or [x[2] for x in sorted(D[k])][:2]
-    s = []
+    u = [x[2] for x in sorted(U[k])][:5]; z = [x[2] for x in sorted(Z[k])][:6]
+    x = []
     if z:
-        for g in sorted(gp[z[0]]):
-            for c in sorted(phon[g], key=lambda c: (c not in known, -sum(pin.get(c, {}).values()))):
-                kk = dominant(c, .9)
-                if c != z[0] and kk in bank and near(k, kk) and k not in readings(c) and (c in known or tgh.get(c, 9999) <= 3500) and c not in [x[0] for x in s]: s.append([c, kk])
-        s = s[:3]
-    if LOCK is not None:  # 找字题沿用已上线的字（find_lock.json），只换认字字库
-        lk = LOCK.get(k, {}); z = list(lk.get('z', '')); d = list(lk.get('d', '')); s = lk.get('s', [])
+        comp = set().union(*(gp[c] for c in z))
+        cand = []
+        for c in pool:
+            if c in z or k in readings(c): continue  # 任何读音含目标音节的字都不能当干扰项
+            sc = score(k, dom[c]) + (2 if gp[c] & comp else 0)
+            if sc > -50: cand.append((-sc, -freq[c], c))
+        cand.sort(); x = [[c, dom[c]] for _, _, c in cand[:12]]
     e = {}
     if u: e['u'] = ''.join(u)
     if z: e['z'] = ''.join(z)
-    if d: e['d'] = ''.join(d)
-    if s: e['s'] = s
+    if x: e['x'] = x
+    fw = ''.join(c for c in z if c in FUNC)
+    if fw: e['fw'] = fw
     out[k] = e
-    for c in set(u + z + d + [x[0] for x in s]): R[c] = sorted(readings(c))
-st = dict(u=sum(1 for v in out.values() if 'u' in v), z=sum(1 for v in out.values() if 'z' in v), s=sum(1 for v in out.values() if 's' in v), none=sum(1 for v in out.values() if not v), chars=len(R))
+    for c in set(u + z + [y[0] for y in x]): R[c] = sorted(readings(c))
+st = dict(u=sum(1 for v in out.values() if 'u' in v), uchars=len({c for v in out.values() for c in v.get('u', '')}), z=sum(1 for v in out.values() if 'z' in v),
+          zchars=sum(len(v.get('z', '')) for v in out.values()), warm=sum(1 for v in out.values() if 'u' not in v and 'z' not in v), chars=len(R),
+          func_new=len(FUNC - textbook), fw_syl=sum(1 for v in out.values() if 'fw' in v), func_z=sorted(c for c in FUNC if any(c in v.get('z', '') for v in out.values())), func_u=sorted(c for c in FUNC if any(c in v.get('u', '') for v in out.values())))
 print(st)
-json.dump({'syl': out, 'R': {c: ','.join(r) for c, r in R.items()}, 'known': len(known)}, open('chars.json', 'w'), ensure_ascii=False, separators=(',', ':'))
+json.dump({'syl': out, 'R': {c: ','.join(r) for c, r in R.items()}, 'known': sorted(known), 'stats': st}, open('chars.json', 'w'), ensure_ascii=False, separators=(',', ':'))
 open('chars_data.js', 'w').write('window.PYC=' + json.dumps({'syl': out, 'R': {c: ','.join(r) for c, r in R.items()}}, ensure_ascii=False, separators=(',', ':')) + ';')

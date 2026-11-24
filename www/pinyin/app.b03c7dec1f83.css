@@ -363,54 +363,14 @@ select{font-family:var(--ui);font-size:16px;padding:6px 8px;border:3px solid var
 @media (hover:hover){.mc-btn.sky:hover{background-color:#96d3ff}}
 .bal-ic{width:44px;height:44px;image-rendering:pixelated}
 .home-hero{position:absolute;right:20%;bottom:150px;width:96px;display:flex;flex-direction:column;align-items:center;animation:hfloat 5s ease-in-out infinite}
-.home-hero .hb{width:96px;height:96px;image-rendering:pixelated}
-.home-hero .string,.hero .string,.balloon .string{display:block;width:3px;height:40px;background:#333;margin-top:-6px}
 .home-hero .hk{width:72px;height:72px;image-rendering:pixelated;margin-top:-4px}
 @keyframes hfloat{0%,100%{transform:translate(0,0)}50%{transform:translate(-14px,-26px)}}
 .menu{gap:12px;margin-top:48px}
 /* ===== 气球闯关 ===== */
-#arcade{padding-bottom:var(--ground)}
-.arc-level{display:flex;align-items:center;justify-content:center;gap:14px}
-.lv-badge{display:inline-grid;place-items:center;min-width:56px;height:56px;padding:0 8px;font-size:36px;color:#fff;background:#4aa8ff;border:3px solid var(--line);box-shadow:inset 3px 3px 0 #c5e7ff,inset -3px -3px 0 #2f78bd;text-shadow:3px 3px 0 #1f5f9a}
-.lv-badge.big{min-width:96px;height:96px;font-size:72px}
-.lv-dots{display:flex;gap:6px}.lv-dots i{width:20px;height:20px;background:#fff;border:3px solid var(--line)}.lv-dots i.done{background:var(--xp)}
 .hearts{display:flex;gap:4px}.hearts .ic{width:44px;height:44px}
 .ic.lost{filter:grayscale(1) opacity(.35)}
 .ic.lose{animation:lose .6s}
 @keyframes lose{30%{transform:scale(1.4)}100%{transform:scale(1)}}
-.arc-prompt{display:flex;align-items:center;gap:20px;margin-top:4px;z-index:3}
-.arc-prompt .speaker canvas{width:80px;height:80px}.arc-prompt .waves{top:40px}
-.timer{width:min(100%,560px);height:16px;margin-top:12px;background:#2a2a2a;border:3px solid var(--line);z-index:3}
-.timer i{display:block;height:100%;width:100%;background:linear-gradient(#ffe27a 0 35%,#ffc21a 35% 70%,#e09b00 70%)}
-.sky{position:relative;flex:1;width:min(100%,1400px);min-height:440px}
-.hero{position:absolute;left:8%;top:2%;width:120px;display:flex;flex-direction:column;align-items:center;z-index:4;pointer-events:none}
-.hero.drift{top:58%}
-.hero.enter{animation:henter .7s cubic-bezier(.3,1.3,.6,1)}
-@keyframes henter{from{transform:translateY(-260px);opacity:0}}
-.hero-balloon{width:120px;height:120px;image-rendering:pixelated;transform-origin:50% 90%}
-.hero-kid{width:96px;height:96px;image-rendering:pixelated;margin-top:-4px;animation:swingk 2.2s ease-in-out infinite;transform-origin:60% 0}
-@keyframes swingk{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
-.hero .chute{display:none}
-.hero.fall .hero-balloon,.hero.fall .string{visibility:hidden}
-.hero.fall .chute{display:block;position:absolute;top:40px;width:150px;height:60px;border:4px solid var(--line);border-bottom:0;border-radius:75px 75px 0 0;background:repeating-linear-gradient(90deg,#fff 0 25px,#ef5b4c 25px 50px)}
-.hero.fall{animation:fall 2s ease-in forwards}
-@keyframes fall{to{transform:translateY(160px);opacity:.0}}
-.balloons{position:absolute;left:26%;right:2%;top:0;bottom:0;display:flex;justify-content:space-around;align-items:flex-start}
-.balloon{position:relative;display:flex;flex-direction:column;align-items:center;margin-top:var(--y);cursor:pointer;animation:rise .8s cubic-bezier(.3,1.2,.6,1) both,bobb 3s ease-in-out infinite;animation-delay:calc(var(--i) * .08s),calc(var(--i) * .5s)}
-@keyframes rise{from{transform:translateY(420px);opacity:0}}
-@keyframes bobb{0%,100%{translate:0 0}50%{translate:0 -12px}}
-.balloon img{width:clamp(150px,13vw,200px);height:clamp(150px,13vw,200px);image-rendering:pixelated}
-.balloon .hz{position:absolute;top:calc(clamp(150px,13vw,200px) * .12);width:clamp(150px,13vw,200px);text-align:center;font-size:clamp(64px,5.6vw,92px);line-height:1.3;color:#1b1b1b;
- text-shadow:0 0 0 #fff;pointer-events:none}
-.balloon .hz::before{content:"";position:absolute;left:50%;top:50%;width:62%;height:78%;transform:translate(-50%,-50%);background:rgba(255,253,244,.92);border:3px solid var(--line);z-index:-1}
-.balloon .string{height:90px}
-@media (hover:hover){.balloon:hover img{filter:brightness(1.12) drop-shadow(0 0 0 #fff);transform:scale(1.06)}.balloon:hover .hz::before{background:#fff;box-shadow:0 0 0 4px #fff}}
-.balloon.popped{animation:none;opacity:0;transform:scale(1.4);transition:opacity .25s,transform .25s;pointer-events:none}
-.balloon.dim{opacity:.35}
-.balloon.hintme img{filter:drop-shadow(0 0 18px #fff36b)}
-.balloon.hintme{animation:hint .8s ease-in-out infinite alternate}
-.balloon.away{animation:none;transform:translateY(-600px);opacity:0;transition:transform 1s ease-in,opacity 1s}
-.balloon.caught{animation:none;transform:translateY(-30px);transition:transform .4s}
 /* 怎么玩 */
 .intro{gap:14px;padding-top:8px}
 .how-say{position:absolute!important;left:12px;top:12px;min-height:44px!important;width:44px!important}
@@ -434,15 +394,175 @@ select{font-family:var(--ui);font-size:16px;padding:6px 8px;border:3px solid var
  .task-find .ores{grid-template-columns:repeat(2,var(--b));--b:min(41vw,180px)}
  .py-plate{font-size:52px}
  .mc-btn.sky{min-width:0;width:100%;font-size:26px}.home-hero{display:none}
- .hero{left:2%;width:80px}.hero-balloon{width:80px;height:80px}.hero-kid{width:64px;height:64px}
- .balloons{left:22%;flex-wrap:wrap}.balloon img{width:112px;height:112px}.balloon .hz{width:112px;top:12px;font-size:52px}.balloon .string{height:30px}
- .hearts .ic{width:32px;height:32px}.lv-dots i{width:14px;height:14px}
+ .hearts .ic{width:32px;height:32px}
 }
-.balloon .hz{left:50%;transform:translateX(-50%);width:auto;top:calc(clamp(150px,13vw,200px) * .2);padding:0 .1em .02em;line-height:1.1;background:rgba(255,253,244,.94);border:3px solid var(--line);box-shadow:3px 3px 0 rgba(0,0,0,.25)}
-.balloon .hz::before{display:none}
-@media (hover:hover){.balloon:hover .hz{background:#fff;outline:3px solid #fff}}
-.hero.fall .chute{top:118px;left:50%;transform:translateX(-50%)}
 .mine::after{width:64px;height:64px;bottom:-56px}
 .kpi b{font-size:24px}
-@media (max-width:760px){.balloon .hz{top:20px;font-size:44px}}
 @media (max-width:760px){.arc-level .lv-dots{display:none}.hud .mc-btn.icon{width:48px;min-height:48px}}
+
+/* ===== 看字选拼音（练习里） ===== */
+.hz-plate{font-family:var(--hz);font-weight:700;font-size:clamp(96px,15vh,150px);line-height:1.1;padding:0 34px 6px;background:#fffdf4;border:5px solid var(--line);box-shadow:inset -6px -6px 0 #e9e1c8,0 10px 0 rgba(0,0,0,.12);animation:cardpop .35s cubic-bezier(.3,1.6,.6,1)}
+.ore .lab.pyo{font-family:var(--py);font-size:calc(var(--b) * .2);padding:.02em .2em .1em}
+.pickpy .ores{--b:clamp(170px,min(15vw,24vh),240px)}
+/* 首页 */
+.big-row .mc-btn{min-width:233px;min-height:72px;font-size:30px}
+.mc-btn.gold{background-color:#ffcf3a;color:#fff;text-shadow:3px 3px 0 #9a6a00;box-shadow:inset 3px 3px 0 #ffeaa0,inset -3px -4px 0 #c08a00}
+@media (hover:hover){.mc-btn.gold:hover{background-color:#ffdb63}}
+.home-hero{flex-direction:row;align-items:flex-end;gap:120px;width:auto;bottom:0;right:22%;animation:none}
+.home-hero .hk{width:88px;height:88px;animation:hop2 2.6s ease-in-out infinite}
+.home-hero .hz2{width:62px;height:88px;image-rendering:pixelated;animation:sneak 6s ease-in-out infinite}
+@keyframes hop2{0%,80%,100%{transform:translateY(0)}88%{transform:translateY(-22px)}}
+@keyframes sneak{0%,100%{transform:translateX(0)}50%{transform:translateX(26px)}}
+.how-pyo{font-family:var(--py);font-weight:700;font-size:28px;background:#fffdf4;border:3px solid var(--line);padding:0 10px 4px}
+.how-pyo.ok{outline:4px solid #62c23c}
+.how-ch.big{font-size:52px;width:72px;height:72px}
+.how-bal.wide{width:100px}
+
+/* ===== 冒险地图 ===== */
+.camp-map{width:min(100%,1240px);position:relative;margin-top:10px}
+.camp-nodes{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,3vw,48px);position:relative}
+.camp-nodes::before{content:"";position:absolute;left:12%;right:12%;top:118px;height:14px;background:repeating-linear-gradient(90deg,#b88a52 0 28px,#9a6f3c 28px 56px);border:3px solid var(--line);z-index:0}
+.node{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:8px;padding:22px 14px 22px;cursor:pointer;font-family:var(--px);
+ background:var(--gui);border:3px solid var(--line);box-shadow:inset 4px 4px 0 #fff,inset -4px -4px 0 #555,0 12px 0 rgba(0,0,0,.14);
+ animation:nodein .5s cubic-bezier(.3,1.4,.6,1) both;animation-delay:calc(var(--i) * .08s);transition:transform .12s}
+@keyframes nodein{from{transform:translateY(40px);opacity:0}}
+@media (hover:hover){.node:not(.locked):hover{transform:translateY(-6px);background:#d4d4d4}.node:not(.locked):hover .node-ic{transform:scale(1.08) rotate(-3deg)}}
+.node-ic{width:clamp(120px,11vw,160px);height:clamp(120px,11vw,160px);background-size:contain;background-repeat:no-repeat;background-position:center;image-rendering:pixelated;transition:transform .15s;filter:drop-shadow(0 8px 0 rgba(0,0,0,.18))}
+.node-n{position:absolute;left:12px;top:10px;width:48px;height:48px;display:grid;place-items:center;font-size:30px;color:#fff;background:#4aa8ff;border:3px solid var(--line);text-shadow:2px 2px 0 #1f5f9a}
+.node-name{font-size:clamp(28px,2.4vw,38px)}
+.node-sub{font-size:20px;color:#444;font-family:var(--ui)}
+.node-star{position:absolute;right:12px;top:10px;width:48px;height:48px;background-size:contain;image-rendering:pixelated}
+.node.done .node-n{background:#62c23c;text-shadow:2px 2px 0 #2c5e18}
+.node.locked{cursor:not-allowed}.node.locked .node-ic,.node.locked .node-name,.node.locked .node-sub{filter:grayscale(1);opacity:.45}
+.node-lock{position:absolute;right:12px;top:10px;font-size:22px;color:#fff;background:#555;border:3px solid var(--line);padding:2px 8px}
+.camp-inv{margin-top:28px;padding:14px 18px;display:flex;align-items:center;gap:16px;z-index:2}
+.inv-title{font-size:28px}.inv-slots{display:flex;gap:4px;flex-wrap:wrap}
+.inv-slots .slot.empty i{filter:grayscale(1) opacity(.3)}
+
+/* ===== 冒险：游戏画面 ===== */
+#game{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(400px,1fr);grid-template-rows:auto minmax(0,1fr) auto;grid-template-areas:"hud hud" "scene q" "scene bag";
+ gap:16px 24px;width:100%;max-width:1760px;margin:0 auto;height:100vh;padding:18px 28px 24px;z-index:3;align-items:stretch;justify-items:stretch}
+#game[hidden]{display:none}
+#game .hud{grid-area:hud;width:100%}
+.ch-tag{flex:1;display:flex;align-items:center;gap:14px;min-width:0}
+.ch-name{font-size:32px;white-space:nowrap}
+.ch-prog{flex:1;max-width:520px;height:20px;background:#2a2a2a;border:3px solid var(--line)}
+.ch-prog i{display:block;height:100%;width:0;background:linear-gradient(#a8ff7a 0 40%,#62c23c 40% 75%,#3f8f25 75%);transition:width .4s}
+#game .hearts .ic{width:44px;height:44px}
+.scene{grid-area:scene;position:relative;overflow:hidden;border:4px solid var(--line);box-shadow:0 12px 0 rgba(0,0,0,.14);min-height:300px;background:#cfeeff}
+.qpanel{grid-area:q;display:flex;flex-direction:column;padding:18px 20px 20px;min-height:0}
+.qhead{display:flex;align-items:center;justify-content:center;gap:16px;min-height:clamp(120px,19vh,190px)}
+.qtype{display:none;width:44px;height:44px;background-size:100% 100%;image-rendering:pixelated;opacity:.75;align-self:flex-start}
+.q-prompt{display:grid;place-items:center;background:#fffdf4;border:5px solid var(--line);box-shadow:inset -6px -6px 0 #e9e1c8}
+.q-prompt.pop{animation:cardpop .35s cubic-bezier(.3,1.6,.6,1)}
+.q-prompt.py{font-family:var(--py);font-weight:700;font-size:clamp(56px,8vh,84px);padding:0 26px 8px;line-height:1.1}
+.q-prompt.hz{font-family:var(--hz);font-weight:700;font-size:clamp(96px,15vh,150px);padding:0 22px 4px;line-height:1.08}
+.q-prompt.pic{padding:10px}.q-prompt.pic img{width:clamp(110px,15vh,150px);height:clamp(110px,15vh,150px);image-rendering:pixelated;display:block}
+.qhead .speaker{margin-top:0}.qhead .speaker canvas{width:80px;height:80px}.qhead .waves{top:40px}
+.qtimer{height:16px;margin:16px 0 16px;background:#2a2a2a;border:3px solid var(--line)}
+.qtimer i{display:block;height:100%;width:100%;background:linear-gradient(#ffe27a 0 35%,#ffc21a 35% 70%,#e09b00 70%)}
+.qopts{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:minmax(84px,1fr);gap:14px;min-height:0}
+.qopt{position:relative;display:grid;place-items:center;cursor:pointer;background:#fffdf4;border:4px solid var(--line);color:var(--ink);
+ box-shadow:inset -6px -6px 0 #e3dbc2,inset 6px 6px 0 #fff,0 8px 0 rgba(0,0,0,.16);transition:transform .1s,background .1s;animation:optin .35s cubic-bezier(.3,1.5,.6,1) both;min-width:0;overflow:hidden}
+@keyframes optin{from{transform:scale(.6);opacity:0}}
+@media (hover:hover){.qopt:hover{transform:translateY(-4px);background:#fff;outline:4px solid #4aa8ff;outline-offset:-10px}}
+.qopt .ql{white-space:nowrap;pointer-events:none}
+.qopt.py .ql{font-family:var(--py);font-weight:700;font-size:clamp(36px,4.8vh,52px)}
+.qopt.hz .ql{font-family:var(--hz);font-weight:700;font-size:clamp(58px,8.5vh,88px);line-height:1.1}
+.qk{position:absolute;left:8px;top:4px;font-size:20px;color:#999;pointer-events:none}
+.qopt.yes{background:#8fe36a;box-shadow:inset -6px -6px 0 #4fa82f,inset 6px 6px 0 #c8f7b0,0 8px 0 rgba(0,0,0,.16);animation:yes .4s cubic-bezier(.3,1.6,.6,1)}
+@keyframes yes{40%{transform:scale(1.08)}}
+.qopt.no{animation:shake .42s both;background:#e9e3d3;opacity:.45;cursor:default}
+.qopt.no .ql{text-decoration:line-through 4px #d9463a}
+.qopt.show{background:#8fe36a;animation:hint .6s ease-in-out infinite alternate}
+.bag-wrap{grid-area:bag;display:flex;justify-content:center}
+.bag{margin-top:0}.bag .slot{width:clamp(44px,3.6vw,60px);height:clamp(44px,3.6vw,60px)}.bag .slot i{width:72%;height:72%}
+.arrow-fly{position:fixed;width:56px;height:20px;image-rendering:pixelated;z-index:60;transform-origin:50% 50%}
+
+/* 第 1 章 矿洞 */
+.scene.ch1{background:linear-gradient(#bfe8ff,#e6f6ff 60%)}
+.scene.ch1::before{content:"";position:absolute;left:6%;top:6%;width:120px;height:40px;background:#fff;box-shadow:160px 30px 0 -6px #fff,420px 4px 0 #fff;opacity:.9}
+.shaft{position:absolute;left:0;right:0;top:36%;display:flex;flex-direction:column;will-change:transform}
+.srow{display:grid;grid-template-columns:repeat(7,1fr)}
+.blk{position:relative;aspect-ratio:1;background-size:100% 100%;image-rendering:pixelated;box-shadow:inset 0 0 0 1px rgba(0,0,0,.18);filter:brightness(calc(1 - var(--r) * .035))}
+.srow .blk:not(.mid){filter:brightness(calc(.86 - var(--r) * .04))}
+.blk.mid{z-index:1;filter:none;box-shadow:inset 0 0 0 3px rgba(255,255,255,.55),0 0 0 3px var(--line)}
+.blk.mid.gone{background:#3a2f26!important;box-shadow:inset 0 10px 0 rgba(0,0,0,.35)}
+.blk.mid.gone canvas{display:none}
+.blk.nope{animation:shake .4s}
+.blk .crack{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}
+.blk.bed{background:repeating-linear-gradient(45deg,#4b4b4b 0 10px,#2e2e2e 10px 20px)}
+.miner,.pick{position:absolute;image-rendering:pixelated;z-index:3;pointer-events:none}
+.pick{transform-origin:20% 80%;transform:rotate(30deg)}
+.pick.swing{animation:swing .11s ease-in-out infinite alternate}
+@keyframes swing{from{transform:rotate(40deg)}to{transform:rotate(-40deg) translate(-10%,10%)}}
+.miner.ouch{animation:ouch .5s}
+@keyframes ouch{30%{filter:brightness(1.5) sepia(1) hue-rotate(-40deg) saturate(5);transform:translateX(-8px)}60%{transform:translateX(8px)}}
+.depth{position:absolute;right:14px;top:12px;z-index:4;font-size:28px;color:#fff;background:rgba(30,30,30,.72);border:3px solid var(--line);padding:2px 12px}
+.depth b{font-weight:400;font-size:36px;color:#ffe27a}
+
+/* 第 2 章 守村（浅色黄昏） */
+.scene.ch2{background:linear-gradient(#e9e0ff,#fbe9f5 55%,#fff4dc)}
+.scene.ch2 .moon{position:absolute;right:9%;top:9%;width:72px;height:72px;background:#fffbe6;border:4px solid var(--line);box-shadow:inset -12px -12px 0 #efe6b8,0 0 0 14px rgba(255,251,230,.45)}
+.scene.ch2 .field{position:absolute;left:0;right:0;bottom:0;height:20%;background:linear-gradient(#7fd05a 0 22px,#62a84c 22px 30px,#9b6b3e 30px);border-top:4px solid var(--line)}
+.vhouse{position:absolute;left:2%;bottom:19.5%;width:28%;image-rendering:pixelated;z-index:1}
+.villager{position:absolute;left:24%;bottom:19.5%;width:7%;z-index:1;image-rendering:pixelated;animation:look 3s steps(1) infinite}
+@keyframes look{50%{transform:scaleX(-1)}}
+.scene .archer{position:absolute;left:32%;bottom:19.5%;width:12%;image-rendering:pixelated;z-index:3}
+.scene.ch2 .fence{position:absolute;left:45%;bottom:19.5%;width:28px;height:70px;background:linear-gradient(90deg,#9b6b3e 0 8px,transparent 8px 20px,#9b6b3e 20px),linear-gradient(transparent 14px,#9b6b3e 14px 22px,transparent 22px 44px,#9b6b3e 44px 52px,transparent 52px);border-left:3px solid var(--line)}
+.mobs{position:absolute;inset:0;pointer-events:none}
+.mob{position:absolute;left:88%;bottom:19.5%;width:12%;image-rendering:pixelated;z-index:2}
+.mob.walk{left:49%;animation:step .5s steps(2) infinite}
+.mob.spider{width:15%}
+.mob.creeper{width:9%}
+.scene.ch2 .stars{position:absolute;left:12%;top:10%;width:6px;height:6px;background:#fff;box-shadow:80px 40px #fff,180px 10px #fffbe6,300px 60px #fff,420px 20px #fff,520px 80px #fffbe6,620px 30px #fff,140px 120px #fff,380px 140px #fff;opacity:.95}
+.scene.ch2 .hillsb{position:absolute;left:0;right:0;bottom:19%;height:34%;background:linear-gradient(#d9cdf2,#d9cdf2);clip-path:polygon(0 60%,10% 40%,22% 55%,36% 20%,50% 45%,63% 30%,78% 55%,90% 35%,100% 50%,100% 100%,0 100%);opacity:.8}
+@keyframes step{50%{translate:0 -6px}}
+.mob.hop{transform:translateX(30px) translateY(-24px);transition:transform .2s}
+.mob.poof{animation:poof .45s forwards}
+@keyframes poof{to{transform:scale(1.3);opacity:0;filter:brightness(3)}}
+.mob.boom{animation:boom .5s forwards}
+@keyframes boom{40%{transform:scale(1.5);filter:brightness(2.5)}to{transform:scale(1.8);opacity:0}}
+
+/* 第 3 章 末地（浅色末地石） */
+.scene.ch3{background:linear-gradient(#efe8ff,#f7f2ff 60%)}
+.scene.ch3 .endland{position:absolute;left:0;right:0;bottom:0;height:19%;border-top:4px solid var(--line);background:#efeab8;
+ background-image:radial-gradient(#d9d39a 20%,transparent 22%),radial-gradient(#f7f3cf 18%,transparent 20%);background-size:28px 28px,38px 38px;background-position:0 0,14px 10px}
+.pillar{position:absolute;bottom:18.5%;width:clamp(48px,6%,72px);image-rendering:pixelated}
+.pillar.p1{left:48%;height:46%}.pillar.p2{left:70%;height:58%}.pillar.p3{left:88%;height:38%}
+.boss{position:absolute;left:38%;top:10%;width:46%;z-index:2}
+.dragon{width:100%;image-rendering:pixelated;display:block}
+.dragon.fly{animation:fly 3.2s ease-in-out infinite}
+@keyframes fly{0%,100%{translate:0 0}25%{translate:-6% 10%}50%{translate:4% 18%}75%{translate:8% 6%}}
+.dragon.hit{filter:brightness(2.2) saturate(0)}
+.boss:has(.hit){animation:dhit .45s}
+@keyframes dhit{30%{transform:translateX(18px) rotate(4deg)}60%{transform:translateX(-10px)}}
+.dragon.swoop{animation:swoop 1.1s ease-in-out}
+@keyframes swoop{50%{translate:-55% 70%;scale:1.2}}
+.dragon.roar{animation:roar .5s}
+@keyframes roar{30%,70%{scale:1.08}50%{rotate:-4deg}}
+.scene .archer.end{left:8%;bottom:18.5%}
+.boss-hp{position:absolute;left:50%;top:12px;transform:translateX(-50%);display:flex;align-items:center;gap:12px;z-index:4;width:min(70%,520px)}
+.boss-hp span{font-size:26px;color:#3a2a5a;white-space:nowrap}
+.hpbar{flex:1;height:22px;background:#2a2a2a;border:3px solid var(--line)}
+.hpbar i{display:block;width:100%;height:100%;background:linear-gradient(#f2a8ff 0 35%,#c25bd8 35% 75%,#8a3aa0 75%);transition:width .35s}
+
+@media (max-width:1100px){
+ #game{grid-template-columns:1fr;grid-template-rows:auto minmax(220px,38vh) auto auto;grid-template-areas:"hud" "scene" "q" "bag";height:auto;min-height:100vh;padding:12px 12px 20px;gap:10px}
+}
+@media (max-width:760px){
+ .camp-nodes{grid-template-columns:1fr;gap:14px}.camp-nodes::before{display:none}
+ .node{flex-direction:row;justify-content:flex-start;gap:14px;padding:12px 14px}.node-ic{width:72px;height:72px}.node-n{position:static;width:40px;height:40px;font-size:24px}
+ .node-sub{display:none}.node-name{font-size:26px}
+ .camp-inv{flex-direction:column;align-items:flex-start;width:100%}.inv-slots .slot{width:48px;height:48px}
+ .ch-name{font-size:22px}#game .hearts .ic{width:30px;height:30px}
+ .qpanel{padding:12px}.qhead{min-height:96px}.q-prompt.hz{font-size:88px}.q-prompt.py{font-size:48px}.q-prompt.pic img{width:88px;height:88px}
+ .qhead .speaker canvas{width:60px;height:60px}.qhead .waves{top:30px}
+ .qopts{grid-auto-rows:76px;gap:10px}.qopt.py .ql{font-size:32px}.qopt.hz .ql{font-size:54px}
+ .bag .slot{width:34px;height:34px}
+ .depth{font-size:20px}.depth b{font-size:26px}.boss-hp span{font-size:18px}
+ .big-row{flex-direction:column}.big-row .mc-btn{width:100%}
+ .hz-plate{font-size:96px}.ore .lab.pyo{font-size:calc(var(--b) * .19)}
+}
+
+.speaker[hidden]{display:none!important}

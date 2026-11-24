@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#9fdcff">
-<title>拼音闯关 · 拼音认字 · 按音找字 · lucca</title>
-<meta name="description" content="看拼音认字、按读音找字、气球闯关。覆盖普通话全部常用带调音节，练到又对又快。">
+<title>拼音闯关 · 拼音认字 · 看字选拼音 · 冒险 · lucca</title>
+<meta name="description" content="看拼音认字、看字选拼音、按读音找字，还有矿洞、守村、末地三章冒险。覆盖普通话全部常用带调音节，练到又对又快。">
 <link rel="canonical" href="https://www.lucca.top/pinyin/index.html">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="preload" href="fonts/lucca-pinyin-bold.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="fonts/pixel.c7afc7d5dd0f.woff2" as="font" type="font/woff2" crossorigin>
-<style>@font-face{font-family:"LuccaPixel";src:url("fonts/pixel.c7afc7d5dd0f.woff2") format("woff2");font-display:block}</style>
-<link rel="stylesheet" href="app.39e38f678e82.css">
+<link rel="preload" href="fonts/pixel.d309fb4560bf.woff2" as="font" type="font/woff2" crossorigin>
+<style>@font-face{font-family:"LuccaPixel";src:url("fonts/pixel.d309fb4560bf.woff2") format("woff2");font-display:block}</style>
+<link rel="stylesheet" href="app.b03c7dec1f83.css">
 <script>
 var _hmt = _hmt || [];
 _hmt.push(["_setAutoPageview", false]);
@@ -45,7 +45,7 @@ _hmt.push(["_trackPageview", "/pinyin/index.html"]);
   <div class="menu">
     <button id="btnPlay" class="mc-btn wide primary"><i class="ic" data-ic="pick"></i><span class="lbl">开始挖矿</span></button>
     <div id="homeHint" class="menu-hint"></div>
-    <button id="btnArcade" class="mc-btn wide sky"><img id="homeBalloonIc" class="bal-ic" alt=""><span class="lbl">气球闯关</span></button>
+    <div class="menu-row big-row"><button id="btnPick" class="mc-btn gold"><img id="pickIc" class="bal-ic" alt=""><span class="lbl">看字选拼音</span></button><button id="btnArcade" class="mc-btn sky"><img id="advIc" class="bal-ic" alt=""><span class="lbl">冒险闯关</span></button></div>
     <div class="menu-row">
       <button id="btnMap" class="mc-btn"><i class="ic" data-ic="map"></i>拼音地图</button>
       <button id="btnOralHome" class="mc-btn"><i class="ic" data-ic="talk"></i>爸爸抽查</button>
@@ -57,7 +57,7 @@ _hmt.push(["_trackPageview", "/pinyin/index.html"]);
     <canvas class="tree t1" width="16" height="32" data-sprite="tree"></canvas>
     <canvas class="tree t2" width="16" height="32" data-sprite="tree"></canvas>
     <div class="ore-pile" id="orePile"></div>
-    <div class="home-hero"><img id="homeBalloon" class="hb" alt=""><i class="string"></i><img id="homeKid" class="hk" alt=""></div>
+    <div class="home-hero"><img id="homeKid" class="hk" alt=""><img id="homeZombie" class="hz2" alt=""></div>
   </div>
 </section>
 
@@ -73,23 +73,28 @@ _hmt.push(["_trackPageview", "/pinyin/index.html"]);
   <div id="fx" class="fx" aria-hidden="true"></div>
 </section>
 
-<section id="arcade" class="screen" hidden>
+<section id="camp" class="screen" hidden>
+  <div class="page-bar"><button id="btnCampHome" class="mc-btn icon" aria-label="返回"><i class="ic" data-ic="back"></i></button><h2 class="page-title">冒险地图</h2></div>
+  <div class="camp-map"><div id="campNodes" class="camp-nodes"></div></div>
+  <div class="camp-inv gui"><span class="inv-title">背包</span><div id="campInv" class="inv-slots"></div></div>
+</section>
+
+<section id="game" class="screen" hidden>
   <div class="hud">
-    <button id="btnArcQuit" class="mc-btn icon" aria-label="回首页"><i class="ic" data-ic="house"></i></button>
-    <div id="arcLevel" class="mode-tag arc-level"></div>
+    <button id="btnArcQuit" class="mc-btn icon" aria-label="回地图"><i class="ic" data-ic="map"></i></button>
+    <div class="ch-tag"><span id="chName" class="ch-name"></span><div class="ch-prog"><i id="chProg"></i></div></div>
     <div id="hearts" class="hearts"></div>
     <button id="btnArcHelp" class="mc-btn icon" aria-label="怎么玩"><i class="ic" data-ic="help"></i></button>
   </div>
-  <div class="arc-prompt">
-    <button id="arcSpeak" class="speaker" type="button" aria-label="听一听"><span class="waves"><i></i><i></i><i></i></span><canvas width="16" height="16" data-sprite="noteblock"></canvas></button>
-    <span id="arcPy" class="py-plate"></span>
+  <div id="scene" class="scene"></div>
+  <div class="qpanel gui">
+    <div class="qhead"><i id="qType" class="qtype"></i><div id="qPrompt" class="q-prompt"></div>
+      <button id="qSpeak" class="speaker" type="button" aria-label="听一听"><span class="waves"><i></i><i></i><i></i></span><canvas width="16" height="16" data-sprite="noteblock"></canvas></button></div>
+    <div class="qtimer"><i id="qTimer"></i></div>
+    <div id="qOpts" class="qopts"></div>
   </div>
-  <div class="timer"><i id="arcTimer"></i></div>
-  <div id="sky" class="sky">
-    <div id="hero" class="hero"><img class="hero-balloon" alt=""><i class="string"></i><img id="heroKid" class="hero-kid" alt=""><i class="chute"></i></div>
-    <div id="balloons" class="balloons"></div>
-  </div>
-  <div id="fx2" class="fx" aria-hidden="true"></div>
+  <div class="bag-wrap"><div id="bag" class="hotbar bag"></div></div>
+  <div id="fx3" class="fx" aria-hidden="true"></div>
 </section>
 
 <section id="result" class="screen" hidden>
@@ -134,7 +139,7 @@ _hmt.push(["_trackPageview", "/pinyin/index.html"]);
 <div id="toast" class="toast" hidden></div>
 </div>
 <script src="data.b6a575474dfe.js"></script>
-<script src="chars.794d8a9b63fc.js"></script>
-<script src="app.084df866c31f.js"></script>
+<script src="chars.730da0084a50.js"></script>
+<script src="app.dac285cd3bf3.js"></script>
 </body>
 </html>
