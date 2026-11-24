@@ -2,13 +2,15 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="theme-color" content="#dff1ff">
-<title>拼音闯关 · 听音挖矿 · lucca</title>
-<meta name="description" content="听读音，挖出对的拼音矿石。覆盖普通话全部常用带调音节，练到又对又快。">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#9fdcff">
+<title>拼音闯关 · 拼音认字 · 按音找字 · lucca</title>
+<meta name="description" content="看拼音认字、按读音找字、气球闯关。覆盖普通话全部常用带调音节，练到又对又快。">
 <link rel="canonical" href="https://www.lucca.top/pinyin/index.html">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="preload" href="fonts/lucca-pinyin-bold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{PIXEL}}" as="font" type="font/woff2" crossorigin>
+<style>@font-face{font-family:"LuccaPixel";src:url("{{PIXEL}}") format("woff2");font-display:block}</style>
 <link rel="stylesheet" href="{{CSS}}">
 <script>
 var _hmt = _hmt || [];
@@ -25,80 +27,114 @@ _hmt.push(["_trackPageview", "/pinyin/index.html"]);
 </script>
 </head>
 <body>
-<div id="sky" aria-hidden="true"><i class="cloud c1"></i><i class="cloud c2"></i><i class="cloud c3"></i></div>
+<div id="world" aria-hidden="true">
+  <i class="sun"></i>
+  <i class="cloud c1"></i><i class="cloud c2"></i><i class="cloud c3"></i><i class="cloud c4"></i>
+  <i class="hills"></i>
+  <i class="ground"></i>
+</div>
 <div id="app">
 
 <section id="home" class="screen">
-  <a class="back-site" href="https://www.lucca.top/">← lucca.top</a>
-  <div class="home-hero">
-    <canvas class="hero-pick" width="16" height="16" data-sprite="pickaxe"></canvas>
-    <h1>拼音闯关</h1>
-    <p class="sub">听音挖矿</p>
+  <a class="site-link" href="https://www.lucca.top/"><i class="ic" data-ic="back"></i>lucca.top</a>
+  <div class="logo-wrap">
+    <canvas class="logo-pick" width="16" height="16" data-sprite="pickaxe"></canvas>
+    <h1 class="logo">拼音闯关</h1>
+    <span class="splash">看拼音，认新字！</span>
   </div>
-  <div class="home-gems"><canvas width="16" height="16" data-sprite="diamond"></canvas><b id="homeGems">0</b></div>
-  <button id="btnPlay" class="mc-btn big green">⛏ 开始挖矿</button>
-  <p id="homeHint" class="hint"></p>
-  <div class="home-row">
-    <button id="btnMap" class="mc-btn">🗺 拼音地图</button>
-    <button id="btnOralHome" class="mc-btn">🗣 爸爸抽查</button>
-    <button id="btnParent" class="mc-btn">👨 家长</button>
+  <div class="menu">
+    <button id="btnPlay" class="mc-btn wide primary"><i class="ic" data-ic="pick"></i><span class="lbl">开始挖矿</span></button>
+    <div id="homeHint" class="menu-hint"></div>
+    <button id="btnArcade" class="mc-btn wide sky"><img id="homeBalloonIc" class="bal-ic" alt=""><span class="lbl">气球闯关</span></button>
+    <div class="menu-row">
+      <button id="btnMap" class="mc-btn"><i class="ic" data-ic="map"></i>拼音地图</button>
+      <button id="btnOralHome" class="mc-btn"><i class="ic" data-ic="talk"></i>爸爸抽查</button>
+    </div>
+    <button id="btnParent" class="mc-btn wide subtle"><i class="ic" data-ic="book"></i>家长</button>
   </div>
-  <div class="home-ground" aria-hidden="true"></div>
+  <div class="home-stats" id="homeStats"></div>
+  <div class="scenery" aria-hidden="true">
+    <canvas class="tree t1" width="16" height="32" data-sprite="tree"></canvas>
+    <canvas class="tree t2" width="16" height="32" data-sprite="tree"></canvas>
+    <div class="ore-pile" id="orePile"></div>
+    <div class="home-hero"><img id="homeBalloon" class="hb" alt=""><i class="string"></i><img id="homeKid" class="hk" alt=""></div>
+  </div>
 </section>
 
 <section id="play" class="screen" hidden>
   <div class="hud">
-    <button id="btnQuit" class="icon-btn" aria-label="回首页">✕</button>
-    <div id="progress" class="progress"></div>
-    <div class="gems"><canvas width="16" height="16" data-sprite="diamond"></canvas><b id="gems">0</b></div>
+    <button id="btnQuit" class="mc-btn icon" aria-label="回首页"><i class="ic" data-ic="house"></i></button>
+    <div id="modeTag" class="mode-tag"></div>
+    <button id="btnHelp" class="mc-btn icon" aria-label="怎么玩"><i class="ic" data-ic="help"></i></button>
   </div>
-  <div id="modeTag" class="mode-tag"></div>
-  <button id="btnSpeak" class="speaker" aria-label="再听一遍"><canvas width="16" height="16" data-sprite="noteblock"></canvas><span>再听</span></button>
-  <div id="ores" class="ores"></div>
+  <div id="stage" class="stage"></div>
+  <div class="xp-wrap"><div class="xp"><i id="xpFill"></i></div></div>
+  <div id="hotbar" class="hotbar"></div>
   <div id="fx" class="fx" aria-hidden="true"></div>
 </section>
 
+<section id="arcade" class="screen" hidden>
+  <div class="hud">
+    <button id="btnArcQuit" class="mc-btn icon" aria-label="回首页"><i class="ic" data-ic="house"></i></button>
+    <div id="arcLevel" class="mode-tag arc-level"></div>
+    <div id="hearts" class="hearts"></div>
+    <button id="btnArcHelp" class="mc-btn icon" aria-label="怎么玩"><i class="ic" data-ic="help"></i></button>
+  </div>
+  <div class="arc-prompt">
+    <button id="arcSpeak" class="speaker" type="button" aria-label="听一听"><span class="waves"><i></i><i></i><i></i></span><canvas width="16" height="16" data-sprite="noteblock"></canvas></button>
+    <span id="arcPy" class="py-plate"></span>
+  </div>
+  <div class="timer"><i id="arcTimer"></i></div>
+  <div id="sky" class="sky">
+    <div id="hero" class="hero"><img class="hero-balloon" alt=""><i class="string"></i><img id="heroKid" class="hero-kid" alt=""><i class="chute"></i></div>
+    <div id="balloons" class="balloons"></div>
+  </div>
+  <div id="fx2" class="fx" aria-hidden="true"></div>
+</section>
+
 <section id="result" class="screen" hidden>
-  <h2 id="resTitle">挖完啦！</h2>
-  <div class="res-gems"><canvas width="16" height="16" data-sprite="diamond"></canvas><b id="resGems">+0</b></div>
-  <div id="resUp" class="res-up"></div>
-  <div class="res-btns">
-    <button id="btnAgain" class="mc-btn big green">⛏ 再来一局</button>
-    <button id="btnOral" class="mc-btn">🗣 爸爸抽查（可选）</button>
-    <div class="home-row">
-      <button id="btnResMap" class="mc-btn">🗺 地图</button>
-      <button id="btnResHome" class="mc-btn">🏠 首页</button>
+  <div class="gui result-gui">
+    <i id="resIcon" class="res-icon"></i>
+    <h2 id="resTitle" class="gui-title">挖完啦！</h2>
+    <div id="resUp" class="res-up"></div>
+    <div class="res-btns">
+      <button id="btnAgain" class="mc-btn wide primary"><i class="ic" data-ic="pick"></i><span class="lbl">再来一局</span></button>
+      <button id="btnOral" class="mc-btn wide"><i class="ic" data-ic="talk"></i>读给爸爸听</button>
+      <div class="menu-row">
+        <button id="btnResMap" class="mc-btn"><i class="ic" data-ic="map"></i>地图</button>
+        <button id="btnResHome" class="mc-btn"><i class="ic" data-ic="house"></i>首页</button>
+      </div>
     </div>
   </div>
 </section>
 
 <section id="map" class="screen" hidden>
-  <div class="bar"><button class="icon-btn" data-go="home" aria-label="返回">←</button><h2>拼音地图</h2></div>
+  <div class="page-bar"><button class="mc-btn icon" data-go="home" aria-label="返回"><i class="ic" data-ic="back"></i></button><h2 class="page-title">拼音地图</h2></div>
   <div id="mapStats" class="map-stats"></div>
-  <div class="legend"><span><i class="lv0"></i>石头</span><span><i class="lv1"></i>铁</span><span><i class="lv2"></i>金</span><span><i class="lv3"></i>钻石</span></div>
   <div id="mapGrid" class="map-grid"></div>
 </section>
 
 <section id="oral" class="screen" hidden>
-  <div class="bar"><button class="icon-btn" data-go="home" aria-label="返回">←</button><h2>爸爸抽查</h2><span id="oralCount" class="bar-right"></span></div>
-  <p class="hint">让孩子大声读出来，爸爸来判断。</p>
-  <div id="oralCard" class="oral-card"></div>
-  <button id="oralListen" class="mc-btn small">🔊 听标准读音</button>
+  <div class="page-bar"><button class="mc-btn icon" data-go="home" aria-label="返回"><i class="ic" data-ic="back"></i></button><h2 class="page-title">爸爸抽查</h2><span id="oralCount" class="page-count"></span></div>
+  <p class="oral-hint">孩子大声读，爸爸来判断</p>
+  <div class="sign"><div id="oralCard" class="sign-board"></div><i class="sign-post"></i></div>
   <div class="oral-btns">
-    <button id="oralBad" class="mc-btn big red">✘ 没读对</button>
-    <button id="oralOk" class="mc-btn big green">✔ 读对了</button>
+    <button id="oralBad" class="mc-btn big red"><i class="ic" data-ic="cross"></i>没读对</button>
+    <button id="oralListen" class="mc-btn"><i class="ic" data-ic="note"></i>听标准音</button>
+    <button id="oralOk" class="mc-btn big green"><i class="ic" data-ic="check"></i>读对了</button>
   </div>
 </section>
 
 <section id="parent" class="screen" hidden>
-  <div class="bar"><button class="icon-btn" data-go="home" aria-label="返回">←</button><h2>家长</h2></div>
+  <div class="page-bar"><button class="mc-btn icon" data-go="home" aria-label="返回"><i class="ic" data-ic="back"></i></button><h2 class="page-title">家长</h2></div>
   <div id="parentBody" class="parent-body"></div>
 </section>
 
-<div id="modal" class="modal" hidden><div class="modal-box"><button class="icon-btn modal-x" aria-label="关闭">✕</button><div id="modalBody"></div></div></div>
+<div id="modal" class="modal" hidden><div class="gui modal-box"><button class="mc-btn icon modal-x" aria-label="关闭"><i class="ic" data-ic="cross"></i></button><div id="modalBody"></div></div></div>
 <div id="toast" class="toast" hidden></div>
 </div>
 <script src="{{DATA}}"></script>
+<script src="{{CHARS}}"></script>
 <script src="{{JS}}"></script>
 </body>
 </html>
