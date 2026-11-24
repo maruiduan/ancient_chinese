@@ -7,6 +7,8 @@ on:
     paths:
       - www/pinyin/**
       - scripts/publish_pinyin.py
+      - www/shared/**
+      - scripts/publish_shared.py
       - scripts/oss_headers.py
       - scripts/put_oss_object.py
       - .github/workflows/publish-pinyin.yml

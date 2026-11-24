@@ -10,6 +10,7 @@ import urllib.request
 import xml.etree.ElementTree as ET
 
 from put_oss_object import put_object
+from publish_shared import publish_shared
 
 FLUENCY_PAGE = 'pinyin-fluency/index.html'
 FILES = ('robots.txt', 'sitemap.xml', 'favicon.ico', 'og.png', FLUENCY_PAGE, 'index.html')  # Homepage last.
@@ -57,6 +58,8 @@ def validate(root: Path):
 
 def publish(root: Path, uploader=put_object, opener=urllib.request.urlopen):
     bodies = validate(root)  # Validate all files before making any changes.
+    # Shared assets (sprites, audio map, Three.js) must be public before the fluency page.
+    publish_shared(root, uploader=uploader, opener=opener)
     def verify(name):
         expected = bodies[name]
         digest = hashlib.sha256(expected).hexdigest()

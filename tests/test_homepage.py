@@ -9,6 +9,7 @@ from unittest.mock import patch
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
 import publish_homepage as home
+from publish_shared import shared_names
 
 
 class HomepageTests(unittest.TestCase):
@@ -27,7 +28,8 @@ class HomepageTests(unittest.TestCase):
             raise RuntimeError('AccessDenied')
         with self.assertRaisesRegex(RuntimeError, 'AccessDenied'):
             home.publish(ROOT / 'www', uploader=denied, opener=lambda *_: self.fail('unexpected GET'))
-        self.assertEqual(calls, ['oss://lucca-www/robots.txt'])
+        first = shared_names(ROOT / 'www')[0]
+        self.assertEqual(calls, ['oss://lucca-www/' + first])
 
     def test_entry_last_and_all_public_bytes_verified(self):
         calls = []
@@ -36,15 +38,22 @@ class HomepageTests(unittest.TestCase):
             calls.append('GET ' + name)
             return io.BytesIO((ROOT / 'www' / name).read_bytes())
         home.publish(ROOT / 'www', uploader=lambda path, dest: calls.append('PUT ' + dest.removeprefix('oss://lucca-www/')), opener=read)
+        shared = shared_names(ROOT / 'www')
+        shared_calls = [item for name in shared for item in ('PUT ' + name, 'GET ' + name)]
         order = list(home.FILES)
-        self.assertEqual(calls, ['PUT ' + n for n in order[:-1]] + ['GET ' + home.FLUENCY_PAGE, 'PUT index.html'] +
+        self.assertEqual(calls, shared_calls + ['PUT ' + n for n in order[:-1]] + ['GET ' + home.FLUENCY_PAGE, 'PUT index.html'] +
                          ['GET ' + n for n in order if n != home.FLUENCY_PAGE])
 
     def test_unverified_fluency_is_not_linked_from_live_homepage(self):
         uploaded = []
+        def opener(request, **kwargs):
+            name = urlsplit(request.full_url).path.lstrip('/')
+            if name.startswith('shared/'):
+                return io.BytesIO((ROOT / 'www' / name).read_bytes())
+            return io.BytesIO(b'stale')
         with self.assertRaisesRegex(RuntimeError, home.FLUENCY_PAGE):
             home.publish(ROOT / 'www', uploader=lambda _, dest: uploaded.append(dest),
-                         opener=lambda *a, **k: io.BytesIO(b'stale'))
+                         opener=opener)
         self.assertEqual(uploaded[-1], 'oss://lucca-www/' + home.FLUENCY_PAGE)
         self.assertNotIn('oss://lucca-www/index.html', uploaded)
 

@@ -16,6 +16,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 from put_oss_object import put_object
+from publish_shared import publish_shared
 
 BUCKET = 'lucca-www'
 PREFIX = 'pinyin/'
@@ -41,6 +42,8 @@ def validate(root: Path) -> list[Path]:
             raise ValueError('index.html references a missing file: ' + ref)
     if 'https://www.lucca.top/' not in page:
         raise ValueError('pinyin page must link back to www.lucca.top')
+    if '/shared/mc-sprites.js' in page and not (root.parent / 'shared/mc-sprites.js').is_file():
+        raise ValueError('www/shared/mc-sprites.js is missing')
     return paths
 
 
@@ -57,6 +60,9 @@ def public_etag(key: str, opener=urllib.request.urlopen) -> str | None:
 
 def publish(root: Path, uploader=put_object, etag=public_etag) -> int:
     paths = validate(root)  # Validate everything before any PUT.
+    www = root.parent
+    if (www / 'shared' / 'mc-sprites.js').is_file() and (www / 'index.html').is_file():
+        publish_shared(www, uploader=uploader)
 
     def one(path: Path) -> bool:
         key = PREFIX + path.relative_to(root).as_posix()
