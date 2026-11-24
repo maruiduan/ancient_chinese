@@ -862,7 +862,7 @@ function renderParent() {
   var cs = Object.keys(S.chars || {}), cOk = cs.filter(function (ch) { return S.chars[ch].c > 0; });
   var pA = el('div', 'panel');
   pA.innerHTML = '<h3>认字和闯关</h3><p>拼音认字见过 ' + cs.length + ' 个新字，自己读对过 ' + cOk.length + ' 个。' + (cOk.length ? '<br><span class="hz-list">' + cOk.slice(-40).join(' ') + '</span>' : '') + '</p>' +
-    '<p>气球闯关玩过 ' + (S.arcade.runs || 0) + ' 次，最远到第 ' + (S.arcade.best || 0) + ' 关。</p><p class="small">认字用的是《通用规范汉字表》一级字里、他课本字表（一年级和二年级上册）以外的字；按音找字的正确答案只用课本里学过的字。</p>';
+    '<p>气球闯关玩过 ' + (S.arcade.runs || 0) + ' 次，最远到第 ' + (S.arcade.best || 0) + ' 关。</p><p class="small">认字只用最常用的 1000 个字里、他课本字表（一年级和二年级上册）以外的字，没有合适的字的音节只做纯拼音热身；按音找字的正确答案只用课本里学过的字。</p>';
   body.appendChild(pA);
   // 14 天
   var p2 = el('div', 'panel'), bars = '', mx = 1;

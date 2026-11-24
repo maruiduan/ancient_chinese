@@ -55,15 +55,20 @@ def near(a, b):
     return i1 == i2 or f1 == f2 or f1.rstrip('g') == f2.rstrip('g')
 def fq(c, k): return pin.get(c, {}).get(k, 0)
 chars = [c for c in tgh]
+# 认字只用最常用的 1000 个字（按 kHanyuPinlu 总频次排序，只算《通用规范汉字表》里的字）
+TOP_N = 1000
+TOP = set(sorted((c for c in chars if pin.get(c)), key=lambda c: -sum(pin[c].values()))[:TOP_N])
 U = collections.defaultdict(list); Z = collections.defaultdict(list); D = collections.defaultdict(list)
 for c in chars:
     lvl = 1 if tgh[c] <= 3500 else 2 if tgh[c] <= 6500 else 3
     k1 = dominant(c, .8)
-    if k1 in bank and c not in known and (lvl == 1 or (lvl == 2 and fq(c, k1) >= 5)): U[k1].append((lvl, -fq(c, k1), tgh[c], c))
+    if k1 in bank and c not in known and c in TOP: U[k1].append((1, -fq(c, k1), tgh[c], c))
     k2 = dominant(c, .9)
     if k2 in bank:
         if c in known: Z[k2].append((-fq(c, k2), c))
         if c in known or (lvl == 1 and fq(c, k2) >= 100): D[k2].append((0 if c in known else 1, -fq(c, k2), c))
+import os
+LOCK = json.load(open('find_lock.json')) if os.path.exists('find_lock.json') else None
 out = {}; R = {}
 for k in sorted(bank):
     u = [x[3] for x in sorted(U[k])]
@@ -71,11 +76,13 @@ for k in sorted(bank):
     u = u[:5]; z = [x[1] for x in sorted(Z[k])][:4]; d = [x[2] for x in sorted(D[k]) if x[0] == 0][:4] or [x[2] for x in sorted(D[k])][:2]
     s = []
     if z:
-        for g in gp[z[0]]:
+        for g in sorted(gp[z[0]]):
             for c in sorted(phon[g], key=lambda c: (c not in known, -sum(pin.get(c, {}).values()))):
                 kk = dominant(c, .9)
                 if c != z[0] and kk in bank and near(k, kk) and k not in readings(c) and (c in known or tgh.get(c, 9999) <= 3500) and c not in [x[0] for x in s]: s.append([c, kk])
         s = s[:3]
+    if LOCK is not None:  # 找字题沿用已上线的字（find_lock.json），只换认字字库
+        lk = LOCK.get(k, {}); z = list(lk.get('z', '')); d = list(lk.get('d', '')); s = lk.get('s', [])
     e = {}
     if u: e['u'] = ''.join(u)
     if z: e['z'] = ''.join(z)
