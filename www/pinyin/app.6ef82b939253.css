@@ -566,3 +566,46 @@ select{font-family:var(--ui);font-size:16px;padding:6px 8px;border:3px solid var
 }
 
 .speaker[hidden]{display:none!important}
+
+/* ===== 看图选拼音：我的世界词语 ===== */
+.pic-plate{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 26px 10px;background:#fffdf4;border:5px solid var(--line);box-shadow:inset -6px -6px 0 #e9e1c8,0 10px 0 rgba(0,0,0,.12);animation:cardpop .35s cubic-bezier(.3,1.6,.6,1)}
+.pic-plate img{height:clamp(110px,17vh,170px);max-width:260px;object-fit:contain;image-rendering:pixelated}
+.pic-word{display:none;font-weight:700;line-height:1.1}
+.pic-plate .pic-word{font-size:40px;margin-top:4px}
+.said .pic-word{display:block;animation:cardpop .3s cubic-bezier(.3,1.6,.6,1)}
+.pickword .ore .lab.pyo{font-size:calc(var(--b) * .15)}
+.q-prompt.pic{display:flex;flex-direction:column;align-items:center}
+.q-prompt.pic img{width:auto;max-width:220px;object-fit:contain}
+.q-prompt.pic .pic-word{font-size:34px}
+.hz-card.word .hz{font-size:40px}
+/* 场景里的我的世界元素 */
+.surface{position:absolute;left:0;right:0;bottom:100%;height:calc(100% / 13 * 1.6);pointer-events:none}
+.sf{position:absolute;bottom:0;image-rendering:pixelated}
+.sf.oak{left:1%;width:12%}.sf.tbl{left:15%;width:8%}.sf.chs{left:24.5%;width:8.5%}
+.sf.cow{left:60%;width:13%;animation:graze 5s ease-in-out infinite}.sf.pig{left:76%;width:11%;animation:graze 6s ease-in-out infinite reverse}
+.sf.flw{left:89%;width:5%}.sf.shp{left:48%;width:10%;display:none}
+@keyframes graze{0%,100%{transform:translateX(0)}50%{transform:translateX(-14px)}}
+.wtorch{position:absolute;left:38%;top:18%;width:22%;image-rendering:pixelated;filter:drop-shadow(0 0 8px rgba(255,210,63,.9))}
+.cbat{position:absolute;left:10%;top:15%;width:80%;image-rendering:pixelated;animation:batfly 2.4s ease-in-out infinite}
+@keyframes batfly{0%,100%{transform:translate(0,0)}25%{transform:translate(12px,-8px) scaleY(.8)}50%{transform:translate(-6px,6px)}75%{transform:translate(-14px,-4px) scaleY(.8)}}
+.roofcat{position:absolute;left:12%;bottom:calc(19.5% + 26%);width:6%;image-rendering:pixelated;z-index:2}
+.farm{position:absolute;bottom:19.5%;image-rendering:pixelated}
+.farm.hen{left:31%;width:4.5%;bottom:19.5%;z-index:1;animation:peck 1.8s steps(2) infinite}
+.farm.cw{left:6%;bottom:30%;width:9%;opacity:.85;filter:saturate(.8)}
+.farm.shp{left:17%;bottom:31%;width:8%;opacity:.85}
+@keyframes peck{50%{transform:rotate(12deg) translateY(2px)}}
+.ftorch{position:absolute;left:calc(45% + 4px);bottom:calc(19.5% + 70px);width:12px;image-rendering:pixelated;filter:drop-shadow(0 0 6px rgba(255,210,63,.9))}
+.mob.enderman{width:7%}
+.mob.slime{width:9%}
+.ecrys{position:absolute;width:clamp(28px,4.5%,48px);image-rendering:pixelated;animation:crys 2s ease-in-out infinite;z-index:1}
+.ecrys.c1{left:48%;bottom:calc(18.5% + 46%)}.ecrys.c2{left:70%;bottom:calc(18.5% + 58%);animation-delay:.6s}.ecrys.c3{left:88%;bottom:calc(18.5% + 38%);animation-delay:1.2s}
+@keyframes crys{50%{transform:translateY(-10px) rotate(45deg)}}
+.eman{position:absolute;bottom:18.5%;width:clamp(34px,5%,56px);image-rendering:pixelated}
+.eman.e1{left:36%}.eman.e2{left:78%;transform:scaleX(-1)}
+.eportal{position:absolute;left:20%;bottom:18.5%;width:clamp(48px,8%,84px);image-rendering:pixelated;opacity:.95}
+/* 首页的动物 */
+.home-farm{position:absolute;left:24%;bottom:0;display:flex;align-items:flex-end;gap:28px}
+.home-farm img{image-rendering:pixelated}
+.home-farm .hf1{width:88px;animation:graze 6s ease-in-out infinite}.home-farm .hf2{width:76px;animation:graze 5s ease-in-out infinite reverse}
+.home-farm .hf3{width:44px;animation:peck 1.8s steps(2) infinite}.home-farm .hf4{width:84px;animation:graze 7s ease-in-out infinite}
+@media (max-width:760px){.home-farm{display:none}.pic-plate img{height:96px}.pickword .ore .lab.pyo{font-size:calc(var(--b) * .14)}.q-prompt.pic .pic-word{font-size:26px}}

@@ -118,3 +118,37 @@ st = dict(u=sum(1 for v in out.values() if 'u' in v), uchars=len({c for v in out
 print(st)
 json.dump({'syl': out, 'R': {c: ','.join(r) for c, r in R.items()}, 'known': sorted(known), 'stats': st}, open('chars.json', 'w'), ensure_ascii=False, separators=(',', ':'))
 open('chars_data.js', 'w').write('window.PYC=' + json.dumps({'syl': out, 'R': {c: ','.join(r) for c, r in R.items()}}, ensure_ascii=False, separators=(',', ':')) + ';')
+
+# ===== 我的世界词语（看图选拼音）：词、带调拼音、图、类别 =====
+# 只收不带轻声的词（轻声没有录音）；每个字的读音都要在 Unihan 读音里、整词读音要和 pypinyin 词典一致
+WORDS = [
+ ('村民', 'cūn mín', 'villager', 'm'), ('末影龙', 'mò yǐng lóng', 'dragon', 'm'), ('苦力怕', 'kǔ lì pà', 'creeper', 'm'), ('僵尸', 'jiāng shī', 'zombie', 'm'),
+ ('骷髅', 'kū lóu', 'skeleton', 'm'), ('蜘蛛', 'zhī zhū', 'spider', 'm'), ('末影人', 'mò yǐng rén', 'enderman', 'm'), ('史莱姆', 'shǐ lái mǔ', 'slime', 'm'),
+ ('蝙蝠', 'biān fú', 'bat', 'm'), ('牛', 'niú', 'cow', 'a'), ('猪', 'zhū', 'pig', 'a'), ('羊', 'yáng', 'sheep', 'a'), ('鸡', 'jī', 'chicken', 'a'),
+ ('马', 'mǎ', 'horse', 'a'), ('狼', 'láng', 'wolf', 'a'), ('猫', 'māo', 'cat', 'a'), ('鱼', 'yú', 'fish', 'a'), ('蜜蜂', 'mì fēng', 'bee', 'a'), ('熊猫', 'xióng māo', 'panda', 'a'),
+ ('钻石', 'zuàn shí', 'gem', 'i'), ('绿宝石', 'lǜ bǎo shí', 'emerald', 'i'), ('红石', 'hóng shí', 'redstone', 'i'), ('剑', 'jiàn', 'sword', 'i'), ('镐', 'gǎo', 'pickaxe', 'i'),
+ ('铁斧', 'tiě fǔ', 'axe', 'i'), ('弓', 'gōng', 'bow', 'i'), ('箭', 'jiàn', 'arrowi', 'i'), ('铁', 'tiě', 'ingot', 'i'), ('金', 'jīn', 'goldi', 'i'), ('煤', 'méi', 'coal', 'i'),
+ ('地图', 'dì tú', 'mapi', 'i'), ('时钟', 'shí zhōng', 'clock', 'i'), ('矿车', 'kuàng chē', 'minecart', 'i'),
+ ('圆石', 'yuán shí', 'cobble', 'b'), ('原木', 'yuán mù', 'log', 'b'), ('草方块', 'cǎo fāng kuài', 'grassb', 'b'), ('仙人掌', 'xiān rén zhǎng', 'cactus', 'b'),
+ ('树', 'shù', 'tree', 'b'), ('花', 'huā', 'flower', 'b'), ('岩浆', 'yán jiāng', 'lava', 'b'), ('火把', 'huǒ bǎ', 'torch', 'b'), ('床', 'chuáng', 'bed', 'b'),
+ ('门', 'mén', 'door', 'b'), ('宝箱', 'bǎo xiāng', 'chest', 'b'), ('工作台', 'gōng zuò tái', 'table', 'b'), ('熔炉', 'róng lú', 'furnace', 'b'),
+ ('炸药', 'zhà yào', 'tnt', 'b'), ('传送门', 'chuán sòng mén', 'portal', 'b'), ('小屋', 'xiǎo wū', 'house', 'b'),
+ ('苹果', 'píng guǒ', 'apple', 'f'), ('面包', 'miàn bāo', 'bread', 'f'), ('蛋糕', 'dàn gāo', 'cake', 'f'), ('西瓜', 'xī guā', 'melon', 'f'),
+ ('南瓜', 'nán guā', 'pumpkin', 'f'), ('鸡蛋', 'jī dàn', 'eggw', 'f'), ('牛奶', 'niú nǎi', 'milk', 'f'),
+]
+from pypinyin import pinyin as _pp, Style as _St
+W = []
+for w, py, pic, cat in WORDS:
+    ks = [key(s) for s in py.split()]
+    assert len(ks) == len(w), w
+    assert [key(x[0]) for x in _pp(w, style=_St.TONE)] == ks, (w, 'pypinyin', _pp(w, style=_St.TONE))
+    for c, k in zip(w, ks):
+        assert k in bank, (w, k, 'no audio')
+        assert k in readings(c), (w, c, k, sorted(readings(c)))
+    W.append([w, ' '.join(ks), pic, cat, [','.join(sorted(readings(c))) for c in w]])
+poly = [(w[0], w[4]) for w in W if any(',' in r for r in w[4])]
+print('words', len(W), 'polyphone words', poly)
+d = json.load(open('chars.json')); d['W'] = W; d['stats']['words'] = len(W)
+json.dump(d, open('chars.json', 'w'), ensure_ascii=False, separators=(',', ':'))
+js = open('chars_data.js').read()
+open('chars_data.js', 'w').write(js[:-1] + ';window.PYC.W=' + json.dumps(W, ensure_ascii=False, separators=(',', ':')) + ';')
