@@ -30,5 +30,13 @@
 4. `f0_praat.py`、`tone_cls.py`：Praat 声调曲线加交叉验证分类，和标注声调对比；不一致的逐个看了曲线。
 结果见 `verification_report.json`。
 
+## 性能与稳定性（手机端）
+
+- 首页云朵用 `translate` 动画，第 3 章治疗光束和答题时间条只改 `transform`，不再每帧重排；第 3 章光束只保留一条 rAF 循环，离开冒险画面就停。
+- 矿石贴图的随机种子限制在 16 个以内，缓存能复用，不再每题新画 PNG。
+- 解码后的音节录音只在内存里留最近 120 个（mp3 文件本身有长缓存）。
+- 拼音粗体字不再首屏 preload，页面加载完后空闲时再下；百度统计也改到加载完再插。
+- 冒险每局有编号，退出或重开后旧局的延时、箭和掉落动画回调都不再执行；练习中途回首页，旧局的跳题延时不会影响新局。
+
 ## 重新生成
 在工作目录准备好 audio-cmn 的 `64k/syllabs`、Unihan、Commons 替换录音后，依次运行 `syllables.py`、`prep_audio.py`、`build_data.py`、`build_chars.py`、`build_site.py`，再把 `site/pinyin/` 复制到 `www/pinyin/`。

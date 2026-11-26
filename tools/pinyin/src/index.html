@@ -8,7 +8,6 @@
 <meta name="description" content="看拼音认字、看字选拼音、按读音找字，还有矿洞、守村、末地三章冒险。覆盖普通话全部常用带调音节，练到又对又快。">
 <link rel="canonical" href="https://www.lucca.top/pinyin/index.html">
 <link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="preload" href="fonts/lucca-pinyin-bold.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{{PIXEL}}" as="font" type="font/woff2" crossorigin>
 <style>@font-face{font-family:"LuccaPixel";src:url("{{PIXEL}}") format("woff2");font-display:block}</style>
 <link rel="stylesheet" href="{{CSS}}">
@@ -16,14 +15,16 @@
 var _hmt = _hmt || [];
 _hmt.push(["_setAutoPageview", false]);
 _hmt.push(["_trackPageview", "/pinyin/index.html"]);
-(function () {
+// 统计脚本等页面加载完再插，不和首屏的脚本、字体抢网速；顺手在空闲时把拼音字体先下好
+window.addEventListener("load", function () { setTimeout(function () {
+  if (document.fonts && document.fonts.load) document.fonts.load('700 1em "LuccaPinyin"').catch(function () {});
   var hm = document.createElement("script");
   hm.async = true;
   hm.src = "https://hm.baidu.com/hm.js?b5b9eb7e229dc60c4ebcd43c57100446";
   hm.onerror = function () {};
   var s = document.getElementsByTagName("script")[0];
   if (s && s.parentNode) s.parentNode.insertBefore(hm, s); else document.head.appendChild(hm);
-})();
+}, 0); });
 </script>
 </head>
 <body>

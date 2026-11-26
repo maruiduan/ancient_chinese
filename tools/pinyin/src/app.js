@@ -61,15 +61,17 @@ var MC = MCSPR.MC;
 var MT = MCSPR.MT;
 
 /* ========== 声音 ========== */
-var AC = null, bufs = {}, loading = {};
+var AC = null, bufs = {}, loading = {}, bufOrder = [], BUF_MAX = 120;
+// 解码后的音频很占内存（每个音节约 100～200 KB），只留最近用到的；mp3 文件本身有浏览器长缓存，再用时重新解码很快
+function keepBuf(k, b) { bufs[k] = b; var i = bufOrder.indexOf(k); if (i >= 0) bufOrder.splice(i, 1); bufOrder.push(k); while (bufOrder.length > BUF_MAX) delete bufs[bufOrder.shift()]; }
 function ctx() { if (!AC) { var C = window.AudioContext || window.webkitAudioContext; AC = new C(); } if (AC.state === 'suspended') AC.resume(); return AC; }
 function audioURL(k) { return 'audio/' + k + '.' + SYL[k].h + '.mp3'; }
 function loadBuf(k) {
-  if (bufs[k]) return Promise.resolve(bufs[k]);
+  if (bufs[k]) { keepBuf(k, bufs[k]); return Promise.resolve(bufs[k]); }
   if (loading[k]) return loading[k];
   loading[k] = fetch(audioURL(k)).then(function (r) { if (!r.ok) throw new Error('audio ' + r.status); return r.arrayBuffer(); })
     .then(function (ab) { return new Promise(function (res, rej) { ctx().decodeAudioData(ab, res, rej); }); })
-    .then(function (b) { bufs[k] = b; delete loading[k]; return b; }, function (e) { delete loading[k]; throw e; });
+    .then(function (b) { keepBuf(k, b); delete loading[k]; return b; }, function (e) { delete loading[k]; throw e; });
   return loading[k];
 }
 var speaking = null;
@@ -367,7 +369,7 @@ function nextQ() {
 }
 function renderRead(q, st) {
   var ore = pick(ORE_NAMES);
-  st.innerHTML = '<div class="read-wrap"><button id="mine" class="mine" type="button" aria-label="挖开"><span class="face" style="background-image:url(' + oreTex(ore, rnd(1e6)) + ')"></span></button>' +
+  st.innerHTML = '<div class="read-wrap"><button id="mine" class="mine" type="button" aria-label="挖开"><span class="face" style="background-image:url(' + oreTex(ore, rnd(16)) + ')"></span></button>' +
     '<div id="card" class="card' + (q.c ? '' : ' warm') + '" hidden>' + (q.c ? '<span class="hz">' + q.c + '</span>' : '') + '<span class="py">' + label(q.k) + '</span></div></div>' +
     '<div id="judge" class="judge off"><button id="btnBad" class="mc-btn jbtn red" type="button" aria-label="没读对"><i class="ic" data-ic="cross"></i></button>' + speakerHTML('btnSpeak') +
     '<button id="btnGood" class="mc-btn jbtn green" type="button" aria-label="读对了"><i class="ic" data-ic="check"></i></button></div>';
@@ -417,13 +419,13 @@ function judge(ok) {
 }
 // 记下这一题的格子，物品飞进快捷栏；listen=true 时先播标准音再走
 function finishQ(mark, fromEl, wait, listen) {
-  save(); var slot = $$('#hotbar .slot')[G.marks.length];
-  flyItem(fromEl, MARK_TEX[mark](), slot, function () { if (!G) return; G.marks.push(mark); renderProgress(); });
+  save(); var slot = $$('#hotbar .slot')[G.marks.length], g = G;
+  flyItem(fromEl, MARK_TEX[mark](), slot, function () { if (G !== g) return; G.marks.push(mark); renderProgress(); });
   if (listen) {
-    var go = false, nx = function () { if (!go) { go = true; advance(); } };
+    var go = false, nx = function () { if (!go) { go = true; if (G === g) advance(); } };
     speakQ(G.q).then(function (r) { setTimeout(nx, r.dur + 900); }).catch(function () { setTimeout(nx, 1200); });
     setTimeout(nx, 4500);
-  } else setTimeout(advance, wait);
+  } else setTimeout(function () { if (G === g) advance(); }, wait);
 }
 function flyItem(fromEl, tex, slot, cb) {
   if (!fromEl || !slot) { cb(); return; }
@@ -436,7 +438,7 @@ function flyItem(fromEl, tex, slot, cb) {
 function renderFind(q, st) {
   var P = q.t === 'p' || q.t === 'i';
   st.innerHTML = '<div class="find-prompt">' + (q.t === 'i' ? '<span class="pic-plate"><img src="' + WART[q.word.pic]() + '" alt=""><span class="pic-word hz">' + q.word.w + '</span></span>' : P ? '<span class="hz-plate hz">' + q.c + '</span>' : speakerHTML('btnSpeak') + '<span class="py-plate">' + label(q.k) + '</span>') + '</div><div id="ores" class="ores"></div><div class="ledge" aria-hidden="true"></div>';
-  var box = $('#ores'), seed = rnd(1e6), names = shuffle(ORE_NAMES.slice());
+  var box = $('#ores'), seed = rnd(16), names = shuffle(ORE_NAMES.slice());
   q.opts.forEach(function (o, i) {
     var b = el('button', 'ore'); b.type = 'button'; b.style.setProperty('--d', (i * .37) + 's');
     b.innerHTML = '<span class="face" style="background-image:url(' + oreTex(names[i], seed + i) + ')"></span><span class="lab ' + (P ? 'pyo' : 'hz') + '">' + (P ? o.l : o.c) + '</span>';
@@ -473,6 +475,7 @@ function pickChar(i, btn) {
       logTime(); save();
     }
     setTimeout(function () {
+      if (!G || G.q !== q) return;
       $$('#ores .ore').forEach(function (b, j) { if (q.opts[j].right) b.classList.add('hintme'); else b.classList.add('dim'); });
       speakQ(q).catch(function () {});
     }, 380);
@@ -630,8 +633,10 @@ function speakWord(ks) {
   return Promise.all(ks.map(loadBuf)).then(function (bs) {
     var a = ctx(); if (speaking) { try { speaking.stop(); } catch (e) {} }
     var t = a.currentTime + .03, last = null, sp = $$('.speaker'); sp.forEach(function (e) { e.classList.add('playing'); });
-    bs.forEach(function (b) { var s = a.createBufferSource(); s.buffer = b; s.connect(a.destination); s.start(t); t += b.duration + .06; last = s; });
-    speaking = last; last.onended = function () { if (speaking === last) { speaking = null; sp.forEach(function (e) { e.classList.remove('playing'); }); } };
+    var srcs = [];
+    bs.forEach(function (b) { var s = a.createBufferSource(); s.buffer = b; s.connect(a.destination); s.start(t); t += b.duration + .06; last = s; srcs.push(s); });
+    var group = { stop: function () { srcs.forEach(function (s) { try { s.stop(); } catch (e) {} }); } };
+    speaking = group; last.onended = function () { if (speaking === group) { speaking = null; sp.forEach(function (e) { e.classList.remove('playing'); }); } };
     return { start: performance.now(), dur: (t - a.currentTime) * 1000 };
   });
 }
@@ -652,13 +657,16 @@ function pickWord(prefer, avoid) {
 }
 
 // 第 3 章：治疗光束从最近的水晶连到末影龙；打掉水晶就断
+var beamRaf = 0;
+function startBeam() { cancelAnimationFrame(beamRaf); beamRaf = requestAnimationFrame(endBeamLoop); }
 function endBeamLoop() {
-  var sc = $('#scene'); if (!sc || !sc.classList.contains('ch3')) return;
+  beamRaf = 0;
+  var sc = $('#scene'); if (cur !== 'game' || !A || !sc || !sc.classList.contains('ch3')) return;
   var beam = $('.ebeam', sc), dr = $('#dragon'); if (!beam || !dr) return;
   var r0 = sc.getBoundingClientRect(), d = dr.getBoundingClientRect(), dx = d.left + d.width * .45 - r0.left, dy = d.top + d.height * .55 - r0.top, best = null, bd = 1e9;
   $$('.pil:not(.gone) .ecore', sc).forEach(function (c) { var b = c.getBoundingClientRect(), x = b.left + b.width / 2 - r0.left, y = b.top + b.height / 2 - r0.top, dd = Math.hypot(x - dx, y - dy); if (dd < bd) { bd = dd; best = [x, y]; } });
-  if (!best || (A && A.hp <= 0)) { beam.style.opacity = 0; } else { beam.style.opacity = 1; beam.style.left = best[0] + 'px'; beam.style.top = best[1] + 'px'; beam.style.width = bd + 'px'; beam.style.transform = 'rotate(' + Math.atan2(dy - best[1], dx - best[0]) + 'rad)'; }
-  requestAnimationFrame(endBeamLoop);
+  if (!best || (A && A.hp <= 0)) { beam.style.opacity = 0; } else { beam.style.opacity = 1; beam.style.transform = 'translate(' + best[0] + 'px,' + best[1] + 'px) rotate(' + Math.atan2(dy - best[1], dx - best[0]) + 'rad) scaleX(' + (bd / 100) + ')'; } // 只改 transform，不每帧重排
+  beamRaf = requestAnimationFrame(endBeamLoop);
 }
 function endScene() {
   var pil = function (n) { return '<div class="pil p' + n + '"><img class="obs" src="' + ART.pillar() + '"><div class="ecrys"><img class="ebase" src="' + ART.crystalBase() + '"><img class="ecage" src="' + ART.crystalCage() + '"><img class="ecage c2" src="' + ART.crystalCage() + '"><img class="ecore" src="' + ART.crystalCore() + '"></div></div>'; };
@@ -716,12 +724,15 @@ function renderCampMap() {
   Object.keys(names).forEach(function (n) { var tex = n === 'orb' || n === 'egg' ? ART[n]() : layerTex(n, 3); html += '<span class="slot' + (inv[n] ? '' : ' empty') + '" title="' + names[n] + '"><i style="background-image:url(' + tex + ')"></i>' + (inv[n] ? '<b>' + inv[n] + '</b>' : '') + '</span>'; });
   $('#campInv').innerHTML = html;
 }
+var campRunId = 0;
+function campLater(fn, ms) { var r = A && A.run; return setTimeout(function () { if (A && A.run === r) fn(); }, ms); }
+function campEvery(fn, ms) { var r = A && A.run, h = setInterval(function () { if (!A || A.run !== r) { clearInterval(h); return; } fn(); }, ms); return h; }
 function startChapter(id) {
   ctx(); lastGame = 'camp';
   var ch = CHAPTERS[id - 1];
-  A = { ch: ch, seed: rnd(6), i: 0, hearts: 3, ok: 0, n: 0, learned: [], queue: campQueue(), qi: 0, got: [], start: performance.now(), hp: ch.n };
+  A = { run: ++campRunId, ch: ch, seed: rnd(6), i: 0, hearts: 3, ok: 0, n: 0, learned: [], queue: campQueue(), qi: 0, got: [], start: performance.now(), hp: ch.n };
   show('game'); $('#game').dataset.ch = id; $('#chName').textContent = ch.name;
-  buildScene(); renderHud(); setTimeout(nextCampQ, 900);
+  buildScene(); renderHud(); campLater(nextCampQ, 900);
 }
 function renderHud() {
   var h = ''; for (var i = 0; i < 3; i++) h += '<i class="ic' + (i < A.hearts ? '' : ' lost') + '" style="background-image:url(' + spriteURL('heart') + ')"></i>'; $('#hearts').innerHTML = h;
@@ -748,15 +759,16 @@ function nextCampQ() {
     box.appendChild(b);
   });
   fitOpts();
-  var bar = $('#qTimer'); bar.style.transition = 'none'; bar.style.width = '100%'; void bar.offsetWidth; bar.style.transition = 'width ' + q.T + 's linear'; bar.style.width = '0%';
-  setTimeout(function () { if (A && A.q === q) { q.t0 = performance.now(); if (q.type === 'f') speak(q.k).catch(function () {}); } }, 300);
-  q.timer = setTimeout(function () { campTimeout(q); }, q.T * 1000 + 300);
+  // 时间条用 transform 缩，不每帧重排
+  var bar = $('#qTimer'); bar.style.transition = 'none'; bar.style.transform = 'scaleX(1)'; void bar.offsetWidth; bar.style.transition = 'transform ' + q.T + 's linear'; bar.style.transform = 'scaleX(0)';
+  campLater(function () { if (A && A.q === q) { q.t0 = performance.now(); if (q.type === 'f') speak(q.k).catch(function () {}); } }, 300);
+  q.timer = campLater(function () { campTimeout(q); }, q.T * 1000 + 300);
   sceneQ(q);
   (q.word ? q.word.ks : [q.k]).forEach(function (k) { loadBuf(k).catch(function () {}); });
 }
 function fitAll(ls) { var f = 1e9; ls.forEach(function (l) { l.style.fontSize = ''; }); ls.forEach(function (l) { var w = l.parentNode.clientWidth * .86, cur = parseFloat(getComputedStyle(l).fontSize); f = Math.min(f, l.offsetWidth > w ? Math.floor(cur * w / l.offsetWidth) : cur); }); if (f < 1e9) ls.forEach(function (l) { l.style.fontSize = f + 'px'; }); }
 function fitOpts() { fitAll($$('#qOpts .ql')); }
-function stopTimer() { var bar = $('#qTimer'); bar.style.width = getComputedStyle(bar).width; bar.style.transition = 'none'; }
+function stopTimer() { var bar = $('#qTimer'); bar.style.transform = getComputedStyle(bar).transform; bar.style.transition = 'none'; }
 function campAnswer(i, b) {
   var q = A && A.q; if (!q || q.done || b.classList.contains('no')) return;
   if (q.t0 == null) q.t0 = performance.now();
@@ -764,12 +776,12 @@ function campAnswer(i, b) {
   if (o.right) {
     q.done = true; clearTimeout(q.timer); stopTimer(); b.classList.add('yes');
     if (!q.wrong && q.word) A.ok++;
-    if (!q.wrong && !q.word) { var res = record(q.k, true, rt, rt <= FAST_MS); A.ok++; if (res.after > res.before && res.after >= 2) setTimeout(SFX.up, 500); }
+    if (!q.wrong && !q.word) { var res = record(q.k, true, rt, rt <= FAST_MS); A.ok++; if (res.after > res.before && res.after >= 2) campLater(SFX.up, 500); }
     if (q.word) { if (!q.wrong) recordWord(q, true, o, rt); A.learned.push([q.c, q.k, q.word.ks]); $('#qPrompt').classList.add('said'); } else A.learned.push([q.c || o.l, q.k]);
     A.n++; logTime(); save();
     speakQ(q).catch(function () {});
     A.i++; renderHud();
-    sceneHit(q, function () { setTimeout(nextCampQ, 250); });
+    sceneHit(q, function () { campLater(nextCampQ, 250); });
   } else {
     SFX.bonk(); b.classList.add('no');
     if (q.type === 'f') { var ck = q.k + '>' + o.k; S.conf[ck] = (S.conf[ck] || 0) + 1; } else { var ck2 = (q.word ? q.word.w : q.k) + '>*' + o.l; S.conf[ck2] = (S.conf[ck2] || 0) + 1; }
@@ -782,14 +794,14 @@ function campTimeout(q) {
   A.n++; logTime(); save(); if (q.word) $('#qPrompt').classList.add('said');
   $$('#qOpts .qopt').forEach(function (b, j) { if (q.opts[j].right) b.classList.add('show'); else b.classList.add('no'); });
   speakQ(q).catch(function () {});
-  sceneMiss(q, true, function () { A.i++; renderHud(); setTimeout(nextCampQ, 600); });
+  sceneMiss(q, true, function () { A.i++; renderHud(); campLater(nextCampQ, 600); });
 }
 function loseHeart() { A.hearts = Math.max(0, A.hearts - 1); renderHud(); var h = $$('#hearts .ic')[A.hearts]; if (h) h.classList.add('lose'); }
 function addInv(n) { var st = campState(); st.inv[n] = (st.inv[n] || 0) + 1; A.got.push(n); }
 function flyTo(img, from, to, cb) {
-  var r = rect(from), t = rect(to), g = el('img', 'drop-gem'); g.src = img; var x0 = r.left + r.width / 2 - 32, y0 = r.top + r.height / 2 - 32; g.style.left = x0 + 'px'; g.style.top = y0 + 'px'; $('#fx3').appendChild(g);
+  var run = A && A.run, r = rect(from), t = rect(to), g = el('img', 'drop-gem'); g.src = img; var x0 = r.left + r.width / 2 - 32, y0 = r.top + r.height / 2 - 32; g.style.left = x0 + 'px'; g.style.top = y0 + 'px'; $('#fx3').appendChild(g);
   var a = g.animate([{ transform: 'translate(0,0) scale(.4)' }, { transform: 'translate(0,-50px) scale(1)', offset: .3 }, { transform: 'translate(' + (t.left + t.width / 2 - 32 - x0) + 'px,' + (t.top + t.height / 2 - 32 - y0) + 'px) scale(.55)' }], { duration: 650, easing: 'ease-in-out', fill: 'forwards' });
-  a.onfinish = function () { g.remove(); SFX.gem(); to.classList.remove('pop'); void to.offsetWidth; to.classList.add('pop'); if (cb) cb(); };
+  a.onfinish = function () { g.remove(); SFX.gem(); to.classList.remove('pop'); void to.offsetWidth; to.classList.add('pop'); if (cb && A && A.run === run) cb(); };
 }
 function bagSlot() { var s = $('#bag'); return s; }
 function updBag() { var g = A.got, html = ''; g.slice(-9).forEach(function (n) { html += '<span class="slot got"><i style="background-image:url(' + (n === 'orb' || n === 'egg' || n === 'crystal' ? ART[n]() : layerTex(n, 4)) + ')"></i></span>'; }); for (var i = g.slice(-9).length; i < 9; i++) html += '<span class="slot"></span>'; $('#bag').innerHTML = html; }
@@ -820,7 +832,7 @@ function buildScene() {
   } else {
     sc.innerHTML = endScene() +
       '<div class="boss"><img id="dragon" class="dragon" src="' + ART.dragon() + '"></div><img class="archer end" src="' + spriteURL('hero') + '"><div class="boss-hp"><span>末影龙</span><div class="hpbar"><i id="hpFill"></i></div></div>';
-    requestAnimationFrame(endBeamLoop);
+    startBeam();
   }
 }
 function placeMiner(instant) {
@@ -850,50 +862,50 @@ function sceneHit(q, cb) {
   if (id === 1) {
     var row = $$('.shaft .srow', sc)[A.depth], blk = row.children[3], cr = $('canvas', blk), name = A.blocks[A.depth], pk = $('.pick', sc), st = 0;
     pk.classList.add('swing'); SFX.hit(); drawCrack(cr, 0);
-    var h = setInterval(function () {
+    var h = campEvery(function () {
       st++; if (st <= 2) { SFX.hit(); drawCrack(cr, st); return; }
       clearInterval(h); pk.classList.remove('swing'); SFX.brk(); burstAt(blk); blk.classList.add('gone');
       addInv(name); flyTo(layerTex(name, A.depth), blk, $('#bag').children[Math.min(8, A.got.length - 1)], function () { updBag(); });
       A.depth++; $('#depthN').textContent = A.depth * 3;
       if (A.depth < A.blocks.length) placeMiner(); else { var m = $('.miner', sc); m.style.transition = 'top .5s'; m.style.top = (parseFloat(m.style.top) + blk.clientHeight) + 'px'; }
-      setTimeout(cb, 520);
+      campLater(cb, 520);
     }, 110);
   } else if (id === 2) {
     var mob = q.mob; shootArrow($('.archer', sc), mob, function () {
       mob.style.transition = 'none'; mob.style.left = getComputedStyle(mob).left; mob.classList.add('poof'); burstAt(mob, '#ffffff'); SFX.brk();
       addInv('orb'); flyTo(ART.orb(), mob, $('#bag').children[Math.min(8, A.got.length - 1)], function () { updBag(); });
-      setTimeout(function () { mob.remove(); cb(); }, 450);
+      campLater(function () { mob.remove(); cb(); }, 450);
     });
   } else {
     var dr = $('#dragon'); shootArrow($('.archer', sc), dr, function () {
-      dr.classList.remove('hit'); void dr.offsetWidth; dr.classList.add('hit'); setTimeout(function () { dr.classList.remove('hit'); }, 260); SFX.brk(); A.hp--; $('#hpFill').style.width = (100 * A.hp / A.ch.n) + '%';
+      dr.classList.remove('hit'); void dr.offsetWidth; dr.classList.add('hit'); campLater(function () { dr.classList.remove('hit'); }, 260); SFX.brk(); A.hp--; $('#hpFill').style.width = (100 * A.hp / A.ch.n) + '%';
       burstAt(dr, '#d98cff');
       if (A.i % 3 === 0) { addInv('crystal'); updBag(); endCrystalBreak(); }
       if (A.hp <= 0) { var ex = $('.exitp', sc); if (ex) ex.classList.add('won'); }
-      setTimeout(cb, 500);
+      campLater(cb, 500);
     });
   }
 }
 function sceneMiss(q, timeout, cb) {
   var id = A.ch.id, sc = $('#scene');
   if (id === 1) {
-    if (timeout) { loseHeart(); var m = $('.miner', sc); m.classList.add('ouch'); setTimeout(function () { m.classList.remove('ouch'); }, 500); }
-    else { var row = $$('.shaft .srow', sc)[A.depth]; if (row) { row.children[3].classList.add('nope'); setTimeout(function () { row.children[3].classList.remove('nope'); }, 400); } }
-    if (cb) setTimeout(function () { if (A) sceneHit(q, cb); }, 1100); // 超时也把这块挖开，钻石层一定挖得到
+    if (timeout) { loseHeart(); var m = $('.miner', sc); m.classList.add('ouch'); campLater(function () { m.classList.remove('ouch'); }, 500); }
+    else { var row = $$('.shaft .srow', sc)[A.depth]; if (row) { row.children[3].classList.add('nope'); campLater(function () { row.children[3].classList.remove('nope'); }, 400); } }
+    if (cb) campLater(function () { if (A) sceneHit(q, cb); }, 1100); // 超时也把这块挖开，钻石层一定挖得到
   } else if (id === 2) {
     var mob = q.mob;
-    if (!timeout) { mob.classList.add('hop'); setTimeout(function () { mob.classList.remove('hop'); }, 400); var cur2 = parseFloat(getComputedStyle(mob).left); mob.style.transition = 'none'; mob.style.left = cur2 + 'px'; void mob.offsetWidth; var left = Math.max(0, (performance.now() - q.shown) / 1000); mob.style.transition = 'left ' + Math.max(1.5, q.T - left - 2) + 's linear'; mob.style.left = ''; mob.classList.add('walk'); q.T -= 0; }
-    else { loseHeart(); mob.classList.add('boom'); SFX.pop(); burstAt(mob, q.mobKind === 'creeper' ? '#8fdc6a' : '#bbbbbb'); setTimeout(function () { mob.remove(); }, 500); if (cb) setTimeout(cb, 1500); }
+    if (!timeout) { mob.classList.add('hop'); campLater(function () { mob.classList.remove('hop'); }, 400); var cur2 = parseFloat(getComputedStyle(mob).left); mob.style.transition = 'none'; mob.style.left = cur2 + 'px'; void mob.offsetWidth; var left = Math.max(0, (performance.now() - q.shown) / 1000); mob.style.transition = 'left ' + Math.max(1.5, q.T - left - 2) + 's linear'; mob.style.left = ''; mob.classList.add('walk'); q.T -= 0; }
+    else { loseHeart(); mob.classList.add('boom'); SFX.pop(); burstAt(mob, q.mobKind === 'creeper' ? '#8fdc6a' : '#bbbbbb'); campLater(function () { mob.remove(); }, 500); if (cb) campLater(cb, 1500); }
   } else {
-    if (timeout) { loseHeart(); var dr = $('#dragon'); dr.classList.add('swoop'); setTimeout(function () { dr.classList.remove('swoop'); }, 1100); if (cb) setTimeout(cb, 1500); }
-    else { var d2 = $('#dragon'); d2.classList.add('roar'); setTimeout(function () { d2.classList.remove('roar'); }, 500); }
+    if (timeout) { loseHeart(); var dr = $('#dragon'); dr.classList.add('swoop'); campLater(function () { dr.classList.remove('swoop'); }, 1100); if (cb) campLater(cb, 1500); }
+    else { var d2 = $('#dragon'); d2.classList.add('roar'); campLater(function () { d2.classList.remove('roar'); }, 500); }
   }
 }
 function shootArrow(from, to, cb) {
-  var a = rect(from), b = rect(to), ar = el('img', 'arrow-fly'); ar.src = ART.arrow(); $('#fx3').appendChild(ar);
+  var run = A && A.run, a = rect(from), b = rect(to), ar = el('img', 'arrow-fly'); ar.src = ART.arrow(); $('#fx3').appendChild(ar);
   var x0 = a.right - 10, y0 = a.top + a.height * .35, x1 = b.left + b.width * .4, y1 = b.top + b.height * .45, ang = Math.atan2(y1 - y0, x1 - x0) * 180 / Math.PI;
   ar.style.left = x0 + 'px'; ar.style.top = y0 + 'px'; SFX.combo();
-  ar.animate([{ transform: 'translate(0,0) rotate(' + ang + 'deg)' }, { transform: 'translate(' + (x1 - x0) + 'px,' + (y1 - y0) + 'px) rotate(' + ang + 'deg)' }], { duration: 320, easing: 'linear', fill: 'forwards' }).onfinish = function () { ar.remove(); cb(); };
+  ar.animate([{ transform: 'translate(0,0) rotate(' + ang + 'deg)' }, { transform: 'translate(' + (x1 - x0) + 'px,' + (y1 - y0) + 'px) rotate(' + ang + 'deg)' }], { duration: 320, easing: 'linear', fill: 'forwards' }).onfinish = function () { ar.remove(); if (A && A.run === run) cb(); };
 }
 function burstAt(elm, col) {
   var r = rect(elm), fx = $('#fx3'), tex = col ? null : elm.style.backgroundImage;
@@ -1162,7 +1174,7 @@ function init() {
     var n = +e.key;
     if (cur === 'game' && A && A.q) { if (n >= 1 && n <= 4) { var bb = $$('#qOpts .qopt')[n - 1]; if (bb) campAnswer(n - 1, bb); } if (e.key === ' ' && A.q.type === 'f') { e.preventDefault(); speak(A.q.k).catch(function () {}); } return; }
     if (cur !== 'play' || !G || !G.q) return;
-    if (G.q.t === 'f' || G.q.t === 'p') { if (n >= 1 && n <= 4) { var b = $$('#ores .ore')[n - 1]; if (b) pickChar(n - 1, b); } if (e.key === ' ') { e.preventDefault(); hear(); } return; }
+    if (G.q.t === 'f' || G.q.t === 'p' || G.q.t === 'i') { if (n >= 1 && n <= 4) { var b = $$('#ores .ore')[n - 1]; if (b) pickChar(n - 1, b); } if (e.key === ' ') { e.preventDefault(); hear(); } return; }
     if (e.key === ' ') { e.preventDefault(); if (G.q.t0 == null) mine(); else hear(); }
     if (e.key === 'ArrowRight' || e.key === 'Enter') judge(true);
     if (e.key === 'ArrowLeft') judge(false);
