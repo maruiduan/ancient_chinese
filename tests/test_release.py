@@ -143,6 +143,33 @@ class ReleaseTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Previous asset hash disagrees"):
             stage_site.active_hashes(self.site)
 
+    def test_stage_splits_poetry_notes_per_piece(self):
+        source = fixture(Path(self.temp.name) / "notes-source")
+        (source / "data" / "poetry-notes.json").write_text(json.dumps({
+            "credit": "本书编写",
+            "authors": {"李白": {"bio": {"s": "诗人", "t": "詩人"}}},
+            "pieces": {"t001": {"author": "李白", "notes": [], "stanzas": [2]}},
+        }, ensure_ascii=False), encoding="utf-8")
+        (source / "data" / "tang.json").write_text(json.dumps({
+            "pieces": [{"id": "t001"}],
+        }), encoding="utf-8")
+        output = Path(self.temp.name) / "notes-release"
+        with patch.object(stage_site, "ROOT", source):
+            stage_site.stage(output)
+        self.assertFalse((output / "data" / "poetry-notes.json").exists())
+        authors = json.loads((output / "data" / "poetry-authors.json").read_text(encoding="utf-8"))
+        self.assertEqual(authors["credit"], "本书编写")
+        self.assertIn("李白", authors["authors"])
+        note = json.loads((output / "data" / "poetry-notes" / "t001.json").read_text(encoding="utf-8"))
+        self.assertEqual(note["author"], "李白")
+        self.assertEqual(note["stanzas"], [2])
+        mapping = (output / "js" / "asset-urls.js").read_text(encoding="utf-8")
+        urls = json.loads(mapping.split("window.ASSET_URLS = ", 1)[1].split(";\n", 1)[0])
+        self.assertIn("data/poetry-notes/t001.json", urls)
+        self.assertIn("data/poetry-authors.json", urls)
+        self.assertNotIn("data/poetry-notes.json", urls)
+        stage_site.validate(output)
+
     def test_stage_copies_robots_and_sitemap_as_real_files(self):
         source = fixture(Path(self.temp.name) / "seo-source")
         robots = "User-agent: *\nAllow: /\n\nSitemap: https://guwen.lucca.top/sitemap.xml\n"

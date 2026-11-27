@@ -41,6 +41,63 @@ def validate(root: Path) -> None:
     for value in manifest.values():
         if not re.fullmatch(r"[a-z]+[1-5]", value) or not (root / "audio" / f"{value}.ogg").is_file():
             raise ValueError(f"Missing manifest recording: {value}")
+    validate_poetry(root)
+
+
+NOTE_ID = re.compile(r"^[a-z0-9-]{1,40}$")
+
+
+def split_poetry_notes(site: Path) -> None:
+    """Publish one small file per poem instead of the 622-piece bundle."""
+    src = site / "data" / "poetry-notes.json"
+    if not src.is_file():
+        return
+    data = json.loads(src.read_text(encoding="utf-8"))
+    pieces = data.get("pieces") or {}
+    if not isinstance(pieces, dict) or not pieces:
+        raise ValueError("poetry-notes.json has no pieces")
+    out = site / "data" / "poetry-notes"
+    if out.exists():
+        raise ValueError("data/poetry-notes already exists")
+    out.mkdir()
+    for pid, piece in pieces.items():
+        if not isinstance(pid, str) or not NOTE_ID.fullmatch(pid):
+            raise ValueError(f"bad poetry note id: {pid}")
+        (out / f"{pid}.json").write_text(
+            json.dumps(piece, ensure_ascii=False, separators=(",", ":")),
+            encoding="utf-8",
+        )
+    (site / "data" / "poetry-authors.json").write_text(
+        json.dumps(
+            {"credit": data.get("credit", ""), "authors": data.get("authors") or {}},
+            ensure_ascii=False,
+            separators=(",", ":"),
+        ),
+        encoding="utf-8",
+    )
+    src.unlink()
+
+
+def validate_poetry(root: Path) -> None:
+    monolith = root / "data" / "poetry-notes.json"
+    if monolith.is_file():
+        raise ValueError("poetry-notes.json must be split per piece before publish")
+    notes = root / "data" / "poetry-notes"
+    authors = root / "data" / "poetry-authors.json"
+    if not notes.is_dir() and not authors.is_file():
+        return
+    if not authors.is_file():
+        raise ValueError("missing poetry-authors.json")
+    payload = json.loads(authors.read_text(encoding="utf-8"))
+    if "authors" not in payload or "credit" not in payload:
+        raise ValueError("poetry-authors.json is missing credit or authors")
+    files = [path for path in notes.glob("*.json") if path.is_file()] if notes.is_dir() else []
+    plain = [path for path in files if not stamp_assets.is_hashed_name(path.name)]
+    if not plain:
+        raise ValueError("poetry notes were not split")
+    for path in plain:
+        if not NOTE_ID.fullmatch(path.stem):
+            raise ValueError(f"bad poetry note name: {path.name}")
 
 
 def active_hashes(previous: Path) -> tuple[str | None, dict[str, bytes]]:
@@ -90,6 +147,7 @@ def stage(output: Path, previous_site: Path | None = None) -> None:
                 shutil.copy2(source, site / name)
         for name in ("css", "js", "data", "audio"):
             shutil.copytree(ROOT / name, site / name)
+        split_poetry_notes(site)
         if stamp_assets.main([str(site)]) != 0:
             raise ValueError("Asset stamping failed")
         for rel, data in previous_assets.items():

@@ -2118,3 +2118,17 @@ h1, h2, .title, .rail-title { -webkit-tap-highlight-color: transparent; }
 main a, .catalog a { -webkit-touch-callout: none; }
 .tz { border-radius: 4px; transition: background-color .15s, color .15s; }
 .tz.on { background-color: var(--accent-soft); color: var(--accent); }
+
+/* 搜索重绘只换结果列表，包一层但不产生盒子，版面和原来直接挂在页面上一样。 */
+.catalog-results { display: contents; }
+
+/* 长文只排版视口附近的句段。auto 会记住真正量过的高度，跳回上次位置时先完整量一次。 */
+.reader .body.prose > .pair,
+.reader .body.prose:not(.sentence) > .para {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 320px;
+}
+.reader .body.cv-measure > .pair,
+.reader .body.cv-measure > .para {
+  content-visibility: visible;
+}

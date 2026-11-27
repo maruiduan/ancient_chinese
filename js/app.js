@@ -99,6 +99,17 @@
     return normalizeProgress(progress);
   }
 
+  let noticeTimer = 0;
+
+  function clearNotice() {
+    if (noticeTimer) {
+      clearTimeout(noticeTimer);
+      noticeTimer = 0;
+    }
+    const notice = document.getElementById("app-notice");
+    if (notice && notice.parentNode && notice.remove) notice.remove();
+  }
+
   function showNotice(message) {
     let notice = document.getElementById("app-notice");
     if (!notice) {
@@ -109,6 +120,12 @@
       document.body.appendChild(notice);
     }
     notice.textContent = message;
+    if (noticeTimer) clearTimeout(noticeTimer);
+    noticeTimer = setTimeout(function () {
+      if (!notice || notice.textContent !== message) return;
+      if (notice.parentNode && notice.remove) notice.remove();
+    }, 3500);
+    if (noticeTimer && typeof noticeTimer.unref === "function") noticeTimer.unref();
   }
 
   function saveProgress() {
@@ -342,7 +359,19 @@
     if (resume !== id) return;
     try { sessionStorage.removeItem(RESUME_KEY); } catch (_) {}
     const item = historyState.recent.find(function (row) { return row.id === id; });
-    if (item && item.y) window.scrollTo(0, item.y);
+    if (item && item.y) revealReadingScroll(item.y);
+  }
+
+  function revealReadingScroll(y) {
+    const body = document.querySelector(".reader .body");
+    if (y > 0 && body && body.classList) {
+      body.classList.add("cv-measure");
+      if (document.documentElement) void document.documentElement.offsetHeight;
+      window.scrollTo(0, y);
+      body.classList.remove("cv-measure");
+      return;
+    }
+    window.scrollTo(0, y || 0);
   }
 
   function beginReading() {
@@ -594,29 +623,137 @@
       const meta = findArticleMeta(state.progress.last);
       if (meta && !isShijiId(meta.id)) state.openVol = Number(meta.id.slice(1, 3));
     }
-    route();
-    // Famous-line marks only decorate text, so they load after the first render.
-    fetchJson("data/famous.json")
-      .then(function (data) {
-        state.famous = data;
+    await route();
+  }
+
+  let auxStarted = false;
+
+  function readingPieceId() {
+    if (state.view === "article" && state.article) return state.article.id;
+    if (state.view === "piece" && state.piece) return state.piece.id;
+    return "";
+  }
+
+  function indexFamous(data) {
+    const byPiece = {};
+    const global = [];
+    (data.lines || []).forEach(function (line) {
+      if (!line.pieces) {
+        global.push(line);
+        return;
+      }
+      const seen = {};
+      line.pieces.forEach(function (id) {
+        if (seen[id]) return;
+        seen[id] = 1;
+        if (!byPiece[id]) byPiece[id] = [];
+        byPiece[id].push(line);
+      });
+    });
+    state.famousByPiece = byPiece;
+    state.famousGlobal = global;
+  }
+
+  function famousLinesFor(pieceId) {
+    if (!state.famous) return [];
+    if (!state.famousByPiece) {
+      return (state.famous.lines || []).filter(function (line) {
+        return !(line.pieces && line.pieces.indexOf(pieceId) < 0);
+      });
+    }
+    return (state.famousByPiece[pieceId] || []).concat(state.famousGlobal || []);
+  }
+
+  function tokenNeedsDictPy(tok) {
+    if (!tok || tok.punct) return false;
+    const chars = Array.from(tok.t || "");
+    if (!chars.length) return false;
+    const curated = syllables(tok.py);
+    if (curated.length === chars.length) return false;
+    if (chars.length === 1 && curated.length) return false;
+    if (curated.length && tok.level === "sentence") {
+      return chars.some(function (ch, i) { return !curated[i] && !!charPinyin(ch); });
+    }
+    return chars.some(function (ch) { return !!charPinyin(ch); });
+  }
+
+  function dictFillsReading() {
+    function anyTokens(tokens) {
+      return (tokens || []).some(tokenNeedsDictPy);
+    }
+    if (state.view === "article" && state.article && state.article.paragraphs) {
+      return state.article.paragraphs.some(function (para) {
+        return (para.sentences || []).some(function (sent) { return anyTokens(sent.tokens); });
+      });
+    }
+    if (state.view === "piece" && state.piece && state.piece.lines) {
+      return state.piece.lines.some(function (line) { return anyTokens(line.tokens); });
+    }
+    return false;
+  }
+
+  function refreshFamousMarks() {
+    const id = readingPieceId();
+    if (id && famousLinesFor(id).length) {
+      if (state.view === "article" && state.article) renderArticle(true);
+      else if (state.view === "piece" && state.piece) renderPiece(true);
+      return;
+    }
+    if (state.famousOnly && state.view !== "article" && state.view !== "piece") route();
+  }
+
+  function ensureFamous() {
+    if (state.famous) return Promise.resolve(state.famous);
+    if (ensureFamous.pending) return ensureFamous.pending;
+    ensureFamous.pending = fetchJson("data/famous.json").then(function (data) {
+      state.famous = data && typeof data === "object" ? data : { pieces: {}, lines: [] };
+      indexFamous(state.famous);
+      refreshFamousMarks();
+      return state.famous;
+      }).catch(function () {
+      state.famous = { pieces: {}, lines: [] };
+      state.famousByPiece = {};
+      state.famousGlobal = [];
+      if (state.famousOnly) route();
+      return state.famous;
+    });
+    return ensureFamous.pending;
+  }
+
+  function ensureDict() {
+    if (state.dict) return Promise.resolve(state.dict);
+    if (ensureDict.pending) return ensureDict.pending;
+    ensureDict.pending = fetch(assetUrl("data/dict.json")).then(function (response) {
+      if (!response.ok) throw new Error("HTTP " + response.status);
+      return response.json();
+    }).then(function (data) {
+      state.dict = (data && data.chars) || {};
+      const open = state.popupTok;
+      if (state.progress.pinyin && dictFillsReading()) {
         if (state.view === "article" && state.article) renderArticle(true);
-        else if (state.view === "piece" && state.piece) renderPiece(true);
-        else if (state.famousOnly) route();
-      })
-      .catch(function () { state.famous = { pieces: {}, lines: [] }; });
-    fetch(assetUrl("data/dict.json"))
-      .then(function (r) { return r.json(); })
-      .then(function (data) {
-        state.dict = data.chars || {};
-        const open = state.popupTok;
-        if (state.view === "article" && state.article && state.progress.pinyin) renderArticle(true);
-        if (state.view === "piece" && state.piece && state.progress.pinyin) renderPiece(true);
-        if (open) {
-          const anchor = open.anchor && open.anchor.isConnected ? open.anchor : null;
-          openPopup(open.tok, open.index, anchor);
-        }
-      })
-      .catch(function () { state.dict = {}; });
+        if (state.view === "piece" && state.piece) renderPiece(true);
+      }
+      if (open) {
+        const anchor = open.anchor && open.anchor.isConnected ? open.anchor : null;
+        openPopup(open.tok, open.index, anchor);
+      }
+      return state.dict;
+    }).catch(function () {
+      state.dict = {};
+      return state.dict;
+    });
+    return ensureDict.pending;
+  }
+
+  function wantsAux() {
+    return state.view !== "hub" && state.view !== "account";
+  }
+
+  function ensureAux() {
+    if (auxStarted || !wantsAux()) return;
+    auxStarted = true;
+    ensureFamous();
+    ensureDict();
   }
 
   function renderRail(volumeNumber) {
@@ -713,6 +850,13 @@
     return response.json();
   }
 
+  async function fetchJsonOrNull(path) {
+    const response = await fetch(assetUrl(path));
+    if (response.status === 404) return null;
+    if (!response.ok) throw new Error("HTTP " + response.status + ": " + path);
+    return response.json();
+  }
+
   function showLoadError(retry) {
     const box = document.createElement("div");
     box.className = "empty";
@@ -788,6 +932,7 @@
   }
 
   async function route() {
+    clearNotice();
     if (!state.catalog) return;
     const hash = location.hash;
     let token = loadToken;
@@ -800,7 +945,10 @@
       console.error(err);
       return;
     }
-    if (token === loadToken && hash === location.hash) trackPageview(hash);
+    if (token === loadToken && hash === location.hash) {
+      trackPageview(hash);
+      ensureAux();
+    }
   }
 
   function dispatchRoute() {
@@ -1275,50 +1423,47 @@
     input.placeholder = "搜索篇名";
     input.value = state.query;
     input.setAttribute("aria-label", "搜索篇名");
-    input.addEventListener("input", function () {
-      state.query = input.value;
-      showBook();
-      const next = main.querySelector(".catalog-search");
-      if (next) {
-        next.focus();
-        const len = next.value.length;
-        next.setSelectionRange(len, len);
-      }
+    bindQueryInput(input, function (value) {
+      if (state.query === value) return;
+      state.query = value;
+      const slot = main.querySelector(".catalog-results");
+      if (!slot || state.view !== "book") return;
+      slot.replaceWith(bookResults());
     });
     wrap.appendChild(input);
     appendCatalogTools(wrap, "gwgz");
-    if ((state.gradeFilter || state.famousOnly) && !state.query.trim()) {
-      appendGradeHits(wrap, flatArticles(), function (art) {
-        return pieceLink(art, true);
-      });
-      main.replaceChildren(wrap);
-      document.title = "古文观止 · 古文";
-      syncChrome();
-      return;
-    }
+    wrap.appendChild(bookResults());
+    main.replaceChildren(wrap);
+    document.title = "古文观止 · 古文";
+    syncChrome();
+  }
 
+  function bindQueryInput(input, commit) {
+    let composing = false;
+    input.addEventListener("compositionstart", function () { composing = true; });
+    input.addEventListener("compositionend", function () {
+      composing = false;
+      commit(input.value);
+    });
+    input.addEventListener("input", function () {
+      if (composing) return;
+      commit(input.value);
+    });
+  }
+
+  function bookResults() {
+    const slot = document.createElement("div");
+    slot.className = "catalog-results";
+    if ((state.gradeFilter || state.famousOnly) && !state.query.trim()) {
+      appendGradeHits(slot, flatArticles(), function (art) { return pieceLink(art, true); });
+      return slot;
+    }
     const q = state.query.trim();
-    if (q) {
-      const hits = flatArticles().filter(function (art) {
-        return (art.title + (art.titleT || "") + art.author).indexOf(q) >= 0;
-      });
-      const box = document.createElement("div");
-      box.className = "piece-list";
-      if (!hits.length) {
-        const empty = document.createElement("p");
-        empty.className = "catalog-empty";
-        empty.textContent = "没有匹配的篇目。";
-        box.appendChild(empty);
-      }
-      hits.filter(function (art) { return gradeMatches(art.id) && famousMatches(art.id); }).slice(0, 40).forEach(function (art) {
-        box.appendChild(pieceLink(art, true));
-      });
-      wrap.appendChild(box);
-    } else {
+    if (!q) {
       const label = document.createElement("p");
       label.className = "section-label";
       label.textContent = "十二卷";
-      wrap.appendChild(label);
+      slot.appendChild(label);
       const rows = document.createElement("div");
       rows.className = "vol-rows";
       state.catalog.volumes.forEach(function (vol) {
@@ -1337,11 +1482,25 @@
         a.appendChild(count);
         rows.appendChild(a);
       });
-      wrap.appendChild(rows);
+      slot.appendChild(rows);
+      return slot;
     }
-    main.replaceChildren(wrap);
-    document.title = "古文观止 · 古文";
-    syncChrome();
+    const hits = flatArticles().filter(function (art) {
+      return (art.title + (art.titleT || "") + art.author).indexOf(q) >= 0;
+    }).filter(function (art) {
+      return gradeMatches(art.id) && famousMatches(art.id);
+    }).slice(0, 40);
+    const box = document.createElement("div");
+    box.className = "piece-list";
+    if (!hits.length) {
+      const empty = document.createElement("p");
+      empty.className = "catalog-empty";
+      empty.textContent = "没有匹配的篇目。";
+      box.appendChild(empty);
+    }
+    hits.forEach(function (art) { box.appendChild(pieceLink(art, true)); });
+    slot.appendChild(box);
+    return slot;
   }
 
   function pieceLink(art, withVol) {
@@ -1419,6 +1578,26 @@
     syncChrome();
   }
 
+  function renjianResults(articles) {
+    const slot = document.createElement("div");
+    slot.className = "catalog-results";
+    const q = state.renjianQuery.trim();
+    const shown = q ? articles.filter(function (art) {
+      return (art.title + (art.titleT || "")).indexOf(q) >= 0;
+    }) : articles;
+    const list = document.createElement("div");
+    list.className = "piece-list";
+    if (!shown.length) {
+      const empty = document.createElement("p");
+      empty.className = "catalog-empty";
+      empty.textContent = "没有匹配的条目。";
+      list.appendChild(empty);
+    }
+    shown.forEach(function (art) { list.appendChild(pieceLink(art, false)); });
+    slot.appendChild(list);
+    return slot;
+  }
+
   function showRenjian() {
     loadToken += 1;
     closePopup();
@@ -1474,31 +1653,15 @@
     input.placeholder = "搜索条目";
     input.value = state.renjianQuery;
     input.setAttribute("aria-label", "搜索条目");
-    input.addEventListener("input", function () {
-      state.renjianQuery = input.value;
-      showRenjian();
-      const next = main.querySelector(".catalog-search");
-      if (next) {
-        next.focus();
-        const len = next.value.length;
-        next.setSelectionRange(len, len);
-      }
+    bindQueryInput(input, function (value) {
+      if (state.renjianQuery === value) return;
+      state.renjianQuery = value;
+      const slot = main.querySelector(".catalog-results");
+      if (!slot || state.view !== "renjian") return;
+      slot.replaceWith(renjianResults(articles));
     });
     wrap.appendChild(input);
-    const q = state.renjianQuery.trim();
-    const shown = q ? articles.filter(function (art) {
-      return (art.title + (art.titleT || "")).indexOf(q) >= 0;
-    }) : articles;
-    const list = document.createElement("div");
-    list.className = "piece-list";
-    if (!shown.length) {
-      const empty = document.createElement("p");
-      empty.className = "catalog-empty";
-      empty.textContent = "没有匹配的条目。";
-      list.appendChild(empty);
-    }
-    shown.forEach(function (art) { list.appendChild(pieceLink(art, false)); });
-    wrap.appendChild(list);
+    wrap.appendChild(renjianResults(articles));
     main.replaceChildren(wrap);
     document.title = "人间词话 · 古文";
     syncChrome();
@@ -1539,7 +1702,8 @@
 
   function famousMatches(id) {
     if (!state.famousOnly) return true;
-    return !!(state.famous && state.famous.pieces && state.famous.pieces[id]);
+    if (!state.famous) return true;
+    return !!(state.famous.pieces && state.famous.pieces[id]);
   }
 
   function appendGradeTag(parent, id) {
@@ -1613,6 +1777,7 @@
     famousBtn.classList.toggle("on", !!state.famousOnly);
     famousBtn.addEventListener("click", function () {
       state.famousOnly = !state.famousOnly;
+      if (state.famousOnly) ensureFamous();
       if (kind === "tang" || kind === "ci" || kind === "ke") renderCollection(kind);
       else if (kind === "gwgz") showBook();
       else if (kind === "zztj") showZztj();
@@ -1755,8 +1920,9 @@
     closePopup();
     state.view = "author";
     state.kind = kind;
+    const authorsReady = ensureAuthors(token);
     if (!(await ensureCollection(kind, token))) return;
-    if (!(await ensureNotes(token))) return;
+    if (!(await authorsReady)) return;
     const data = state.collections[kind];
     const pieces = data.pieces.filter(function (item) {
       return item.author.s === name || item.author.t === name;
@@ -1827,8 +1993,9 @@
     state.kind = kind;
     state.article = null;
     state.piece = null;
+    const noteReady = ensurePieceNote(id, token);
     if (!(await ensureCollection(kind, token))) return;
-    if (!(await ensureNotes(token))) return;
+    if (!(await noteReady)) return;
     state.verseTab = "";
     const piece = state.collections[kind].pieces.find(function (item) { return item.id === id; });
     if (!piece) {
@@ -1872,11 +2039,43 @@
     t: ["上闋", "下闋"],
   };
 
-  async function ensureNotes(token) {
-    if (state.notes) return token === loadToken;
-    const data = await fetchJson("data/poetry-notes.json");
+  function storeAuthors(data) {
+    state.notes = state.notes || { pieces: {} };
+    state.notes.pieces = state.notes.pieces || {};
+    state.notes.credit = data ? data.credit : "";
+    state.notes.authors = (data && data.authors) || {};
+  }
+
+  async function ensureAuthors(token) {
+    if (state.notes && state.notes.authors) return token === loadToken;
+    const data = await fetchJson("data/poetry-authors.json");
     if (token !== loadToken) return false;
-    state.notes = data;
+    storeAuthors(data);
+    return true;
+  }
+
+  async function ensurePieceNote(id, token) {
+    if (!/^[a-z0-9-]+$/.test(id || "")) return false;
+    const haveAuthors = !!(state.notes && state.notes.authors);
+    const havePiece = !!(state.notes && state.notes.pieces && Object.prototype.hasOwnProperty.call(state.notes.pieces, id));
+    if (haveAuthors && havePiece) return token === loadToken;
+    const jobs = [];
+    if (!haveAuthors) {
+      jobs.push(fetchJson("data/poetry-authors.json").then(function (data) { return { kind: "authors", data: data }; }));
+    }
+    if (!havePiece) {
+      jobs.push(fetchJsonOrNull("data/poetry-notes/" + id + ".json").then(function (data) { return { kind: "piece", data: data }; }));
+    }
+    const parts = await Promise.all(jobs);
+    if (token !== loadToken) return false;
+    parts.forEach(function (part) {
+      if (part.kind === "authors") storeAuthors(part.data);
+      else {
+        state.notes = state.notes || { pieces: {} };
+        state.notes.pieces = state.notes.pieces || {};
+        state.notes.pieces[id] = part.data;
+      }
+    });
     return true;
   }
 
@@ -3338,14 +3537,13 @@
   }
 
   function matchFamous(pieceId, tokens) {
-    const lines = (state.famous && state.famous.lines) || [];
+    const lines = famousLinesFor(pieceId);
     const han = simplifiedHan(tokens);
     if (!han || han.length < 2) return null;
     let best = null;
     let bestScore = -1;
     for (let i = 0; i < lines.length; i += 1) {
       const line = lines[i];
-      if (line.pieces && line.pieces.indexOf(pieceId) < 0) continue;
       const quote = String(line.quote || "").replace(/[^\u4e00-\u9fff]/g, "");
       if (quote.length < 3) continue;
       const inside = han.indexOf(quote) >= 0;
@@ -3542,10 +3740,9 @@
     const zis = nodes.filter(function (node) { return node.kind === "zi" && node.ch; });
     const hay = zis.map(function (node) { return node.ch; }).join("");
     if (hay.length < 3) return;
-    const lines = (state.famous && state.famous.lines) || [];
+    const lines = famousLinesFor(pieceId);
     const found = [];
     lines.forEach(function (line) {
-      if (line.pieces && line.pieces.indexOf(pieceId) < 0) return;
       const quote = onlyHanText(line.quote);
       if (quote.length < 3 || hay.indexOf(quote) < 0) return;
       const text = onlyHanText(line.text || line.quote);
@@ -3674,6 +3871,7 @@
   }
 
   function openPopup(tok, index, anchor) {
+    if (!state.dict) ensureDict();
     closeFamous();
     state.popupTok = { tok: tok, index: index, anchor: anchor };
     document.querySelectorAll(".zi.on, .tz.on").forEach(function (el) { el.classList.remove("on"); });
@@ -4039,19 +4237,59 @@
     scheduleBalance();
   });
 
-  let swipeX = 0;
-  let swipeY = 0;
+  let swipeX = NaN;
+  let swipeY = NaN;
   let lastSwipeAt = 0;
+
+  function swipeBlocked(target) {
+    const el = target && target.nodeType === 1 ? target : (target && target.parentElement);
+    if (!el || !el.closest) return false;
+    if (el.closest(".verse-panel, .verse-bar, .author-card, .verse-turn, .foot-links, .mark, .read-tools, .biao-scroll, .biao-tabs")) return true;
+    let node = el;
+    while (node && node !== main) {
+      if (node.scrollWidth > node.clientWidth + 8) {
+        let overflow = "";
+        try { overflow = getComputedStyle(node).overflowX; } catch (_) { overflow = ""; }
+        if (overflow === "auto" || overflow === "scroll" || overflow === "overlay") return true;
+      }
+      node = node.parentElement;
+    }
+    return false;
+  }
+
+  main.addEventListener("contentvisibilityautostatechange", function (event) {
+    if (!event || event.skipped) return;
+    const target = event.target;
+    if (!target || !target.classList) return;
+    if (target.classList.contains("orig")) balanceOrig(target);
+    else if (target.classList.contains("pair") && target.querySelector) {
+      const orig = target.querySelector(".orig");
+      if (orig) balanceOrig(orig);
+    }
+  });
   main.addEventListener("touchstart", function (event) {
-    if (event.touches.length !== 1) return;
+    if (event.touches.length !== 1) {
+      swipeX = NaN;
+      swipeY = NaN;
+      return;
+    }
     swipeX = event.touches[0].clientX;
     swipeY = event.touches[0].clientY;
+  }, { passive: true });
+  main.addEventListener("touchcancel", function () {
+    swipeX = NaN;
+    swipeY = NaN;
   }, { passive: true });
   main.addEventListener("touchend", function (event) {
     const readingPiece = state.view === "piece" && !!state.piece;
     const readingArticle = state.view === "article" && !!state.article;
     if (!readingPiece && !readingArticle) return;
-    if (event.target.closest && event.target.closest(".verse-panel, .verse-bar, .author-card, .verse-turn, .foot-links, .mark, .read-tools")) return;
+    if (event.touches.length !== 0 || !Number.isFinite(swipeX) || !Number.isFinite(swipeY)) {
+      swipeX = NaN;
+      swipeY = NaN;
+      return;
+    }
+    if (swipeBlocked(event.target)) return;
     const touch = event.changedTouches[0];
     const dx = touch.clientX - swipeX;
     const dy = touch.clientY - swipeY;
