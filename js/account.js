@@ -146,12 +146,13 @@
   }
 
   function mountEntry() {
-    if (document.querySelector(".account-entry")) return refreshEntry();
+    var old = document.querySelector(".account-entry");
     var header = document.querySelector("header.top");
-    if (!header) return;
+    if (!old && !header) return;
     var link = document.createElement("a");
     link.className = "account-entry";
-    header.appendChild(link);
+    if (old && old.parentNode) old.parentNode.replaceChild(link, old);
+    else header.appendChild(link);
     refreshEntry();
   }
 
@@ -185,9 +186,14 @@
     parent.appendChild(p);
   }
 
+  function replaceHash(hash) {
+    if (typeof location.replace === "function") location.replace(hash);
+    else location.hash = hash;
+  }
+
   function renderLogin() {
     if (token()) {
-      location.hash = "#/me";
+      replaceHash("#/me");
       return;
     }
     openPage("登录", function (wrap) {
@@ -252,7 +258,7 @@
           rememberUser(data && data.userId);
           refreshEntry();
           pullHistory();
-          location.hash = "#/me";
+          replaceHash("#/me");
         }).catch(function (error) {
           formMessage(error.message || "没有登录", true);
         }).then(function () { go.disabled = false; });
