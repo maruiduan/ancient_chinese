@@ -97,6 +97,93 @@ test("logged-out boot does nothing until health succeeds, then only shows 同步
   assert.equal(up.location.hash, "#/login");
 });
 
+test("a failed account script can be loaded again", async () => {
+  const up = runBoot({ apiBase: "https://api.example", healthOk: true });
+  await new Promise(function (resolve) { setTimeout(resolve, 0); });
+  const link = up.header.children[0];
+  link.listeners.click({ preventDefault() {} });
+  const scripts = up.created.filter(function (node) { return node.src === "js/account.js"; });
+  assert.equal(scripts.length > 0, true);
+  const first = scripts[0];
+  assert.equal(typeof first.onerror, "function");
+  first.onerror();
+  link.listeners.click({ preventDefault() {} });
+  const again = up.created.filter(function (node) { return node.src === "js/account.js"; });
+  assert.equal(again.some(function (node) { return node !== first; }), true);
+});
+
+test("login replaces the sync entry so 我的 does not return to the login hash", async () => {
+  const children = [];
+  const header = {
+    children: children,
+    appendChild(node) { children.push(node); node.parentNode = header; },
+    replaceChild(next, old) {
+      const index = children.indexOf(old);
+      children[index] = next;
+      next.parentNode = header;
+      old.parentNode = null;
+    },
+  };
+  const storage = { "gwgz-session-v1": "" };
+  const location = {
+    hash: "#/",
+    replaced: "",
+    replace(hash) { this.replaced = hash; this.hash = hash; },
+  };
+  const window = {
+    API_BASE: "https://api.example",
+    addEventListener() {},
+    requestIdleCallback(fn) { fn(); },
+  };
+  const document = {
+    body: { appendChild() {} },
+    addEventListener() {},
+    getElementById() { return null; },
+    querySelector(sel) {
+      if (sel === "header.top") return header;
+      if (sel === ".account-entry") return children[0] || null;
+      return null;
+    },
+    createElement() {
+      return {
+        parentNode: null,
+        className: "",
+        style: {},
+        listeners: {},
+        addEventListener(type, fn) { this.listeners[type] = fn; },
+        appendChild() {},
+      };
+    },
+  };
+  const context = vm.createContext({
+    window: window,
+    document: document,
+    localStorage: {
+      getItem(key) { return key === "gwgz-session-v1" ? storage["gwgz-session-v1"] : ""; },
+      setItem() {},
+      removeItem() {},
+    },
+    location: location,
+    fetch() { return Promise.resolve({ ok: true, status: 200, json() { return Promise.resolve({}); } }); },
+    console: { error() {}, log() {} },
+    setTimeout: setTimeout,
+    clearTimeout: clearTimeout,
+  });
+  vm.runInContext(bootSource(), context, { filename: "index-boot.js" });
+  await new Promise(function (resolve) { setTimeout(resolve, 0); });
+  const entry = children[0];
+  assert.equal(entry.textContent, "同步进度");
+  entry.listeners.click({ preventDefault() {} });
+  vm.runInContext(fs.readFileSync(path.join(root, "js/account.js"), "utf8"), context, { filename: "js/account.js" });
+  assert.equal(children.length, 1);
+  assert.notEqual(children[0], entry);
+  assert.equal(children[0].listeners.click, undefined);
+  storage["gwgz-session-v1"] = "session-token-value";
+  assert.equal(window.gwgzAccount.route("#/login"), true);
+  assert.equal(location.replaced, "#/me");
+  assert.equal(location.hash, "#/me");
+});
+
 test("a stored token loads account code without waiting for health", () => {
   const booted = runBoot({
     apiBase: "https://api.example",

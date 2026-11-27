@@ -157,7 +157,12 @@
           var pending = waiters.splice(0);
           pending.forEach(function (fn) { fn(); });
         };
-        script.onerror = function () {};
+        script.onerror = function () {
+          loading = false;
+          waiters = [];
+          script.onload = null;
+          if (script.parentNode) script.parentNode.removeChild(script);
+        };
         document.body.appendChild(script);
       }
       function showEntry() {
